@@ -1,0 +1,155 @@
+"use client";
+
+import { useState } from "react";
+import { quizQuestions } from "@/data/quizData";
+import { T } from "@/components/TextConverter";
+
+type DoshaKey = "V" | "P" | "K";
+
+export default function QuizPage() {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [scores, setScores] = useState<Record<DoshaKey, number>>({
+    V: 0,
+    P: 0,
+    K: 0,
+  });
+  const [finished, setFinished] = useState(false);
+
+  const progress = (currentStep / quizQuestions.length) * 100;
+
+  const handleSelect = (val: DoshaKey) => {
+    setScores((prev) => ({ ...prev, [val]: prev[val] + 1 }));
+    if (currentStep + 1 < quizQuestions.length) {
+      setCurrentStep((prev) => prev + 1);
+    } else {
+      setFinished(true);
+    }
+  };
+
+  if (finished) {
+    const winner = Object.keys(scores).reduce((a, b) =>
+      scores[a as DoshaKey] > scores[b as DoshaKey] ? a : b,
+    ) as DoshaKey;
+    return <ResultPage dosha={winner} />;
+  }
+
+  const currentQ = quizQuestions[currentStep];
+
+  return (
+    <main className="min-h-screen bg-[#FDFBF7] py-16 px-6">
+      <div className="max-w-xl mx-auto">
+        {/* 進度條 */}
+        <div className="w-full bg-stone-200 h-1 mb-10 rounded-full overflow-hidden">
+          <div
+            className="bg-[#2D4232] h-full transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+
+        <div className="mb-6 text-[10px] tracking-[0.3em] text-[#2D4232]/50 uppercase">
+          <T>題目</T> {currentStep + 1} / {quizQuestions.length}
+        </div>
+
+        <h2 className="text-3xl font-serif text-[#2D4232] mb-10 leading-tight">
+          <T>{currentQ.title}</T>
+        </h2>
+
+        <div className="space-y-4">
+          {currentQ.options.map((opt, i) => (
+            <button
+              key={i}
+              onClick={() => handleSelect(opt.val)}
+              className="w-full text-left p-6 bg-white border border-stone-200 rounded-xl hover:border-[#2D4232] transition-all duration-300 active:scale-[0.98] shadow-sm"
+            >
+              <T>{opt.label}</T>
+            </button>
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function ResultPage({ dosha }: { dosha: "V" | "P" | "K" }) {
+  const details = {
+    V: {
+      title: "Vata 瓦塔",
+      essence:
+        "Vata 体质的核心是『风』与『空』的能量，代表着变动、轻盈与创造力。",
+      imbalance: "当能量失衡时，容易感到焦虑、失眠、消化不良或思绪过于跳跃。",
+      advice:
+        "建议透过规律的作息、温暖的饮食与规律的居家空间，来安定散乱的能量。",
+    },
+    P: {
+      title: "Pitta 皮塔",
+      essence:
+        "Pitta 体质的核心是『火』的能量，代表着转化、热情、智慧与精准的执行力。",
+      imbalance:
+        "当能量失衡时，容易表现出急躁、愤怒、好辩，或是身体容易发炎与燥热。",
+      advice:
+        "建议透过降温的饮食、冥想与适度的放松，将过盛的火元素转化为冷静的洞察力。",
+    },
+    K: {
+      title: "Kapha 卡法",
+      essence:
+        "Kapha 体质的核心是『地』与『水』的能量，代表着稳定、滋养、爱与深厚的耐力。",
+      imbalance:
+        "当能量失衡时，容易感到沉重、迟钝、对现状过于安逸，或是体重过度增加。",
+      advice:
+        "建议透过适度的体能锻炼、多变化的感官刺激与规律的清理，来保持流动的生命力。",
+    },
+  };
+
+  const data = details[dosha];
+
+  return (
+    <div className="min-h-screen bg-[#FDFBF7] py-16 px-6">
+      <div className="max-w-lg mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-stone-100">
+        <div className="text-center mb-12">
+          <h2 className="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-4">
+            <T>您的体质类型</T>
+          </h2>
+          <h1 className="text-4xl font-serif text-[#2D4232]">{data.title}</h1>
+        </div>
+
+        <div className="space-y-10">
+          <section>
+            <h3 className="text-sm font-bold text-[#2D4232] mb-3 uppercase tracking-widest">
+              <T>核心本质</T>
+            </h3>
+            <p className="text-stone-600 leading-relaxed text-sm">
+              <T>{data.essence}</T>
+            </p>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-bold text-[#2D4232] mb-3 uppercase tracking-widest">
+              <T>能量失衡时</T>
+            </h3>
+            <p className="text-stone-600 leading-relaxed text-sm">
+              <T>{data.imbalance}</T>
+            </p>
+          </section>
+
+          <section className="bg-[#FDFBF7] p-8 rounded-2xl border border-[#2D4232]/5">
+            <h3 className="text-sm font-bold text-[#2D4232] mb-4 text-center uppercase tracking-widest">
+              <T>平衡之道</T>
+            </h3>
+            <p className="text-stone-700 leading-relaxed text-sm text-center">
+              <T>{data.advice}</T>
+            </p>
+          </section>
+        </div>
+
+        <div className="text-center pt-12">
+          <button
+            onClick={() => window.location.reload()}
+            className="text-stone-400 hover:text-[#2D4232] text-xs transition-colors border-b border-stone-300 pb-1 uppercase tracking-widest"
+          >
+            <T>重新测试</T>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
