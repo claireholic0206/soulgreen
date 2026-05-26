@@ -11,9 +11,13 @@
   "dependencies": {
     "next": "16.2.6",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "opencc-js": "^1.3.1",
 =======
 >>>>>>> 67b29a5 (Initial commit from Create Next App)
+=======
+    "opencc-js": "^1.3.1",
+>>>>>>> 3569e3f (first commit)
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
