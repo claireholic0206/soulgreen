@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 "use client";
 
 import React from 'react';
@@ -57,11 +55,10 @@ export default function HomePage() {
     </main>
   );
 }
-=======
+
 import Image from "next/image";
-=======
+
 "use client";
->>>>>>> 3569e3f (first commit)
 
 import React from 'react';
 
@@ -117,9 +114,6 @@ export default function HomePage() {
       </div>
     </main>
   );
-<<<<<<< HEAD
+
 }
->>>>>>> 67b29a5 (Initial commit from Create Next App)
-=======
 }
->>>>>>> 3569e3f (first commit)
