@@ -7,34 +7,75 @@ import { T } from "@/components/TextConverter";
 type DoshaKey = "V" | "P" | "K";
 
 export default function QuizPage() {
+  const [stage, setStage] = useState<"intro" | "quiz" | "result">("intro");
   const [currentStep, setCurrentStep] = useState(0);
   const [scores, setScores] = useState<Record<DoshaKey, number>>({
     V: 0,
     P: 0,
     K: 0,
   });
-  const [finished, setFinished] = useState(false);
+  const [result, setResult] = useState<DoshaKey | null>(null);
 
   const progress = (currentStep / quizQuestions.length) * 100;
 
   const handleSelect = (val: DoshaKey) => {
-    setScores((prev) => ({ ...prev, [val]: prev[val] + 1 }));
+    const newScores = { ...scores, [val]: scores[val] + 1 };
+    setScores(newScores);
+
     if (currentStep + 1 < quizQuestions.length) {
       setCurrentStep((prev) => prev + 1);
     } else {
-      setFinished(true);
+      const winner = Object.keys(newScores).reduce((a, b) =>
+        newScores[a as DoshaKey] > newScores[b as DoshaKey] ? a : b,
+      ) as DoshaKey;
+      setResult(winner);
+      setStage("result");
     }
   };
 
-  if (finished) {
-    const winner = Object.keys(scores).reduce((a, b) =>
-      scores[a as DoshaKey] > scores[b as DoshaKey] ? a : b,
-    ) as DoshaKey;
-    return <ResultPage dosha={winner} />;
+  // 1. 介紹頁面
+  if (stage === "intro") {
+    return (
+      <main className="min-h-screen bg-[#FDFBF7] py-24 px-6 flex items-center justify-center">
+        <div className="max-w-md text-center">
+          <h2 className="text-[10px] tracking-[0.3em] uppercase text-[#2D4232]/50 mb-6">
+            <T>身心諮詢室</T>
+          </h2>
+          <h1 className="text-4xl font-serif text-[#2D4232] mb-8 leading-tight">
+            <T>尋找身心的平衡點</T>
+          </h1>
+          <p className="text-stone-600 mb-12 leading-relaxed text-sm">
+            <T>
+              在阿育吠陀的智慧中，每個人都是由三種能量組成的獨特聚合體。這份測驗將帶您重新解讀身體的語言，找出當下最需要的自然療癒處方。
+            </T>
+          </p>
+          <button
+            onClick={() => setStage("quiz")}
+            className="w-full py-4 bg-[#2D4232] text-white rounded-full tracking-widest hover:bg-[#1e2e22] transition-all"
+          >
+            <T>開始進行諮詢</T>
+          </button>
+        </div>
+      </main>
+    );
   }
 
-  const currentQ = quizQuestions[currentStep];
+  // 2. 結果頁面
+  if (stage === "result" && result) {
+    return (
+      <ResultPage
+        dosha={result}
+        onReset={() => {
+          setStage("intro");
+          setCurrentStep(0);
+          setScores({ V: 0, P: 0, K: 0 });
+        }}
+      />
+    );
+  }
 
+  // 3. 測驗頁面
+  const currentQ = quizQuestions[currentStep];
   return (
     <main className="min-h-screen bg-[#FDFBF7] py-16 px-6">
       <div className="max-w-xl mx-auto">
@@ -44,15 +85,12 @@ export default function QuizPage() {
             style={{ width: `${progress}%` }}
           />
         </div>
-
         <div className="mb-6 text-[10px] tracking-[0.3em] text-[#2D4232]/50 uppercase">
           <T>題目</T> {currentStep + 1} / {quizQuestions.length}
         </div>
-
         <h2 className="text-3xl font-serif text-[#2D4232] mb-10 leading-tight">
           <T>{currentQ.title}</T>
         </h2>
-
         <div className="space-y-4">
           {currentQ.options.map((opt, i) => (
             <button
@@ -69,36 +107,34 @@ export default function QuizPage() {
   );
 }
 
-function ResultPage({ dosha }: { dosha: "V" | "P" | "K" }) {
+function ResultPage({
+  dosha,
+  onReset,
+}: {
+  dosha: DoshaKey;
+  onReset: () => void;
+}) {
   const details = {
     V: {
       title: "Vata 瓦塔",
-      essence:
-        "Vata 体质的核心是『风』与『空』的能量，代表着变动、轻盈与创造力。",
-      imbalance: "当能量失衡时，容易感到焦虑、失眠、消化不良或思绪过于跳跃。",
-      advice:
-        "建议透过规律的作息、温暖的饮食与规律的居家空间，来安定散乱的能量。",
-      oils: "推荐精油：甜橙、天竺葵、檀香（温暖且安抚神经）",
+      series: "大地根植系列 (Grounding)",
+      essence: "風與空的能量，代表著變動、輕盈與創造力。",
+      advice: "回歸大地，找回穩定感。透過溫暖香氣，讓浮動心靈落地。",
+      oils: "推薦：岩蘭草、檀香、甜橙",
     },
     P: {
       title: "Pitta 皮塔",
-      essence:
-        "Pitta 体质的核心是『火』的能量，代表着转化、热情、智慧与精准的执行力。",
-      imbalance:
-        "当能量失衡时，容易表现出急躁、愤怒、好辩，或是身体容易发炎与燥热。",
-      advice:
-        "建议透过降温的饮食、冥想与适度的放松，将过盛的火元素转化为冷静的洞察力。",
-      oils: "推荐精油：薄荷、薰衣草、依兰依兰（清凉且平缓燥热）",
+      series: "清涼舒壓系列 (Soothing)",
+      essence: "火的能量，代表著轉化、熱情、智慧與精準執行力。",
+      advice: "適度降溫，給心靈留白。透過清涼香氣，撫平內心波瀾。",
+      oils: "推薦：洋甘菊、薰衣草、乳香",
     },
     K: {
       title: "Kapha 卡法",
-      essence:
-        "Kapha 体质的核心是『地』与『水』的能量，代表着稳定、滋养、爱与深厚的耐力。",
-      imbalance:
-        "当能量失衡时，容易感到沉重、迟钝、对现状过于安逸，或是体重过度增加。",
-      advice:
-        "建议透过适度的体能锻炼、多变化的感官刺激与规律的清理，来保持流动的生命力。",
-      oils: "推荐精油：尤加利、迷迭香、葡萄柚（提振与促进代谢）",
+      series: "煥活流動系列 (Energizing)",
+      essence: "地與水的能量，代表著穩定、滋養、愛與深厚耐力。",
+      advice: "喚醒感官，打破沈滯。透過活力香氣，激發身心流動感。",
+      oils: "推薦：葡萄柚、迷迭香、黑胡椒",
     },
   };
 
@@ -106,72 +142,50 @@ function ResultPage({ dosha }: { dosha: "V" | "P" | "K" }) {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] py-16 px-6">
-      <div className="max-w-lg mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-stone-100">
-        <div className="text-center mb-12">
-          <h2 className="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-4">
-            <T>您的体质类型</T>
-          </h2>
-          <h1 className="text-4xl font-serif text-[#2D4232]">{data.title}</h1>
-        </div>
+      <div className="max-w-lg mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-stone-100 text-center">
+        <h2 className="text-[10px] tracking-[0.3em] uppercase text-stone-400 mb-4">
+          <T>您的體質類型</T>
+        </h2>
+        <h1 className="text-4xl font-serif text-[#2D4232] mb-2">
+          {data.title}
+        </h1>
+        <p className="text-[#2D4232]/80 italic text-sm mb-12">
+          <T>{data.series}</T>
+        </p>
 
-        <div className="space-y-8">
-          <section>
-            <h3 className="text-sm font-bold text-[#2D4232] mb-3 uppercase tracking-widest">
-              <T>核心本质</T>
-            </h3>
-            <p className="text-stone-600 leading-relaxed text-sm">
-              <T>{data.essence}</T>
-            </p>
-          </section>
+        <section className="text-left mb-8">
+          <h3 className="text-sm font-bold text-[#2D4232] mb-3 uppercase tracking-widest">
+            <T>核心本質</T>
+          </h3>
+          <p className="text-stone-600 leading-relaxed text-sm">
+            <T>{data.essence}</T>
+          </p>
+        </section>
 
-          <section>
-            <h3 className="text-sm font-bold text-[#2D4232] mb-3 uppercase tracking-widest">
-              <T>能量失衡时</T>
-            </h3>
-            <p className="text-stone-600 leading-relaxed text-sm">
-              <T>{data.imbalance}</T>
-            </p>
-          </section>
+        <section className="bg-[#2D4232]/5 p-6 rounded-2xl mb-8">
+          <h3 className="text-sm font-bold text-[#2D4232] mb-3 uppercase tracking-widest">
+            <T>Soulgreen 處方</T>
+          </h3>
+          <p className="text-stone-700 leading-relaxed text-sm mb-4">
+            <T>{data.advice}</T>
+          </p>
+          <p className="text-[#2D4232] font-bold text-sm border-t border-[#2D4232]/10 pt-4">
+            <T>{data.oils}</T>
+          </p>
+        </section>
 
-          {/* 新增：芳療建議區 */}
-          <section className="bg-[#2D4232]/5 p-6 rounded-2xl">
-            <h3 className="text-sm font-bold text-[#2D4232] mb-3 uppercase tracking-widest text-center">
-              <T>芳疗建议</T>
-            </h3>
-            <p className="text-stone-700 leading-relaxed text-sm text-center">
-              <T>{data.advice}</T>
-            </p>
-            {/* 加入這行來顯示精油 */}
-            <p className="text-[#2D4232] font-medium text-sm text-center border-t border-[#2D4232]/10 pt-3">
-              <T>{data.oils}</T>
-            </p>
-          </section>
-
-          {/* 新增：導航連結 */}
-          <div className="grid grid-cols-1 gap-3 pt-6">
-            <a
-              href="/products"
-              className="w-full py-4 bg-[#2D4232] text-white text-center rounded-full text-sm tracking-widest hover:bg-[#1e2e22] transition-all"
-            >
-              <T>浏览产品</T>
-            </a>
-            <a
-              href="/services"
-              className="w-full py-4 bg-transparent border border-[#2D4232] text-[#2D4232] text-center rounded-full text-sm tracking-widest hover:bg-[#2D4232]/5 transition-all"
-            >
-              <T>订制专属配方</T>
-            </a>
-          </div>
-        </div>
-
-        <div className="text-center pt-10">
-          <button
-            onClick={() => window.location.reload()}
-            className="text-stone-400 hover:text-[#2D4232] text-xs underline uppercase tracking-widest"
-          >
-            <T>重新测试</T>
-          </button>
-        </div>
+        <a
+          href="/products"
+          className="block w-full py-4 bg-[#2D4232] text-white rounded-full text-sm tracking-widest hover:bg-[#1e2e22] transition-all mb-4"
+        >
+          <T>瀏覽完整產品系列</T>
+        </a>
+        <button
+          onClick={onReset}
+          className="text-stone-400 hover:text-[#2D4232] text-xs underline uppercase tracking-widest"
+        >
+          <T>重新測試</T>
+        </button>
       </div>
     </div>
   );
