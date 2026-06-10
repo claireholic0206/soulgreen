@@ -1,0 +1,78 @@
+name: Deploy to Tencent COS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload to Tencent COS
+        run: |
+          npm install cos-nodejs-sdk-v5
+          node - <<'EOF'
+          const COS = require('cos-nodejs-sdk-v5');
+          const fs = require('fs');
+          const path = require('path');
+
+          const cos = new COS({
+            SecretId: process.env.TENCENT_SECRET_ID,
+            SecretKey: process.env.TENCENT_SECRET_KEY,
+          });
+
+          const bucket = 'soulgreen-website-1439001590';
+          const region = 'ap-guangzhou';
+          const outDir = './out';
+
+          async function uploadDir(dir, prefix = '') {
+            const files = fs.readdirSync(dir);
+            for (const file of files) {
+              const filePath = path.join(dir, file);
+              const stat = fs.statSync(filePath);
+              const key = prefix ? `${prefix}/${file}` : file;
+
+              if (stat.isDirectory()) {
+                await uploadDir(filePath, key);
+              } else {
+                const fileContent = fs.readFileSync(filePath);
+                await new Promise((resolve, reject) => {
+                  cos.putObject({
+                    Bucket: bucket,
+                    Region: region,
+                    Key: key,
+                    Body: fileContent,
+                  }, (err, data) => {
+                    if (err) reject(err);
+                    else resolve(data);
+                  });
+                });
+                console.log(`Uploaded: ${key}`);
+              }
+            }
+          }
+
+          uploadDir(outDir).then(() => {
+            console.log('Deploy completed successfully!');
+          }).catch(err => {
+            console.error('Deploy failed:', err);
+            process.exit(1);
+          });
+          EOF
+        env:
+          TENCENT_SECRET_ID: ${{ secrets.TENCENT_SECRET_ID }}
+          TENCENT_SECRET_KEY: ${{ secrets.TENCENT_SECRET_KEY }}
