@@ -78,14 +78,14 @@ export default function ProductsPage() {
 
       {/* 分類 Tab */}
       <div className="sticky top-[57px] z-40 bg-[#FDFBF7] border-b border-stone-200">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex overflow-x-auto px-4 scrollbar-hide">
+        <div className="max-w-5xl mx-auto px-4 py-3">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setActiveCategory("all")}
-              className={`flex-shrink-0 px-4 py-3.5 text-[11px] tracking-wider transition-all border-b-2 ${
+              className={`px-4 py-1.5 rounded-full text-[11px] tracking-wider transition-all border ${
                 activeCategory === "all"
-                  ? "border-[#2D4232] text-[#2D4232] font-medium"
-                  : "border-transparent text-stone-400 hover:text-[#2D4232]"
+                  ? "bg-[#2D4232] border-[#2D4232] text-white font-medium"
+                  : "border-stone-200 text-stone-400 hover:border-[#8A9A86] hover:text-[#2D4232]"
               }`}
             >
               <T>全部</T>
@@ -94,10 +94,10 @@ export default function ProductsPage() {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`flex-shrink-0 px-4 py-3.5 text-[11px] tracking-wider transition-all border-b-2 whitespace-nowrap ${
+                className={`px-4 py-1.5 rounded-full text-[11px] tracking-wider transition-all border whitespace-nowrap ${
                   activeCategory === cat.id
-                    ? "border-[#2D4232] text-[#2D4232] font-medium"
-                    : "border-transparent text-stone-400 hover:text-[#2D4232]"
+                    ? "bg-[#2D4232] border-[#2D4232] text-white font-medium"
+                    : "border-stone-200 text-stone-400 hover:border-[#8A9A86] hover:text-[#2D4232]"
                 }`}
               >
                 <T>{cat.name_cn}</T>

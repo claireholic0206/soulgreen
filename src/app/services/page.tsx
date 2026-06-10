@@ -1,9 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
 import { T } from "@/components/TextConverter";
 
 export default function ConsultationForm() {
+  const [stage, setStage] = useState<"form" | "success">("form");
+  const [formData, setFormData] = useState({
+    from_name: "",
+    wechat_id: "",
+    energy_level: "",
+    healing_goals: [] as string[],
+    additional_notes: "",
+    chakra_detection: "",
+  });
+  const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "";
+  const templateId = "template_azxgpe8";
+  const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "";
+
   const sectionClass =
     "bg-white p-8 rounded-2xl border border-stone-100 shadow-sm";
   const labelClass =
@@ -11,11 +28,95 @@ export default function ConsultationForm() {
   const inputClass =
     "w-full p-4 bg-[#FDFBF7] border border-stone-200 rounded-lg focus:ring-1 focus:ring-[#2D4232] outline-none transition";
 
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type } = e.target as HTMLInputElement;
+    if (type === "checkbox") {
+      setFormData((prev) => ({
+        ...prev,
+        healing_goals: (e.target as HTMLInputElement).checked
+          ? [...prev.healing_goals, value]
+          : prev.healing_goals.filter((item) => item !== value),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (
+      !formData.from_name ||
+      !formData.wechat_id ||
+      !formData.energy_level ||
+      formData.healing_goals.length === 0 ||
+      !formData.additional_notes ||
+      !formData.chakra_detection
+    ) {
+      setErrorMsg("請填寫所有必填項目");
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 3000);
+      return;
+    }
+
+    setStatus("sending");
+    try {
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: formData.from_name,
+          wechat_id: formData.wechat_id,
+          energy_level: formData.energy_level,
+          healing_goals: formData.healing_goals.join("、"),
+          additional_notes: formData.additional_notes,
+          chakra_detection:
+            formData.chakra_detection === "yes" ? "愿意" : "暂时不用",
+        },
+        publicKey
+      );
+      setStage("success");
+    } catch (error) {
+      setErrorMsg("提交失败，请稍后重试");
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 3000);
+    }
+  };
+
+  if (stage === "success") {
+    return (
+      <main className="min-h-screen bg-[#FDFBF7] py-24 px-6 flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <div className="text-5xl mb-6">✓</div>
+          <h2 className="text-3xl font-serif text-[#2D4232] mb-4">
+            <T>感谢您的信任</T>
+          </h2>
+          <p className="text-stone-600 mb-8 leading-relaxed">
+            <T>
+              您的咨询需求已收到，我将在 3-5
+              个工作日内与您联系，为您量身规划专属的植物配方方案。
+            </T>
+          </p>
+          <a
+            href="/products"
+            className="inline-block px-8 py-3 bg-[#2D4232] text-white rounded-full hover:bg-[#3D5A45] transition-all"
+          >
+            <T>返回产品页</T>
+          </a>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-[#FDFBF7] py-16 px-6">
       <form
-        action="https://formspree.io/f/xdajlpak"
-        method="POST"
+        onSubmit={handleSubmit}
         className="max-w-2xl mx-auto space-y-8"
       >
         {/* 標題與引導文案 */}
@@ -47,8 +148,9 @@ export default function ConsultationForm() {
                 <T>您的称呼</T>
               </label>
               <input
-                name="name"
-                required
+                name="from_name"
+                value={formData.from_name}
+                onChange={handleInputChange}
                 className={inputClass}
                 placeholder="Nickname"
               />
@@ -58,8 +160,9 @@ export default function ConsultationForm() {
                 <T>WeChat ID</T>
               </label>
               <input
-                name="wechat"
-                required
+                name="wechat_id"
+                value={formData.wechat_id}
+                onChange={handleInputChange}
                 className={inputClass}
                 placeholder="ID"
               />
@@ -87,9 +190,10 @@ export default function ConsultationForm() {
               >
                 <input
                   type="radio"
-                  name="energy"
+                  name="energy_level"
                   value={item}
-                  required
+                  checked={formData.energy_level === item}
+                  onChange={handleInputChange}
                   className="mr-3 accent-[#2D4232]"
                 />{" "}
                 <T>{item}</T>
@@ -120,8 +224,10 @@ export default function ConsultationForm() {
               >
                 <input
                   type="checkbox"
-                  name="concerns"
+                  name="healing_goals"
                   value={item}
+                  checked={formData.healing_goals.includes(item)}
+                  onChange={handleInputChange}
                   className="mr-3 accent-[#2D4232]"
                 />{" "}
                 <T>{item}</T>
@@ -129,8 +235,9 @@ export default function ConsultationForm() {
             ))}
           </div>
           <textarea
-            name="symptoms"
-            required
+            name="additional_notes"
+            value={formData.additional_notes}
+            onChange={handleInputChange}
             placeholder="Please describe your needs..."
             className={inputClass + " h-32"}
           />
@@ -146,9 +253,10 @@ export default function ConsultationForm() {
               <label className="flex items-center cursor-pointer">
                 <input
                   type="radio"
-                  name="chakra_test"
+                  name="chakra_detection"
                   value="yes"
-                  required
+                  checked={formData.chakra_detection === "yes"}
+                  onChange={handleInputChange}
                   className="mr-2 accent-[#2D4232]"
                 />{" "}
                 <T>愿意</T>
@@ -156,9 +264,10 @@ export default function ConsultationForm() {
               <label className="flex items-center cursor-pointer">
                 <input
                   type="radio"
-                  name="chakra_test"
+                  name="chakra_detection"
                   value="no"
-                  required
+                  checked={formData.chakra_detection === "no"}
+                  onChange={handleInputChange}
                   className="mr-2 accent-[#2D4232]"
                 />{" "}
                 <T>暂时不用</T>
@@ -166,11 +275,18 @@ export default function ConsultationForm() {
             </div>
           </div>
 
+          {status === "error" && (
+            <div className="w-full max-w-md p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600 text-center">
+              {errorMsg}
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full md:w-auto px-16 py-4 bg-[#2D4232] text-white rounded-full font-medium hover:bg-[#1e2e22] transition-all shadow-md text-sm tracking-widest uppercase"
+            disabled={status === "sending"}
+            className="w-full md:w-auto px-16 py-4 bg-[#2D4232] text-white rounded-full font-medium hover:bg-[#1e2e22] transition-all shadow-md text-sm tracking-widest uppercase disabled:opacity-50"
           >
-            <T>发送咨询需求</T>
+            <T>{status === "sending" ? "发送中..." : "发送咨询需求"}</T>
           </button>
         </div>
       </form>

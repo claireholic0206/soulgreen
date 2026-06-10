@@ -106,7 +106,7 @@ export default function QuizPage() {
     const next = { ...answers, [currentQ.id]: dosha };
     setAnswers(next);
     if (!isLast) {
-      setTimeout(() => setCurrentStep((s) => s + 1), 280);
+      setTimeout(() => setCurrentStep((s) => Math.min(s + 1, total - 1)), 280);
     }
   };
 
@@ -122,7 +122,7 @@ export default function QuizPage() {
     if (isLast) {
       calcResult(answers, multiAnswers);
     } else {
-      setCurrentStep((s) => s + 1);
+      setCurrentStep((s) => Math.min(s + 1, total - 1));
     }
   };
 
