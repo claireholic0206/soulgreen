@@ -1,127 +1,217 @@
 "use client";
 
-import { useState } from "react";
-import { PRODUCTS } from "@/data/products";
-import { T } from "@/components/TextConverter"; // 假設您的轉換組件已具備繁轉簡邏輯
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { T } from "@/components/TextConverter";
+import type { Category, Product } from "@/types/product";
+import Image from "next/image";
+import Link from "next/link";
+
+const DOSHA_COLOR: Record<string, string> = {
+  V: "#7F77DD",
+  P: "#D85A30",
+  K: "#1D9E75",
+};
+const DOSHA_LABEL: Record<string, string> = {
+  V: "Vata",
+  P: "Pitta",
+  K: "Kapha",
+};
+const DOSHA_BG: Record<string, string> = {
+  V: "#3C3489",
+  P: "#993C1D",
+  K: "#0F6E56",
+};
 
 export default function ProductsPage() {
-  const [activeTab, setActiveTab] = useState("all");
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [loading, setLoading] = useState(true);
 
-  const categories = [
-    { id: "all", label: "全部產品" },
-    { id: "blend-oil", label: "複方精華油" },
-    { id: "single-oil", label: "單方精油" },
-    { id: "carrier-oil", label: "植物基底油" },
-    { id: "cold-process-soap", label: "能量洗沐" },
-    { id: "seasonal", label: "時令限定" },
-  ];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("*")
+        .order("id");
+      if (data) setCategories(data);
+      if (error) console.error("categories error:", error);
+    };
+    fetchCategories();
+  }, []);
 
-  const filteredProducts =
-    activeTab === "all"
-      ? PRODUCTS
-      : PRODUCTS.filter((p) => p.category === activeTab);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      let query = supabase
+        .from("products")
+        .select("*, categories(id, name_cn, name_en, slug)")
+        .order("id");
+
+      if (activeCategory !== "all") {
+        query = query.eq("category_id", activeCategory);
+      }
+
+      const { data, error } = await query;
+      if (data) setProducts(data);
+      if (error) console.error("products error:", error);
+      setLoading(false);
+    };
+    fetchProducts();
+  }, [activeCategory]);
 
   return (
-    <main className="min-h-screen bg-[#FDFBF7] py-12 px-6">
-      <div className="max-w-5xl mx-auto">
-        <header className="text-center mb-16">
-          <h1 className="text-3xl font-serif text-[#2D4232]">
-            <T>植物功能與能量資料庫</T>
-          </h1>
-        </header>
+    <main className="min-h-screen bg-[#FDFBF7]">
+      {/* Hero */}
+      <div className="bg-[#F5F2EB] border-b border-stone-200 px-6 py-14 text-center">
+        <p className="text-[10px] tracking-[0.35em] uppercase text-[#2D4232]/50 mb-3">
+          <T>Soulgreen Studio</T>
+        </p>
+        <h1 className="font-serif text-3xl text-[#2D4232] mb-3 leading-tight">
+          <T>植萃芳療產品</T>
+        </h1>
+        <p className="text-xs text-stone-400 max-w-xs mx-auto leading-relaxed">
+          <T>結合阿育吠陀智慧與瑞士芳療科學，為你的體質量身打造</T>
+        </p>
+      </div>
 
-        {/* 分類導航：強制折行，移除滾動條 */}
-        <nav className="flex flex-wrap justify-center gap-3 mb-12">
-          {categories.map((cat) => (
+      {/* 分類 Tab */}
+      <div className="sticky top-[57px] z-40 bg-[#FDFBF7] border-b border-stone-200">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex overflow-x-auto px-4 scrollbar-hide">
             <button
-              key={cat.id}
-              onClick={() => {
-                setActiveTab(cat.id);
-                setExpandedId(null);
-              }}
-              className={`px-6 py-2 rounded-full text-xs transition border ${
-                activeTab === cat.id
-                  ? "bg-[#2D4232] text-white border-[#2D4232]"
-                  : "bg-white border-stone-200 text-stone-600 hover:border-[#2D4232]"
+              onClick={() => setActiveCategory("all")}
+              className={`flex-shrink-0 px-4 py-3.5 text-[11px] tracking-wider transition-all border-b-2 ${
+                activeCategory === "all"
+                  ? "border-[#2D4232] text-[#2D4232] font-medium"
+                  : "border-transparent text-stone-400 hover:text-[#2D4232]"
               }`}
             >
-              <T>{cat.label}</T>
+              <T>全部</T>
             </button>
-          ))}
-        </nav>
-
-        {/* 產品網格 */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((p) => (
-            <article
-              key={p.id}
-              className="bg-white p-6 rounded-xl border border-stone-100 shadow-sm flex flex-col transition-all duration-300"
-            >
-              {/* 圖片渲染：僅在有 image 路徑時顯示 */}
-              {p.image && (
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  className="w-full h-48 object-cover rounded-lg mb-4"
-                />
-              )}
-
-              <span className="text-[10px] text-stone-400 font-mono">
-                {p.id}
-              </span>
-              <h3 className="font-bold font-serif text-[#2D4232] my-1">
-                <T>{p.name}</T>
-              </h3>
-              <p className="text-[10px] text-stone-400">{p.nameEn}</p>
-
-              {p.latinName && (
-                <p className="text-[10px] text-[#8A9A86] italic mb-4 font-mono">
-                  {p.latinName}
-                </p>
-              )}
-
-              <div className="flex-grow">
-                <p className="text-[12px] text-stone-600 leading-relaxed mb-4">
-                  <T>{p.Description}</T>
-                </p>
-
-                {/* 展開詳情區域：欄位有資料才顯示 */}
-                {expandedId === p.id && (
-                  <div className="pt-4 border-t border-stone-100 space-y-3 animate-in fade-in duration-300">
-                    {p.Ingredients && (
-                      <InfoRow label="成分" value={p.Ingredients} />
-                    )}
-                    {p.Usage && <InfoRow label="用途" value={p.Usage} />}
-                    {p.Method && <InfoRow label="方法" value={p.Method} />}
-                  </div>
-                )}
-              </div>
-
+            {categories.map((cat) => (
               <button
-                onClick={() => setExpandedId(expandedId === p.id ? null : p.id)}
-                className="mt-6 w-full text-center py-2 border border-[#2D4232] text-[10px] uppercase tracking-widest cursor-pointer hover:bg-[#2D4232] hover:text-white transition"
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`flex-shrink-0 px-4 py-3.5 text-[11px] tracking-wider transition-all border-b-2 whitespace-nowrap ${
+                  activeCategory === cat.id
+                    ? "border-[#2D4232] text-[#2D4232] font-medium"
+                    : "border-transparent text-stone-400 hover:text-[#2D4232]"
+                }`}
               >
-                <T>{expandedId === p.id ? "收起詳情" : "查看完整參數"}</T>
+                <T>{cat.name_cn}</T>
               </button>
-            </article>
-          ))}
-        </section>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 產品 Grid */}
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="rounded-xl overflow-hidden">
+                <div className="bg-stone-100 animate-pulse w-full aspect-square" />
+                <div className="pt-3 space-y-2">
+                  <div className="bg-stone-100 animate-pulse h-3 w-1/2 rounded" />
+                  <div className="bg-stone-100 animate-pulse h-4 w-3/4 rounded" />
+                  <div className="bg-stone-100 animate-pulse h-3 w-1/3 rounded" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-20 text-stone-400 text-sm">
+            <T>此分類暫無產品</T>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );
 }
 
-// 輔助組件：確保欄位格式統一，且自動進行繁簡轉換
-function InfoRow({ label, value }: { label: string; value: string }) {
+function ProductCard({ product }: { product: Product }) {
+  const dosha = product.dosha_type;
+  const hasImage = !!product.image_url;
+
   return (
-    <div>
-      <p className="text-[10px] font-bold text-[#2D4232] uppercase">
-        <T>{label}</T>
-      </p>
-      <p className="text-[11px] text-stone-500">
-        <T>{value}</T>
-      </p>
-    </div>
+    <Link href={`/products/${product.id}`} className="group block">
+      <div className="bg-white border border-stone-200 rounded-xl overflow-hidden hover:border-[#8A9A86] hover:shadow-sm transition-all duration-300">
+        {/* 圖片區：固定正方形比例 */}
+        <div className="relative w-full aspect-square overflow-hidden">
+          {hasImage ? (
+            <Image
+              src={product.image_url!}
+              alt={product.name_cn ?? ""}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : (
+            // 無圖：品牌色塊佔位
+            <div
+              className="w-full h-full flex flex-col items-center justify-center gap-2"
+              style={{
+                background:
+                  dosha && DOSHA_BG[dosha] ? DOSHA_BG[dosha] : "#2D4232",
+              }}
+            >
+              <span className="text-3xl">🌿</span>
+              {dosha && DOSHA_LABEL[dosha] && (
+                <span className="text-[10px] tracking-widest text-white/70 uppercase">
+                  {DOSHA_LABEL[dosha]}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Badge 區 */}
+          <div className="absolute top-2 left-2 flex flex-col gap-1">
+            {product.Is_Sale && (
+              <span className="bg-[#D85A30] text-white text-[9px] px-2 py-0.5 rounded-full tracking-wider">
+                <T>優惠</T>
+              </span>
+            )}
+            {dosha && DOSHA_LABEL[dosha] && hasImage && (
+              <span
+                className="text-[9px] px-2 py-0.5 rounded-full tracking-wider text-white"
+                style={{ background: DOSHA_COLOR[dosha] }}
+              >
+                {DOSHA_LABEL[dosha]}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* 文字區 */}
+        <div className="p-3 md:p-4">
+          {product.categories && (
+            <p className="text-[9px] tracking-wider text-stone-400 uppercase mb-1">
+              <T>{product.categories.name_cn}</T>
+            </p>
+          )}
+          <p className="text-sm font-medium text-[#2D4232] leading-snug mb-0.5 group-hover:text-[#3D5A45] transition-colors line-clamp-2">
+            <T>{product.name_cn ?? ""}</T>
+          </p>
+          {product.volume && (
+            <p className="text-[10px] text-stone-400 mb-1.5">
+              {product.volume}
+            </p>
+          )}
+          {product.price != null && (
+            <p className="text-sm text-[#2D4232] font-medium">
+              ¥ {product.price.toLocaleString()}
+            </p>
+          )}
+        </div>
+      </div>
+    </Link>
   );
 }
