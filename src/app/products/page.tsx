@@ -29,42 +29,20 @@ export default function ProductsPage() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [loading, setLoading] = useState(true);
 
+  // 计算有销售产品的类别
+  const categoriesWithSales = new Set(
+    products.filter(p => p.Is_Sale).map(p => p.category_id)
+  );
+  const visibleCategories = categories.filter(cat => categoriesWithSales.has(cat.id));
+
   useEffect(() => {
     const fetchCategories = async () => {
-      const { data: allCategories, error: catError } = await supabase
+      const { data, error } = await supabase
         .from("categories")
         .select("*")
         .order("id");
-
-      if (catError) {
-        console.error("categories error:", catError);
-        return;
-      }
-
-      if (!allCategories?.length) {
-        setCategories([]);
-        return;
-      }
-
-      // 只保留有销售产品的类别
-      const { data: saleProducts, error: prodError } = await supabase
-        .from("products")
-        .select("category_id")
-        .eq("Is_Sale", true);
-
-      if (prodError) {
-        console.error("products error:", prodError);
-        return;
-      }
-
-      const categoriesWithSales = new Set(
-        saleProducts?.map((p) => p.category_id) || []
-      );
-      const filteredCategories = allCategories.filter((cat) =>
-        categoriesWithSales.has(cat.id)
-      );
-
-      setCategories(filteredCategories);
+      if (data) setCategories(data);
+      if (error) console.error("categories error:", error);
     };
     fetchCategories();
   }, []);
@@ -119,7 +97,7 @@ export default function ProductsPage() {
             >
               <T>全部</T>
             </button>
-            {categories.map((cat) => (
+            {visibleCategories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
