@@ -53,7 +53,6 @@ export default function ProductsPage() {
       let query = supabase
         .from("products")
         .select("*, categories(id, name_cn, name_en, slug)")
-        .eq("Is_Sale", true)
         .order("id");
 
       if (activeCategory !== "all") {
@@ -61,7 +60,11 @@ export default function ProductsPage() {
       }
 
       const { data, error } = await query;
-      if (data) setProducts(data);
+      if (data) {
+        // 客户端过滤：只显示 Is_Sale 为 true 的产品
+        const filteredProducts = data.filter(p => p.Is_Sale === true);
+        setProducts(filteredProducts);
+      }
       if (error) console.error("products error:", error);
       setLoading(false);
     };
