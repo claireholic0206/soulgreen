@@ -25,13 +25,14 @@ const DOSHA_BG: Record<string, string> = {
 
 export default function ProductsPage() {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [allSaleProducts, setAllSaleProducts] = useState<Product[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [loading, setLoading] = useState(true);
 
-  // 计算有销售产品的类别
+  // 计算有销售产品的类别（基于所有销售产品，不受当前分类影响）
   const categoriesWithSales = new Set(
-    products.filter(p => p.Is_Sale).map(p => p.category_id)
+    allSaleProducts.map(p => p.category_id)
   );
   const visibleCategories = categories.filter(cat => categoriesWithSales.has(cat.id));
 
@@ -58,6 +59,7 @@ export default function ProductsPage() {
       if (data) {
         // 客户端过滤：只显示 Is_Sale 为 true 的产品
         const saleProducts = data.filter(p => p.Is_Sale === true);
+        setAllSaleProducts(saleProducts);
 
         // 根据选中分类过滤显示的产品
         if (activeCategory !== "all") {
