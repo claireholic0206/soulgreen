@@ -187,19 +187,16 @@ function ProductCard({ product }: { product: Product }) {
           )}
 
           {/* Badge 區 */}
-          <div className="absolute top-2 left-2 flex flex-col gap-1">
-            <span className="bg-[#D85A30] text-white text-[9px] px-2 py-0.5 rounded-full tracking-wider">
-              <T>優惠</T>
-            </span>
-            {dosha && DOSHA_LABEL[dosha] && hasImage && (
+          {dosha && DOSHA_LABEL[dosha] && hasImage && (
+            <div className="absolute top-2 left-2">
               <span
                 className="text-[9px] px-2 py-0.5 rounded-full tracking-wider text-white"
                 style={{ background: DOSHA_COLOR[dosha] }}
               >
                 {DOSHA_LABEL[dosha]}
               </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* 文字區 */}
