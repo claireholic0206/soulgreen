@@ -31,12 +31,40 @@ export default function ProductsPage() {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const { data, error } = await supabase
+      const { data: allCategories, error: catError } = await supabase
         .from("categories")
         .select("*")
         .order("id");
-      if (data) setCategories(data);
-      if (error) console.error("categories error:", error);
+
+      if (catError) {
+        console.error("categories error:", catError);
+        return;
+      }
+
+      if (!allCategories?.length) {
+        setCategories([]);
+        return;
+      }
+
+      // 只保留有销售产品的类别
+      const { data: saleProducts, error: prodError } = await supabase
+        .from("products")
+        .select("category_id")
+        .eq("Is_Sale", true);
+
+      if (prodError) {
+        console.error("products error:", prodError);
+        return;
+      }
+
+      const categoriesWithSales = new Set(
+        saleProducts?.map((p) => p.category_id) || []
+      );
+      const filteredCategories = allCategories.filter((cat) =>
+        categoriesWithSales.has(cat.id)
+      );
+
+      setCategories(filteredCategories);
     };
     fetchCategories();
   }, []);
@@ -47,6 +75,7 @@ export default function ProductsPage() {
       let query = supabase
         .from("products")
         .select("*, categories(id, name_cn, name_en, slug)")
+        .eq("Is_Sale", true)
         .order("id");
 
       if (activeCategory !== "all") {
@@ -174,11 +203,9 @@ function ProductCard({ product }: { product: Product }) {
 
           {/* Badge 區 */}
           <div className="absolute top-2 left-2 flex flex-col gap-1">
-            {product.Is_Sale && (
-              <span className="bg-[#D85A30] text-white text-[9px] px-2 py-0.5 rounded-full tracking-wider">
-                <T>優惠</T>
-              </span>
-            )}
+            <span className="bg-[#D85A30] text-white text-[9px] px-2 py-0.5 rounded-full tracking-wider">
+              <T>優惠</T>
+            </span>
             {dosha && DOSHA_LABEL[dosha] && hasImage && (
               <span
                 className="text-[9px] px-2 py-0.5 rounded-full tracking-wider text-white"
