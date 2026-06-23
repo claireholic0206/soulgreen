@@ -207,9 +207,14 @@ function ProductCard({ product }: { product: Product }) {
               <T>{product.categories.name_cn}</T>
             </p>
           )}
-          <p className="text-sm font-medium text-[#2D4232] leading-snug mb-0.5 group-hover:text-[#3D5A45] transition-colors line-clamp-2">
+          <p className="text-sm font-medium text-[#2D4232] leading-snug mb-1 group-hover:text-[#3D5A45] transition-colors line-clamp-2">
             <T>{product.name_cn ?? ""}</T>
           </p>
+          {product.usage && (
+            <p className="text-xs text-stone-500 mb-1.5 leading-relaxed">
+              <T>{product.usage}</T>
+            </p>
+          )}
           {product.volume && (
             <p className="text-[10px] text-stone-400 mb-1.5">
               {product.volume}
