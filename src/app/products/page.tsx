@@ -50,20 +50,22 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
-      let query = supabase
+      const { data, error } = await supabase
         .from("products")
         .select("*, categories(id, name_cn, name_en, slug)")
         .order("id");
 
-      if (activeCategory !== "all") {
-        query = query.eq("category_id", activeCategory);
-      }
-
-      const { data, error } = await query;
       if (data) {
         // 客户端过滤：只显示 Is_Sale 为 true 的产品
-        const filteredProducts = data.filter(p => p.Is_Sale === true);
-        setProducts(filteredProducts);
+        const saleProducts = data.filter(p => p.Is_Sale === true);
+
+        // 根据选中分类过滤显示的产品
+        if (activeCategory !== "all") {
+          const filtered = saleProducts.filter(p => p.category_id === activeCategory);
+          setProducts(filtered);
+        } else {
+          setProducts(saleProducts);
+        }
       }
       if (error) console.error("products error:", error);
       setLoading(false);
