@@ -4,12 +4,21 @@
 import { useEffect, useState } from "react";
 import * as OpenCC from "opencc-js";
 
+// 轉換器建立成本高（需載入整套字典），整個 App 共用同一個 instance，
+// 避免每個 <T> 元件各自重建造成頁面卡頓
+let sharedConverter: ((text: string) => string) | null = null;
+function getConverter() {
+  if (!sharedConverter) {
+    sharedConverter = OpenCC.Converter({ from: "tw", to: "cn" });
+  }
+  return sharedConverter;
+}
+
 export function T({ children }: { children: React.ReactNode }) {
   const [convertedText, setConvertedText] = useState<React.ReactNode>(children);
 
   useEffect(() => {
-    // 建立繁轉簡的轉換器
-    const converter = OpenCC.Converter({ from: "tw", to: "cn" });
+    const converter = getConverter();
 
     // 處理 children (如果是字串則轉換)
     const convert = (node: React.ReactNode): React.ReactNode => {

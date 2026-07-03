@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { useState } from "react";
 import { T } from "@/components/TextConverter";
 import type { Product } from "@/types/product";
 import { useCart } from "@/context/CartContext";
@@ -26,50 +25,9 @@ const DOSHA_BG: Record<string, string> = {
 
 const ESSENTIAL_OIL_CATEGORY = "03";
 
-export default function ProductDetailClient({ id }: { id: string }) {
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
+export default function ProductDetailClient({ product }: { product: Product }) {
   const [added, setAdded] = useState(false);
   const { addItem } = useCart();
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const { data } = await supabase
-        .from("products")
-        .select("*, categories(id, name_cn, name_en, slug)")
-        .eq("id", id)
-        .single();
-
-      if (data) setProduct(data);
-      else setNotFound(true);
-      setLoading(false);
-    };
-    fetchProduct();
-  }, [id]);
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#2D4232] border-t-transparent rounded-full animate-spin" />
-      </main>
-    );
-  }
-
-  if (notFound || !product) {
-    return (
-      <main className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-stone-400 mb-4">
-            <T>找不到此產品</T>
-          </p>
-          <Link href="/products" className="text-xs text-[#2D4232] underline">
-            <T>返回產品列表</T>
-          </Link>
-        </div>
-      </main>
-    );
-  }
 
   const isEssentialOil = product.category_id === ESSENTIAL_OIL_CATEGORY;
   const dosha = product.dosha_type;
