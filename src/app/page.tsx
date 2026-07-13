@@ -1,18 +1,29 @@
+"use client";
+
 import { createClient } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
 import type { Product } from "@/types/product";
 
-export default async function HomePage() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  );
+export default function HomePage() {
+  const [teaserProducts, setTeaserProducts] = useState<Product[]>([]);
 
-  const { data: products } = await supabase
-    .from("products")
-    .select("*, categories(id, name_cn, name_en, slug)")
-    .limit(3);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      );
 
-  const teaserProducts = (products ?? []).slice(0, 3);
+      const { data: products } = await supabase
+        .from("products")
+        .select("*, categories(id, name_cn, name_en, slug)")
+        .limit(3);
+
+      setTeaserProducts((products ?? []).slice(0, 3));
+    };
+
+    fetchProducts();
+  }, []);
 
   const features = [
     {
@@ -422,16 +433,20 @@ export default async function HomePage() {
                   fontSize: "12px",
                 }}
               >
-                [圖片]
+                {p.image_url ? (
+                  <img src={p.image_url} alt={p.name_cn || ""} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  "[圖片]"
+                )}
               </div>
               <div style={{ padding: "18px", display: "flex", flexDirection: "column", gap: "6px", flex: 1 }}>
                 <div>
-                  <div style={{ fontSize: "14px", fontWeight: 500, color: "var(--text)" }}>{p.name}</div>
+                  <div style={{ fontSize: "14px", fontWeight: 500, color: "var(--text)" }}>{p.name_cn}</div>
                   <div style={{ fontSize: "11px", color: "var(--text-muted)", letterSpacing: "0.02em" }}>
-                    {p.nameEn}
+                    {p.name_en}
                   </div>
                 </div>
-                <div style={{ fontSize: "12px", color: "var(--text-sub)", lineHeight: 1.6, flex: 1 }}>{p.Usage}</div>
+                <div style={{ fontSize: "12px", color: "var(--text-sub)", lineHeight: 1.6, flex: 1 }}>{p.usage}</div>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "8px" }}>
                   <div>
                     <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>{p.volume}</div>

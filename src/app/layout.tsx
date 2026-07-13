@@ -6,6 +6,9 @@ import { CartProvider } from "@/context/CartContext";
 export const metadata: Metadata = {
   title: "Soulgreen | 芳疗名片手册",
   description: "内在探索 ✕ 科学基础，专注于植物对身心的真实支持。",
+  other: {
+    'preconnect': 'https://fonts.googleapis.com',
+  },
 };
 
 export default function RootLayout({
