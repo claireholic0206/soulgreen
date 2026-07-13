@@ -76,7 +76,7 @@ export default function ConsultationForm() {
           healing_goals: formData.healing_goals.join("、"),
           additional_notes: formData.additional_notes,
           chakra_detection:
-            formData.chakra_detection === "yes" ? "願意" : "暫時不用",
+            formData.chakra_detection === "yes" ? "願意" : "暫时不用",
         },
         publicKey
       );
@@ -94,12 +94,12 @@ export default function ConsultationForm() {
         <div className="text-center max-w-md">
           <div className="text-5xl mb-6">✓</div>
           <h2 className="text-3xl font-serif text-[#4A5E4D] mb-4">
-            <T>感謝您的信任</T>
+            <T>感谢您的信任</T>
           </h2>
           <p className="text-[#6E6B66] mb-8 leading-relaxed">
             <T>
-              您的諮詢需求已收到，我將在 3-5
-              個工作日內與您聯繫，為您量身規劃專屬的植物配方方案。
+              您的諮询需求已收到，我將在 3-5
+              个工作日內与您聯繫，為您量身规划专屬的植物配方方案。
             </T>
           </p>
           <a
@@ -119,20 +119,20 @@ export default function ConsultationForm() {
         onSubmit={handleSubmit}
         className="max-w-2xl mx-auto space-y-8"
       >
-        {/* 標題與引導文案 */}
+        {/* 标题与引导文案 */}
         <header className="text-center mb-12">
           <h2 className="text-3xl font-serif text-[#4A5E4D] mb-8 tracking-tight">
-            <T>Soulgreen 個案諮詢</T>
+            <T>Soulgreen 个案諮询</T>
           </h2>
 
           <div className="space-y-6 text-[#6E6B66] text-sm font-light leading-relaxed max-w-lg mx-auto bg-white/50 p-8 rounded-2xl border border-stone-100">
             <p>
               <T>
-                不論是為忙碌的自己尋求安頓，或是為摯愛的家人尋求溫和的支持，我將透過這份諮詢，深入傾聽您的需求，為您量身規劃守護全家人的植物配方。
+                不論是為忙碌的自己尋求安頓，或是為摯愛的家人尋求温和的支持，我將透过这份諮询，深入倾聽您的需求，為您量身规划守護全家人的植物配方。
               </T>
             </p>
             <p className="font-medium text-[#4A5E4D]">
-              <T>您的信任，是我們開啟療癒之旅的第一步。</T>
+              <T>您的信任，是我們开启疗癒之旅的第一步。</T>
             </p>
           </div>
         </header>
@@ -140,12 +140,12 @@ export default function ConsultationForm() {
         {/* 區塊 1：基本資料 */}
         <div className={sectionClass}>
           <h3 className="text-lg font-serif text-[#4A5E4D] mb-6">
-            <T>關於您與家人</T>
+            <T>关于您与家人</T>
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className={labelClass}>
-                <T>您的稱呼</T>
+                <T>您的称呼</T>
               </label>
               <input
                 name="from_name"
@@ -170,19 +170,19 @@ export default function ConsultationForm() {
           </div>
         </div>
 
-        {/* 區塊 2：體質與能量 */}
+        {/* 區塊 2：体质与能量 */}
         <div className={sectionClass}>
           <h3 className="text-lg font-serif text-[#4A5E4D] mb-6">
-            <T>體質與能量傾向</T>
+            <T>体质与能量倾向</T>
           </h3>
           <label className={labelClass}>
             <T>您日常的身心能量感受通常是？</T>
           </label>
           <div className="grid grid-cols-1 gap-3">
             {[
-              "容易疲倦，晨間難以啟動",
-              "波動較大，午後易枯竭",
-              "規律穩定，保有活力",
+              "容易疲倦，晨间难以启动",
+              "波动较大，午后易枯竭",
+              "规律稳定，保有活力",
             ].map((item) => (
               <label
                 key={item}
@@ -205,18 +205,18 @@ export default function ConsultationForm() {
         {/* 區塊 3：核心需求 */}
         <div className={sectionClass}>
           <h3 className="text-lg font-serif text-[#4A5E4D] mb-6">
-            <T>療癒目標</T>
+            <T>疗癒目标</T>
           </h3>
           <label className={labelClass}>
-            <T>最想呵護的身心狀態 (可複選)</T>
+            <T>最想呵護的身心状态 (可复选)</T>
           </label>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
             {[
-              "呼吸道不適",
-              "睡眠品質差",
-              "情緒壓力管理",
-              "肌膚過敏修護",
-              "經期困擾調理",
+              "呼吸道不适",
+              "睡眠品质差",
+              "情绪压力管理",
+              "肌肤过敏修護",
+              "经期困扰调理",
             ].map((item) => (
               <label
                 key={item}
@@ -247,7 +247,7 @@ export default function ConsultationForm() {
         <div className="flex flex-col items-center gap-8 py-4">
           <div className="text-center">
             <p className="text-xs text-[#6E6B66] mb-4">
-              <T>是否加入脈輪檢測，以輔助規劃心靈滋養配方？</T>
+              <T>是否加入脈轮檢測，以輔助规划心靈滋養配方？</T>
             </p>
             <div className="flex gap-8 justify-center">
               <label className="flex items-center cursor-pointer">
@@ -270,7 +270,7 @@ export default function ConsultationForm() {
                   onChange={handleInputChange}
                   className="mr-2 accent-[#4A5E4D]"
                 />{" "}
-                <T>暫時不用</T>
+                <T>暫时不用</T>
               </label>
             </div>
           </div>
@@ -286,7 +286,7 @@ export default function ConsultationForm() {
             disabled={status === "sending"}
             className="w-full md:w-auto px-16 py-4 bg-[#4A5E4D] text-white rounded-full font-medium hover:bg-[#1e2e22] transition-all shadow-md text-sm tracking-widest uppercase disabled:opacity-50"
           >
-            <T>{status === "sending" ? "發送中..." : "發送諮詢需求"}</T>
+            <T>{status === "sending" ? "发送中..." : "发送諮询需求"}</T>
           </button>
         </div>
       </form>

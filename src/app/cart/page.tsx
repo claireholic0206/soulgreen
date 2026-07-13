@@ -69,7 +69,7 @@ export default function CartPage() {
       clearCart();
     } catch {
       setStatus("error");
-      setErrorMsg("發送失敗，請稍後再試");
+      setErrorMsg("发送失敗，請稍后再试");
     }
   };
 
@@ -82,13 +82,13 @@ export default function CartPage() {
             <T>已收到您的購物清單</T>
           </h1>
           <p className="text-sm text-[#A09890] mb-8 leading-relaxed">
-            <T>我們會盡快與您聯繫確認訂單與付款方式，謝謝您的耐心等候。</T>
+            <T>我們会盡快与您聯繫確認訂單与付款方式，谢谢您的耐心等候。</T>
           </p>
           <Link
             href="/products"
             className="inline-block px-8 py-3 bg-[#4A5E4D] text-white text-xs tracking-[0.2em] uppercase rounded-md hover:bg-[#2E2E2C] transition-all"
           >
-            <T>繼續選購</T>
+            <T>繼續选購</T>
           </Link>
         </div>
       </main>
@@ -111,7 +111,7 @@ export default function CartPage() {
               href="/products"
               className="text-xs text-[#4A5E4D] underline"
             >
-              <T>前往選購商品</T>
+              <T>前往选購商品</T>
             </Link>
           </div>
         ) : (
@@ -160,7 +160,7 @@ export default function CartPage() {
                         updateQuantity(item.id, item.quantity - 1)
                       }
                       className="w-7 h-7 flex items-center justify-center border border-[#E2DDD5] rounded-md text-[#4A5E4D] hover:bg-[#F3F1ED] transition-colors"
-                      aria-label="減少數量"
+                      aria-label="减少數量"
                     >
                       −
                     </button>
@@ -189,10 +189,10 @@ export default function CartPage() {
               ))}
             </div>
 
-            {/* 總計 */}
+            {/* 總计 */}
             <div className="flex justify-between items-center border-t border-[#E2DDD5] pt-4 mb-10">
               <span className="text-sm text-[#6E6B66]">
-                <T>總計</T>
+                <T>總计</T>
               </span>
               <span className="text-xl text-[#4A5E4D] font-medium">
                 ¥ {totalPrice.toLocaleString()}
@@ -205,7 +205,7 @@ export default function CartPage() {
                 <T>填寫聯繫方式</T>
               </h2>
               <p className="text-xs text-[#A09890] mb-5">
-                <T>提交後我們會以您留下的方式與您聯繫，確認訂單與付款方式</T>
+                <T>提交后我們会以您留下的方式与您聯繫，確認訂單与付款方式</T>
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -248,12 +248,12 @@ export default function CartPage() {
                 </div>
 
                 <p className="text-[11px] text-[#A09890] -mt-2">
-                  <T>電話與 Email 請至少填寫一項</T>
+                  <T>電話与 Email 請至少填寫一項</T>
                 </p>
 
                 <div>
                   <label className="block text-xs text-[#6E6B66] mb-1.5">
-                    <T>備註</T>
+                    <T>备註</T>
                   </label>
                   <textarea
                     value={note}

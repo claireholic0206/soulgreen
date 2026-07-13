@@ -27,8 +27,8 @@ export default async function ProductDetailPage({
 }) {
   const { id } = await params;
 
-  // 靜態匯出模式下，這個 fetch 只會在 next build 時執行一次，
-  // 產生的是已經含資料的靜態 HTML，瀏覽器不需要再打 API
+  // 静态匯出模式下，这个 fetch 只会在 next build 时執行一次，
+  // 產生的是已经含資料的静态 HTML，瀏覽器不需要再打 API
   const { data: product } = await getSupabase()
     .from("products")
     .select("*, categories(id, name_cn, name_en, slug)")

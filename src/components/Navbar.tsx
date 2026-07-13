@@ -23,7 +23,7 @@ export function Navbar() {
           <T>Soulgreen Aroma</T>
         </span>
 
-        {/* 電腦版選單 */}
+        {/* 電腦版选單 */}
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-stone-600">
           {navLinks.map((link) => (
             <a key={link.name} href={link.href} className="hover:text-[#8A9A86] transition-colors">
@@ -52,7 +52,7 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* 手機版下拉選單 */}
+      {/* 手機版下拉选單 */}
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-stone-100 px-6 py-4 flex flex-col space-y-4 animate-in slide-in-from-top-2">
           {navLinks.map((link) => (
@@ -60,7 +60,7 @@ export function Navbar() {
               key={link.name}
               href={link.href}
               className="text-sm font-medium text-stone-600 hover:text-[#8A9A86] transition-colors block py-2"
-              onClick={() => setIsMenuOpen(false)} // 點擊後關閉選單
+              onClick={() => setIsMenuOpen(false)} // 点击后关閉选單
             >
               <T>{link.name}</T>
             </a>

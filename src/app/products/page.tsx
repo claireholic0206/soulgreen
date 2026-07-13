@@ -8,8 +8,8 @@ export default async function ProductsPage() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   );
 
-  // 靜態匯出模式下，這兩個 fetch 只會在 next build 時執行一次，
-  // 產生的是已經含資料的靜態 HTML，瀏覽器不需要再打 API 拿分類/產品
+  // 静态匯出模式下，这兩个 fetch 只会在 next build 时執行一次，
+  // 產生的是已经含資料的静态 HTML，瀏覽器不需要再打 API 拿分類/產品
   const [{ data: categories, error: categoriesError }, { data: products, error: productsError }] =
     await Promise.all([
       supabase.from("categories").select("*").order("id"),

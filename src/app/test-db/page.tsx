@@ -7,7 +7,7 @@ export default function TestPage() {
 
   useEffect(() => {
     async function checkConnection() {
-      // 試著撈出 products 表的一筆資料
+      // 试著撈出 products 表的一筆資料
       const { data, error } = await supabase
         .from("products")
         .select("*")
@@ -23,5 +23,5 @@ export default function TestPage() {
     checkConnection();
   }, []);
 
-  return <div>測試結果：{status}</div>;
+  return <div>測试结果：{status}</div>;
 }

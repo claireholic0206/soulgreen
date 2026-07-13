@@ -24,14 +24,14 @@ export default function QuizPage() {
   const [stage, setStage] = useState<"intro" | "quiz" | "result">("intro");
   const [currentStep, setCurrentStep] = useState(0);
 
-  // 單選答案：qId -> OptionDosha
+  // 單选答案：qId -> OptionDosha
   const [answers, setAnswers] = useState<Record<number, OptionDosha>>({});
-  // 多選答案：qId -> index[]
+  // 多选答案：qId -> index[]
   const [multiAnswers, setMultiAnswers] = useState<Record<number, number[]>>(
     {},
   );
 
-  // 結果
+  // 结果
   const [primary, setPrimary] = useState<DoshaKey | null>(null);
   const [secondary, setSecondary] = useState<DoshaKey | null>(null);
   const [imbalance, setImbalance] = useState<DoshaKey | null>(null);
@@ -48,12 +48,12 @@ export default function QuizPage() {
   const currentSection = getSection(currentStep);
   const sectionMeta = SECTION_META[currentSection];
 
-  // 目前題目是否已作答
+  // 目前题目是否已作答
   const isAnswered = currentQ.multi
     ? (multiAnswers[currentQ.id]?.length ?? 0) > 0
     : answers[currentQ.id] !== undefined;
 
-  // ── 計算結果 ──
+  // ── 计算结果 ──
   const calcResult = (
     finalAnswers: Record<number, OptionDosha>,
     finalMulti: Record<number, number[]>,
@@ -147,7 +147,7 @@ export default function QuizPage() {
       <main className="min-h-screen bg-[#FAFAF8] py-24 px-6 flex items-center justify-center">
         <div className="max-w-md w-full text-center">
           <p className="text-[10px] tracking-[0.35em] uppercase text-[#4A5E4D]/50 mb-5">
-            <T>身心諮詢室 · Soulgreen Studio</T>
+            <T>身心諮询室 · Soulgreen Studio</T>
           </p>
           <h1 className="text-4xl font-serif text-[#4A5E4D] mb-5 leading-tight">
             <em className="italic text-[#B8975A]">
@@ -157,14 +157,14 @@ export default function QuizPage() {
           </h1>
           <p className="text-[#6E6B66] mb-8 leading-relaxed text-sm">
             <T>
-              阿育吠陀認為，每個人皆由風（Vata）、火（Pitta）、土水（Kapha）三種生命能量組成。這份問卷結合瑞士芳療科學，幫助你深入了解當下的體質狀態與失衡傾向，找到最適合你的植萃配方。
+              阿育吠陀認為，每个人皆由风（Vata）、火（Pitta）、土水（Kapha）三種生命能量組成。这份问卷结合瑞士芳疗科学，帮助你深入了解当下的体质状态与失衡倾向，找到最适合你的植萃配方。
             </T>
           </p>
 
           {/* 三督夏 pill */}
           <div className="flex justify-center gap-3 mb-8 flex-wrap">
             {[
-              { label: "Vata 風", color: "#7F77DD" },
+              { label: "Vata 风", color: "#7F77DD" },
               { label: "Pitta 火", color: "#D85A30" },
               { label: "Kapha 土水", color: "#1D9E75" },
             ].map((d) => (
@@ -179,21 +179,21 @@ export default function QuizPage() {
           </div>
 
           <p className="text-xs text-[#A09890] mb-8 bg-[#F3F1ED] rounded-lg px-5 py-3 border border-#E2DDD5">
-            <T>約需 5–8 分鐘 · 共 23 題 · 結果含專屬配方推薦</T>
+            <T>約需 5–8 分鐘 · 共 23 题 · 结果含专屬配方推薦</T>
           </p>
 
           <button
             onClick={() => setStage("quiz")}
             className="w-full py-4 bg-[#4A5E4D] text-white text-xs tracking-[0.25em] uppercase rounded-md hover:bg-[#2E2E2C] transition-all"
           >
-            <T>開始進行諮詢</T>
+            <T>开始进行諮询</T>
           </button>
         </div>
       </main>
     );
   }
 
-  // ── 結果頁 ────────────────────────────────────────────────────
+  // ── 结果頁 ────────────────────────────────────────────────────
   if (stage === "result" && primary && secondary && imbalance) {
     return (
       <ResultPage
@@ -229,7 +229,7 @@ export default function QuizPage() {
       <div className="px-6 pt-5 pb-2 max-w-xl mx-auto">
         <div className="flex justify-between text-[11px] text-[#A09890] mb-2">
           <span>
-            <T>問卷進度</T>
+            <T>问卷进度</T>
           </span>
           <span>
             {currentStep + 1} / {total}
@@ -314,7 +314,7 @@ export default function QuizPage() {
             currentStep === 0 ? "invisible" : ""
           }`}
         >
-          <T>← 上一題</T>
+          <T>← 上一题</T>
         </button>
 
         {(currentQ.multi || isLast) && (
@@ -323,7 +323,7 @@ export default function QuizPage() {
             disabled={!isAnswered}
             className="text-xs bg-[#4A5E4D] text-white px-7 py-2.5 rounded-md tracking-widest uppercase disabled:opacity-30 hover:bg-[#2E2E2C] transition-all"
           >
-            <T>{isLast ? "查看我的體質 →" : "繼續 →"}</T>
+            <T>{isLast ? "查看我的体质 →" : "繼續 →"}</T>
           </button>
         )}
       </div>
@@ -331,7 +331,7 @@ export default function QuizPage() {
   );
 }
 
-// ── 結果頁元件 ────────────────────────────────────────────────────
+// ── 结果頁元件 ────────────────────────────────────────────────────
 function ResultPage({
   primary,
   secondary,
@@ -371,13 +371,13 @@ function ResultPage({
           {primary}
         </div>
         <p className="text-[10px] tracking-[0.35em] uppercase text-[#4A5E4D]/50 mb-3">
-          <T>你的督夏體質</T>
+          <T>你的督夏体质</T>
         </p>
         <h1 className="text-3xl font-serif text-[#4A5E4D] mb-2">
           <T>{pd.name}</T>
         </h1>
         <p className="text-sm text-[#A09890]">
-          <T>次體質：</T>
+          <T>次体质：</T>
           <T>{sd.name}</T>
         </p>
       </div>
@@ -406,10 +406,10 @@ function ResultPage({
       </div>
 
       <div className="max-w-lg mx-auto px-6 space-y-4">
-        {/* 體質解讀 */}
+        {/* 体质解讀 */}
         <div className="bg-[#F3F1ED] border border-#E2DDD5 rounded-xl p-6">
           <p className="text-[10px] tracking-[0.2em] uppercase text-[#4A5E4D]/50 mb-3">
-            <T>體質解讀</T> · <T>{pd.name}</T>
+            <T>体质解讀</T> · <T>{pd.name}</T>
           </p>
           <p className="text-sm text-[#6E6B66] leading-relaxed mb-4">
             <T>{pd.essence}</T>
@@ -427,10 +427,10 @@ function ResultPage({
           </div>
         </div>
 
-        {/* 當下失衡信號 */}
+        {/* 当下失衡信號 */}
         <div className="bg-white border border-#E2DDD5 rounded-xl p-6">
           <p className="text-[10px] tracking-[0.2em] uppercase text-[#4A5E4D]/50 mb-3">
-            <T>當下失衡信號</T> · <T>{id.name}</T>
+            <T>当下失衡信號</T> · <T>{id.name}</T>
           </p>
           <div className="flex flex-wrap gap-2">
             {id.imbalanceSigns.map((s) => (
@@ -451,10 +451,10 @@ function ResultPage({
         {/* 產品推薦 */}
         <div>
           <h2 className="font-serif text-xl text-[#4A5E4D] mt-6 mb-1">
-            <T>專屬芳療配方推薦</T>
+            <T>专屬芳疗配方推薦</T>
           </h2>
           <p className="text-xs text-[#A09890] mb-4">
-            <T>根據你的體質與當下狀態，以下配方最能支持你的身心平衡</T>
+            <T>根據你的体质与当下状态，以下配方最能支持你的身心平衡</T>
           </p>
           <div className="space-y-3">
             {pd.products.map((p) => (
@@ -483,21 +483,21 @@ function ResultPage({
           </div>
         </div>
 
-        {/* CTA 預約諮詢 */}
+        {/* CTA 預約諮询 */}
         <div className="bg-[#4A5E4D] rounded-2xl p-8 text-center mt-6">
           <h2 className="font-serif text-2xl text-[#FAFAF8] mb-3">
-            <T>深度諮詢</T>
+            <T>深度諮询</T>
           </h2>
           <p className="text-xs text-[#FAFAF8]/70 leading-relaxed mb-6">
             <T>
-              每一個體質都是獨一無二的組合。讓我們的認證芳療師為你設計完整的個人化療癒計劃，從精油選擇到日常調理，全方位守護你的身心。
+              每一个体质都是独一無二的組合。讓我們的認證芳疗師為你設计完整的个人化疗癒计划，從精油选择到日常调理，全方位守護你的身心。
             </T>
           </p>
           <a
             href="/services"
             className="block w-full py-3.5 bg-[#FAFAF8] text-[#4A5E4D] text-xs tracking-[0.2em] uppercase rounded-md font-medium hover:opacity-90 transition-all mb-3"
           >
-            <T>預約一對一諮詢</T>
+            <T>預約一对一諮询</T>
           </a>
           <a
             href="/products"

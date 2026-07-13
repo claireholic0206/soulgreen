@@ -13,7 +13,7 @@ const DOSHA_COLOR: Record<string, string> = {
   K: "#1D9E75",
 };
 const DOSHA_LABEL: Record<string, string> = {
-  V: "Vata 風型",
+  V: "Vata 风型",
   P: "Pitta 火型",
   K: "Kapha 土水型",
 };
@@ -187,7 +187,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
           </div>
         </div>
 
-        {/* 下方詳細資訊 */}
+        {/* 下方詳细資訊 */}
         {(product.ingredients || product.usage) && (
           <div className="mt-12 border-t border-[#E2DDD5] pt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
             {product.ingredients && (
@@ -223,20 +223,20 @@ export default function ProductDetailClient({ product }: { product: Product }) {
               className="text-[10px] tracking-[0.2em] uppercase mb-2"
               style={{ color: DOSHA_COLOR[dosha] }}
             >
-              <T>適合體質</T>
+              <T>适合体质</T>
             </p>
             <p className="font-serif text-lg text-[#4A5E4D] mb-2">
               {DOSHA_LABEL[dosha]}
             </p>
             <p className="text-xs text-[#6E6B66] leading-relaxed">
-              <T>想了解自己的體質？</T>
+              <T>想了解自己的体质？</T>
             </p>
             <Link
               href="/quiz"
               className="inline-block mt-3 text-xs tracking-wider underline"
               style={{ color: DOSHA_COLOR[dosha] }}
             >
-              <T>進行體質測驗 →</T>
+              <T>进行体质測驗 →</T>
             </Link>
           </div>
         )}

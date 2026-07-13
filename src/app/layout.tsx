@@ -3,8 +3,8 @@ import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 
 export const metadata: Metadata = {
-  title: "Soulgreen | 芳療名片手冊",
-  description: "內在探索 ✕ 科學基礎，專注於植物對身心的真實支持。",
+  title: "Soulgreen | 芳疗名片手册",
+  description: "内在探索 ✕ 科学基础，专注于植物对身心的真实支持。",
 };
 
 export default function RootLayout({
@@ -40,7 +40,7 @@ function Header() {
       <style>{`
         .header-logo {
           font-family: 'Lora', serif;
-          font-size: 20px;
+          font-size: 24px;
           font-weight: 700;
           color: var(--primary-dark);
           letter-spacing: 0.01em;
@@ -49,7 +49,7 @@ function Header() {
         }
         @media (max-width: 640px) {
           .header-logo {
-            font-size: 16px;
+            font-size: 17px;
           }
         }
       `}</style>
@@ -93,7 +93,7 @@ function Header() {
               textDecoration: "none",
             }}
           >
-            芳療產品
+            芳疗產品
           </a>
           <a
             href="/quiz"
@@ -106,7 +106,7 @@ function Header() {
               textDecoration: "none",
             }}
           >
-            體質測驗
+            体质測驗
           </a>
           <a
             href="/services"
@@ -119,7 +119,7 @@ function Header() {
               textDecoration: "none",
             }}
           >
-            專屬服務
+            专屬服務
           </a>
           <a
             href="/cart"
@@ -162,7 +162,7 @@ function Footer() {
         Soulgreen
       </span>
       <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
-        © 2026 Soulgreen Studio · 香氛連接靈性與身心平衡
+        © 2026 Soulgreen Studio · 香氛連接靈性与身心平衡
       </span>
     </div>
   );

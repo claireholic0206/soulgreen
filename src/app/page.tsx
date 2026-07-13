@@ -36,18 +36,18 @@ export default function HomePage() {
 
   const features = [
     {
-      title: "科學嚴謹",
-      desc: "傳承瑞士體系，以臨床芳療科學為核心。",
+      title: "科学嚴謹",
+      desc: "傳承瑞士体系，以臨床芳疗科学為核心。",
       icon: "diamond",
     },
     {
       title: "植萃輔助",
-      desc: "精選自然精粹，提供身體與情緒的平衡。",
+      desc: "精选自然精粹，提供身体与情绪的平衡。",
       icon: "leaf",
     },
     {
       title: "全方守護",
-      desc: "從日常調理到身心安撫，穩固生活支持。",
+      desc: "從日常调理到身心安撫，稳固生活支持。",
       icon: "shield",
     },
   ];
@@ -106,7 +106,7 @@ export default function HomePage() {
             }
           `}</style>
           <h1 className="hero-title">
-            安靜地，<em>回到自己</em>
+            安静地，<em>回到自己</em>
           </h1>
           <p
             style={{
@@ -118,7 +118,7 @@ export default function HomePage() {
               margin: "0 auto 40px",
             }}
           >
-            芳療不僅是氣味的愉悅，更是連接內在與外在的橋樑。Soulgreen 將瑞士芳療的科學嚴謹，與阿育吠陀的身心智慧合而為一，陪你找回內在節奏。
+            芳疗不僅是气味的愉悅，更是連接內在与外在的橋樑。Soulgreen 將瑞士芳疗的科学嚴謹，与阿育吠陀的身心智慧合而為一，陪你找回內在节奏。
           </p>
           <style>{`
             .hero-buttons {
@@ -158,7 +158,7 @@ export default function HomePage() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "#2E2E2C")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "var(--primary-dark)")}
             >
-              開始體質測試
+              开始体质測试
             </Link>
             <Link
               href="/products"
@@ -179,14 +179,14 @@ export default function HomePage() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "var(--primary-muted)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
-              瀏覽芳療產品
+              瀏覽芳疗產品
             </Link>
           </div>
         </div>
       </div>
 
       {/* Features */}
-      <div style={{ maxWidth: "1160px", margin: "0 auto", padding: "0 48px 96px" }}>
+      <div style={{ maxWidth: "1160px", margin: "0 auto", padding: "120px 48px 96px" }}>
         <div
           style={{
             display: "grid",
@@ -322,19 +322,24 @@ export default function HomePage() {
                 margin: 0,
               }}
             >
-              草本與香氣的對話
+              草本与香气的对話
             </h2>
           </div>
           <Link
             href="/products"
             style={{
-              fontSize: "13px",
-              color: "var(--primary)",
+              fontSize: "14px",
+              color: "var(--text)",
               cursor: "pointer",
-              textDecoration: "underline",
+              textDecoration: "none",
+              borderBottom: "1px solid var(--text)",
+              paddingBottom: "4px",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
             }}
           >
-            查看全部商品 →
+            查看全部产品 →
           </Link>
         </div>
         <div
@@ -430,7 +435,7 @@ export default function HomePage() {
                       onMouseEnter={(e) => (e.currentTarget.style.background = "var(--primary-muted)")}
                       onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                     >
-                      加入購物
+                      加入購物車
                     </button>
                   </div>
                 </div>
@@ -452,7 +457,7 @@ export default function HomePage() {
               margin: "0 0 14px",
             }}
           >
-            還不確定從何開始？
+            還不確定從何开始？
           </h2>
           <p
             style={{
@@ -463,7 +468,7 @@ export default function HomePage() {
               margin: "0 0 32px",
             }}
           >
-            用半小時，讓高質測試的為你帶來方向 — 直接面對面詢問，由香氛師為你量身建議。
+            用半小时，讓高质測试的為你帶来方向 — 直接面对面询问，由香氛師為你量身建議。
           </p>
           <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link
@@ -485,7 +490,7 @@ export default function HomePage() {
               onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
             >
-              開始體質測試
+              开始体质測试
             </Link>
             <Link
               href="/services"
@@ -505,7 +510,7 @@ export default function HomePage() {
               onMouseEnter={(e) => (e.currentTarget.style.borderColor = "white")}
               onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(250,250,248,0.4)")}
             >
-              預訂諮詢
+              預訂諮询
             </Link>
           </div>
         </div>

@@ -49,10 +49,10 @@ export default function ProductsClient({
           <T>Soulgreen Studio</T>
         </p>
         <h1 className="font-serif text-3xl text-[#4A5E4D] mb-3 leading-tight">
-          <T>植萃芳療產品</T>
+          <T>植萃芳疗產品</T>
         </h1>
         <p className="text-xs text-[#A09890] max-w-xs mx-auto leading-relaxed">
-          <T>結合阿育吠陀智慧與瑞士芳療科學，為你的體質量身打造</T>
+          <T>结合阿育吠陀智慧与瑞士芳疗科学，為你的体质量身打造</T>
         </p>
       </div>
 
