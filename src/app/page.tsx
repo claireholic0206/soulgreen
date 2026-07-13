@@ -327,8 +327,9 @@ export default function HomePage() {
             </div>
           ) : (
             teaserProducts.map((p: Product) => (
-              <div
+              <Link
                 key={p.id}
+                href={`/products/${p.id}`}
                 style={{
                   background: "white",
                   border: "1px solid var(--border)",
@@ -338,6 +339,8 @@ export default function HomePage() {
                   flexDirection: "column",
                   cursor: "pointer",
                   transition: "border-color 0.2s",
+                  textDecoration: "none",
+                  color: "inherit",
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#8A9A86")}
                 onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
@@ -382,6 +385,10 @@ export default function HomePage() {
                       <div style={{ fontSize: "15px", color: "var(--text)", fontWeight: 500 }}>¥ {p.price}</div>
                     </div>
                     <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
                       style={{
                         background: "transparent",
                         color: "var(--primary)",
@@ -400,7 +407,7 @@ export default function HomePage() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </div>
