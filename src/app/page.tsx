@@ -86,19 +86,27 @@ export default function HomePage() {
           >
             SOULGREEN AROMA
           </div>
-          <h1
-            style={{
-              fontFamily: "'Lora', serif",
-              fontSize: "52px",
-              fontWeight: 400,
-              lineHeight: 1.4,
-              color: "var(--text)",
-              maxWidth: "320px",
-              margin: "0 auto 22px",
-            }}
-          >
-            安靜地，<br />
-            <em style={{ fontStyle: "italic", color: "var(--primary)" }}>回到自己</em>
+          <style>{`
+            .hero-title {
+              font-family: 'Lora', serif;
+              font-size: 52px;
+              font-weight: 400;
+              line-height: 1.4;
+              color: var(--text);
+              margin: 0 auto 22px;
+            }
+            .hero-title em {
+              font-style: italic;
+              color: var(--primary);
+            }
+            @media (max-width: 640px) {
+              .hero-title {
+                font-size: 42px;
+              }
+            }
+          `}</style>
+          <h1 className="hero-title">
+            安靜地，<em>回到自己</em>
           </h1>
           <p
             style={{
@@ -117,7 +125,7 @@ export default function HomePage() {
               href="/quiz"
               style={{
                 display: "inline-block",
-                background: "var(--primary)",
+                background: "var(--primary-dark)",
                 color: "var(--bg)",
                 border: "none",
                 borderRadius: "999px",
@@ -130,8 +138,8 @@ export default function HomePage() {
                 transition: "background 0.18s",
                 textDecoration: "none",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--primary-dark)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--primary)")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#2E2E2C")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--primary-dark)")}
             >
               開始體質測試
             </Link>
@@ -140,8 +148,8 @@ export default function HomePage() {
               style={{
                 display: "inline-block",
                 background: "transparent",
-                color: "var(--primary)",
-                border: "1px solid var(--primary)",
+                color: "var(--primary-dark)",
+                border: "1px solid var(--primary-dark)",
                 borderRadius: "999px",
                 padding: "14px 34px",
                 fontFamily: "'Inter', sans-serif",
@@ -416,7 +424,7 @@ export default function HomePage() {
       </div>
 
       {/* CTA Band */}
-      <div style={{ background: "var(--primary-dark)", padding: "80px 48px", textAlign: "center" }}>
+      <div style={{ background: "#2E2E2C", padding: "80px 48px", textAlign: "center" }}>
         <div style={{ maxWidth: "520px", margin: "0 auto" }}>
           <h2
             style={{

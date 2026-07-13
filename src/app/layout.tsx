@@ -3,8 +3,8 @@ import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 
 export const metadata: Metadata = {
-  title: "Soulgreen | 芳疗名片手册",
-  description: "内在探索 ✕ 科学基础，专注于植物对身心的真实支持。",
+  title: "Soulgreen | 芳療名片手冊",
+  description: "內在探索 ✕ 科學基礎，專注於植物對身心的真實支持。",
 };
 
 export default function RootLayout({
@@ -115,22 +115,7 @@ function Header() {
           >
             專屬服務
           </a>
-          <span
-            style={{
-              fontSize: "10px",
-              letterSpacing: "0.1em",
-              color: "var(--text-muted)",
-              background: "var(--bg-mid)",
-              border: "1px solid var(--border)",
-              borderRadius: "999px",
-              padding: "6px 13px",
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-            }}
-          >
-            會員系統 · 敬請期待
-          </span>
-          <a
+          <
             href="/cart"
             style={{
               fontSize: "13px",
