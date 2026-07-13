@@ -2,24 +2,33 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import type { Product } from "@/types/product";
 
 export default function HomePage() {
   const [teaserProducts, setTeaserProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      );
+      try {
+        const supabase = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        );
 
-      const { data: products } = await supabase
-        .from("products")
-        .select("*, categories(id, name_cn, name_en, slug)")
-        .limit(3);
+        const { data: products } = await supabase
+          .from("products")
+          .select("*, categories(id, name_cn, name_en, slug)")
+          .eq("Is_Sale", true)
+          .limit(3);
 
-      setTeaserProducts((products ?? []).slice(0, 3));
+        setTeaserProducts(products ?? []);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchProducts();
@@ -44,110 +53,7 @@ export default function HomePage() {
   ];
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
-      {/* Navbar */}
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 50,
-          background: "rgba(250,250,248,0.94)",
-          backdropFilter: "blur(10px)",
-          borderBottom: "1px solid var(--border)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1160px",
-            margin: "0 auto",
-            padding: "18px 48px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "20px",
-            flexWrap: "wrap",
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "'Lora', serif",
-              fontSize: "20px",
-              fontWeight: 500,
-              color: "var(--primary-dark)",
-              letterSpacing: "0.01em",
-              cursor: "pointer",
-              flexShrink: 0,
-            }}
-          >
-            Soul Green
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "28px", flexWrap: "wrap" }}>
-            <span
-              style={{
-                fontSize: "13px",
-                color: "var(--text-sub)",
-                fontWeight: 400,
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-            >
-              產品
-            </span>
-            <span
-              style={{
-                fontSize: "13px",
-                color: "var(--text-sub)",
-                fontWeight: 400,
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-            >
-              問卷
-            </span>
-            <span
-              style={{
-                fontSize: "13px",
-                color: "var(--text-sub)",
-                fontWeight: 400,
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-            >
-              服務
-            </span>
-            <span
-              style={{
-                fontSize: "10px",
-                letterSpacing: "0.1em",
-                color: "var(--text-muted)",
-                background: "var(--bg-mid)",
-                border: "1px solid var(--border)",
-                borderRadius: "999px",
-                padding: "6px 13px",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-            >
-              會員系統 · 敬請期待
-            </span>
-            <span
-              style={{
-                fontSize: "13px",
-                color: "var(--text-sub)",
-                fontWeight: 400,
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
-            >
-              購物車 <span style={{ fontSize: "10px" }}>📦</span>
-            </span>
-          </div>
-        </div>
-      </div>
-
+    <div style={{ background: "var(--bg)" }}>
       {/* Hero */}
       <div
         style={{
@@ -205,8 +111,10 @@ export default function HomePage() {
             香氣不只是聞覺的愉悅，更是連接內在與外在的橋樑。Soul Green 走向土醫的芳香科學與智慧，以綠色長青的身心精油與植物為導，陪你探尋身心平衡。
           </p>
           <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
-            <button
+            <Link
+              href="/quiz"
               style={{
+                display: "inline-block",
                 background: "var(--primary)",
                 color: "var(--bg)",
                 border: "none",
@@ -218,14 +126,17 @@ export default function HomePage() {
                 letterSpacing: "0.04em",
                 cursor: "pointer",
                 transition: "background 0.18s",
+                textDecoration: "none",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "var(--primary-dark)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "var(--primary)")}
             >
               開始高質測試
-            </button>
-            <button
+            </Link>
+            <Link
+              href="/products"
               style={{
+                display: "inline-block",
                 background: "transparent",
                 color: "var(--primary)",
                 border: "1px solid var(--primary)",
@@ -236,12 +147,13 @@ export default function HomePage() {
                 fontWeight: 400,
                 letterSpacing: "0.04em",
                 cursor: "pointer",
+                textDecoration: "none",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "#DDE8DE")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--primary-muted)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
               瀏覽香氛商品
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -386,7 +298,8 @@ export default function HomePage() {
               植本香氛的小對話
             </h2>
           </div>
-          <span
+          <Link
+            href="/products"
             style={{
               fontSize: "13px",
               color: "var(--primary)",
@@ -395,7 +308,7 @@ export default function HomePage() {
             }}
           >
             查看全部商品 →
-          </span>
+          </Link>
         </div>
         <div
           style={{
@@ -404,74 +317,92 @@ export default function HomePage() {
             gap: "18px",
           }}
         >
-          {teaserProducts.map((p: Product) => (
-            <div
-              key={p.id}
-              style={{
-                background: "white",
-                border: "1px solid var(--border)",
-                borderRadius: "16px",
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-                cursor: "pointer",
-                transition: "border-color 0.2s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#8A9A86")}
-              onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
-            >
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  aspectRatio: "1",
-                  background: "var(--bg-mid)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--text-muted)",
-                  fontSize: "12px",
-                }}
-              >
-                {p.image_url ? (
-                  <img src={p.image_url} alt={p.name_cn || ""} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                ) : (
-                  "[圖片]"
-                )}
-              </div>
-              <div style={{ padding: "18px", display: "flex", flexDirection: "column", gap: "6px", flex: 1 }}>
-                <div>
-                  <div style={{ fontSize: "14px", fontWeight: 500, color: "var(--text)" }}>{p.name_cn}</div>
-                  <div style={{ fontSize: "11px", color: "var(--text-muted)", letterSpacing: "0.02em" }}>
-                    {p.name_en}
-                  </div>
-                </div>
-                <div style={{ fontSize: "12px", color: "var(--text-sub)", lineHeight: 1.6, flex: 1 }}>{p.usage}</div>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "8px" }}>
-                  <div>
-                    <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>{p.volume}</div>
-                    <div style={{ fontSize: "15px", color: "var(--text)", fontWeight: 500 }}>¥ {p.price}</div>
-                  </div>
-                  <button
-                    style={{
-                      background: "transparent",
-                      color: "var(--primary)",
-                      border: "1px solid var(--primary)",
-                      borderRadius: "999px",
-                      padding: "8px 16px",
-                      fontFamily: "'Inter', sans-serif",
-                      fontSize: "12px",
-                      cursor: "pointer",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "var(--primary-muted)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                  >
-                    加入購物
-                  </button>
-                </div>
-              </div>
+          {loading ? (
+            <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px", color: "var(--text-muted)" }}>
+              加載中...
             </div>
-          ))}
+          ) : teaserProducts.length === 0 ? (
+            <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px", color: "var(--text-muted)" }}>
+              暫無商品
+            </div>
+          ) : (
+            teaserProducts.map((p: Product) => (
+              <div
+                key={p.id}
+                style={{
+                  background: "white",
+                  border: "1px solid var(--border)",
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  cursor: "pointer",
+                  transition: "border-color 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#8A9A86")}
+                onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    aspectRatio: "1",
+                    background: "var(--bg-mid)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "var(--text-muted)",
+                    fontSize: "12px",
+                    overflow: "hidden",
+                  }}
+                >
+                  {p.image_url ? (
+                    <img
+                      src={p.image_url}
+                      alt={p.name_cn || ""}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  ) : (
+                    "[圖片]"
+                  )}
+                </div>
+                <div style={{ padding: "18px", display: "flex", flexDirection: "column", gap: "6px", flex: 1 }}>
+                  <div>
+                    <div style={{ fontSize: "14px", fontWeight: 500, color: "var(--text)" }}>{p.name_cn}</div>
+                    <div style={{ fontSize: "11px", color: "var(--text-muted)", letterSpacing: "0.02em" }}>
+                      {p.name_en}
+                    </div>
+                  </div>
+                  <div style={{ fontSize: "12px", color: "var(--text-sub)", lineHeight: 1.6, flex: 1 }}>
+                    {p.usage}
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "8px" }}>
+                    <div>
+                      <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>{p.volume}</div>
+                      <div style={{ fontSize: "15px", color: "var(--text)", fontWeight: 500 }}>¥ {p.price}</div>
+                    </div>
+                    <button
+                      style={{
+                        background: "transparent",
+                        color: "var(--primary)",
+                        border: "1px solid var(--primary)",
+                        borderRadius: "999px",
+                        padding: "8px 16px",
+                        fontFamily: "'Inter', sans-serif",
+                        fontSize: "12px",
+                        cursor: "pointer",
+                        transition: "background 0.2s",
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = "var(--primary-muted)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                    >
+                      加入購物
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
@@ -501,8 +432,10 @@ export default function HomePage() {
             用半小時，讓高質測試的為你帶來方向 — 直接面對面詢問，由香氛師為你量身建議。
           </p>
           <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-            <button
+            <Link
+              href="/quiz"
               style={{
+                display: "inline-block",
                 background: "white",
                 color: "var(--primary-dark)",
                 border: "none",
@@ -513,14 +446,17 @@ export default function HomePage() {
                 fontWeight: 500,
                 letterSpacing: "0.04em",
                 cursor: "pointer",
+                textDecoration: "none",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
             >
               開始測試
-            </button>
-            <button
+            </Link>
+            <Link
+              href="/services"
               style={{
+                display: "inline-block",
                 background: "transparent",
                 color: "white",
                 border: "1px solid rgba(250,250,248,0.4)",
@@ -530,36 +466,16 @@ export default function HomePage() {
                 fontSize: "13px",
                 letterSpacing: "0.04em",
                 cursor: "pointer",
+                textDecoration: "none",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.borderColor = "white")}
               onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(250,250,248,0.4)")}
             >
               預訂諮詢
-            </button>
+            </Link>
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <div
-        style={{
-          maxWidth: "1160px",
-          margin: "0 auto",
-          padding: "40px 48px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "12px",
-        }}
-      >
-        <span style={{ fontFamily: "'Lora', serif", fontSize: "15px", color: "var(--primary-dark)" }}>
-          Soul Green
-        </span>
-        <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
-          © 2026 Soul Green Studio · 香氛連接靈性與身心平衡
-        </span>
-      </div>
-    </main>
+    </div>
   );
 }
