@@ -91,12 +91,14 @@ export default function HomePage() {
               fontFamily: "'Lora', serif",
               fontSize: "52px",
               fontWeight: 400,
-              lineHeight: 1.2,
+              lineHeight: 1.4,
               color: "var(--text)",
-              margin: "0 0 22px",
+              maxWidth: "320px",
+              margin: "0 auto 22px",
             }}
           >
-            安靜地，<em style={{ fontStyle: "italic", color: "var(--primary)" }}>回到自己</em>
+            安靜地，<br />
+            <em style={{ fontStyle: "italic", color: "var(--primary)" }}>回到自己</em>
           </h1>
           <p
             style={{
@@ -295,7 +297,7 @@ export default function HomePage() {
                 margin: 0,
               }}
             >
-              植本香氛的小對話
+              草本與香氣的對話
             </h2>
           </div>
           <Link

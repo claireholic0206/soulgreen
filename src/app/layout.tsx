@@ -53,7 +53,7 @@ function Header() {
           style={{
             fontFamily: "'Lora', serif",
             fontSize: "20px",
-            fontWeight: 500,
+            fontWeight: 700,
             color: "var(--primary-dark)",
             letterSpacing: "0.01em",
             cursor: "pointer",
