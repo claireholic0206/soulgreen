@@ -96,7 +96,7 @@ export default function HomePage() {
               margin: "0 0 22px",
             }}
           >
-            香氣裡，<em style={{ fontStyle: "italic", color: "var(--primary)" }}>遇見自己</em>
+            安靜地，<em style={{ fontStyle: "italic", color: "var(--primary)" }}>回到自己</em>
           </h1>
           <p
             style={{
@@ -108,7 +108,7 @@ export default function HomePage() {
               margin: "0 auto 40px",
             }}
           >
-            香氣不只是聞覺的愉悅，更是連接內在與外在的橋樑。Soul Green 走向土醫的芳香科學與智慧，以綠色長青的身心精油與植物為導，陪你探尋身心平衡。
+            芳療不僅是氣味的愉悅，更是連接內在與外在的橋樑。Soul Green 將瑞士芳療的科學嚴謹，與阿育吠陀的身心智慧合而為一，陪你找回內在節奏。
           </p>
           <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link
@@ -131,7 +131,7 @@ export default function HomePage() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "var(--primary-dark)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "var(--primary)")}
             >
-              開始高質測試
+              開始體質測試
             </Link>
             <Link
               href="/products"
@@ -152,7 +152,7 @@ export default function HomePage() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "var(--primary-muted)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
-              瀏覽香氛商品
+              瀏覽芳療產品
             </Link>
           </div>
         </div>
@@ -451,7 +451,7 @@ export default function HomePage() {
               onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
             >
-              開始測試
+              開始體質測試
             </Link>
             <Link
               href="/services"
