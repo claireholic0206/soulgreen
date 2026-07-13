@@ -39,16 +39,19 @@ function Header() {
     >
       <style>{`
         .header-logo {
-          font-family: 'Lora', serif;
+          font-family: 'Lora', 'Lora', serif;
           font-size: 24px;
           font-weight: 700;
           color: var(--primary-dark);
           letter-spacing: 0.01em;
           cursor: pointer;
           flex-shrink: 0;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
         @media (max-width: 640px) {
           .header-logo {
+            font-family: 'Lora', 'Lora', serif;
             font-size: 17px;
           }
         }
