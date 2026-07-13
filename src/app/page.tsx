@@ -84,7 +84,7 @@ export default function HomePage() {
               marginBottom: "24px",
             }}
           >
-            SOUL GREEN AROMA
+            SOULGREEN AROMA
           </div>
           <h1
             style={{
@@ -110,7 +110,7 @@ export default function HomePage() {
               margin: "0 auto 40px",
             }}
           >
-            芳療不僅是氣味的愉悅，更是連接內在與外在的橋樑。Soul Green 將瑞士芳療的科學嚴謹，與阿育吠陀的身心智慧合而為一，陪你找回內在節奏。
+            芳療不僅是氣味的愉悅，更是連接內在與外在的橋樑。Soulgreen 將瑞士芳療的科學嚴謹，與阿育吠陀的身心智慧合而為一，陪你找回內在節奏。
           </p>
           <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link

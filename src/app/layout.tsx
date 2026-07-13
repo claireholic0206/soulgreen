@@ -168,10 +168,10 @@ function Footer() {
       }}
     >
       <span style={{ fontFamily: "'Lora', serif", fontSize: "15px", color: "var(--primary-dark)" }}>
-        Soul Green
+        Soulgreen
       </span>
       <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
-        © 2026 Soul Green Studio · 香氛連接靈性與身心平衡
+        © 2026 Soulgreen Studio · 香氛連接靈性與身心平衡
       </span>
     </div>
   );
