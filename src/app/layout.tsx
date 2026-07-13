@@ -37,6 +37,22 @@ function Header() {
         borderBottom: "1px solid var(--border)",
       }}
     >
+      <style>{`
+        .header-logo {
+          font-family: 'Lora', serif;
+          font-size: 20px;
+          font-weight: 700;
+          color: var(--primary-dark);
+          letter-spacing: 0.01em;
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+        @media (max-width: 640px) {
+          .header-logo {
+            font-size: 16px;
+          }
+        }
+      `}</style>
       <div
         style={{
           maxWidth: "1160px",
@@ -49,17 +65,7 @@ function Header() {
           flexWrap: "wrap",
         }}
       >
-        <div
-          style={{
-            fontFamily: "'Lora', serif",
-            fontSize: "20px",
-            fontWeight: 700,
-            color: "var(--primary-dark)",
-            letterSpacing: "0.01em",
-            cursor: "pointer",
-            flexShrink: 0,
-          }}
-        >
+        <div className="header-logo">
           Soulgreen Aroma
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "28px", flexWrap: "wrap" }}>

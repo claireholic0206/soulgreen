@@ -120,7 +120,24 @@ export default function HomePage() {
           >
             芳療不僅是氣味的愉悅，更是連接內在與外在的橋樑。Soulgreen 將瑞士芳療的科學嚴謹，與阿育吠陀的身心智慧合而為一，陪你找回內在節奏。
           </p>
-          <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
+          <style>{`
+            .hero-buttons {
+              display: flex;
+              gap: 14px;
+              justify-content: center;
+              flex-wrap: wrap;
+            }
+            @media (max-width: 480px) {
+              .hero-buttons {
+                gap: 10px;
+              }
+              .hero-buttons a {
+                padding: 12px 24px !important;
+                font-size: 13px !important;
+              }
+            }
+          `}</style>
+          <div className="hero-buttons">
             <Link
               href="/quiz"
               style={{
