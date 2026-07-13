@@ -24,9 +24,9 @@ export default function ConsultationForm() {
   const sectionClass =
     "bg-white p-8 rounded-2xl border border-stone-100 shadow-sm";
   const labelClass =
-    "block text-xs font-bold text-[#2D4232] mb-3 uppercase tracking-wider after:content-['*'] after:ml-1 after:text-red-500";
+    "block text-xs font-bold text-[#4A5E4D] mb-3 uppercase tracking-wider after:content-['*'] after:ml-1 after:text-red-500";
   const inputClass =
-    "w-full p-4 bg-[#FDFBF7] border border-stone-200 rounded-lg focus:ring-1 focus:ring-[#2D4232] outline-none transition";
+    "w-full p-4 bg-[#FAFAF8] border border-#E2DDD5 rounded-lg focus:ring-1 focus:ring-[#4A5E4D] outline-none transition";
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -90,13 +90,13 @@ export default function ConsultationForm() {
 
   if (stage === "success") {
     return (
-      <main className="min-h-screen bg-[#FDFBF7] py-24 px-6 flex items-center justify-center">
+      <main className="min-h-screen bg-[#FAFAF8] py-24 px-6 flex items-center justify-center">
         <div className="text-center max-w-md">
           <div className="text-5xl mb-6">✓</div>
-          <h2 className="text-3xl font-serif text-[#2D4232] mb-4">
+          <h2 className="text-3xl font-serif text-[#4A5E4D] mb-4">
             <T>感谢您的信任</T>
           </h2>
-          <p className="text-stone-600 mb-8 leading-relaxed">
+          <p className="text-[#6E6B66] mb-8 leading-relaxed">
             <T>
               您的咨询需求已收到，我将在 3-5
               个工作日内与您联系，为您量身规划专属的植物配方方案。
@@ -104,7 +104,7 @@ export default function ConsultationForm() {
           </p>
           <a
             href="/products"
-            className="inline-block px-8 py-3 bg-[#2D4232] text-white rounded-full hover:bg-[#3D5A45] transition-all"
+            className="inline-block px-8 py-3 bg-[#4A5E4D] text-white rounded-full hover:bg-[#2E2E2C] transition-all"
           >
             <T>返回产品页</T>
           </a>
@@ -114,24 +114,24 @@ export default function ConsultationForm() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FDFBF7] py-16 px-6">
+    <main className="min-h-screen bg-[#FAFAF8] py-16 px-6">
       <form
         onSubmit={handleSubmit}
         className="max-w-2xl mx-auto space-y-8"
       >
         {/* 標題與引導文案 */}
         <header className="text-center mb-12">
-          <h2 className="text-3xl font-serif text-[#2D4232] mb-8 tracking-tight">
+          <h2 className="text-3xl font-serif text-[#4A5E4D] mb-8 tracking-tight">
             <T>Soulgreen 个案咨询</T>
           </h2>
 
-          <div className="space-y-6 text-stone-600 text-sm font-light leading-relaxed max-w-lg mx-auto bg-white/50 p-8 rounded-2xl border border-stone-100">
+          <div className="space-y-6 text-[#6E6B66] text-sm font-light leading-relaxed max-w-lg mx-auto bg-white/50 p-8 rounded-2xl border border-stone-100">
             <p>
               <T>
                 不论是为忙碌的自己寻求安顿，或是为挚爱的家人寻求温和的支持，我将透过这份咨询，深入倾听您的需求，为您量身规划守护全家人的植物配方。
               </T>
             </p>
-            <p className="font-medium text-[#2D4232]">
+            <p className="font-medium text-[#4A5E4D]">
               <T>您的信任，是我们开启疗愈之旅的第一步。</T>
             </p>
           </div>
@@ -139,7 +139,7 @@ export default function ConsultationForm() {
 
         {/* 區塊 1：基本資料 */}
         <div className={sectionClass}>
-          <h3 className="text-lg font-serif text-[#2D4232] mb-6">
+          <h3 className="text-lg font-serif text-[#4A5E4D] mb-6">
             <T>关于您与家人</T>
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -172,7 +172,7 @@ export default function ConsultationForm() {
 
         {/* 區塊 2：體質與能量 */}
         <div className={sectionClass}>
-          <h3 className="text-lg font-serif text-[#2D4232] mb-6">
+          <h3 className="text-lg font-serif text-[#4A5E4D] mb-6">
             <T>体质与能量倾向</T>
           </h3>
           <label className={labelClass}>
@@ -186,7 +186,7 @@ export default function ConsultationForm() {
             ].map((item) => (
               <label
                 key={item}
-                className="flex items-center p-4 border border-stone-200 rounded-lg cursor-pointer hover:border-[#2D4232] transition text-sm text-stone-600"
+                className="flex items-center p-4 border border-#E2DDD5 rounded-lg cursor-pointer hover:border-[#4A5E4D] transition text-sm text-[#6E6B66]"
               >
                 <input
                   type="radio"
@@ -194,7 +194,7 @@ export default function ConsultationForm() {
                   value={item}
                   checked={formData.energy_level === item}
                   onChange={handleInputChange}
-                  className="mr-3 accent-[#2D4232]"
+                  className="mr-3 accent-[#4A5E4D]"
                 />{" "}
                 <T>{item}</T>
               </label>
@@ -204,7 +204,7 @@ export default function ConsultationForm() {
 
         {/* 區塊 3：核心需求 */}
         <div className={sectionClass}>
-          <h3 className="text-lg font-serif text-[#2D4232] mb-6">
+          <h3 className="text-lg font-serif text-[#4A5E4D] mb-6">
             <T>疗愈目标</T>
           </h3>
           <label className={labelClass}>
@@ -220,7 +220,7 @@ export default function ConsultationForm() {
             ].map((item) => (
               <label
                 key={item}
-                className="flex items-center p-3 border border-stone-200 rounded-lg cursor-pointer hover:bg-stone-50 transition text-sm text-stone-600"
+                className="flex items-center p-3 border border-#E2DDD5 rounded-lg cursor-pointer hover:bg-stone-50 transition text-sm text-[#6E6B66]"
               >
                 <input
                   type="checkbox"
@@ -228,7 +228,7 @@ export default function ConsultationForm() {
                   value={item}
                   checked={formData.healing_goals.includes(item)}
                   onChange={handleInputChange}
-                  className="mr-3 accent-[#2D4232]"
+                  className="mr-3 accent-[#4A5E4D]"
                 />{" "}
                 <T>{item}</T>
               </label>
@@ -246,7 +246,7 @@ export default function ConsultationForm() {
         {/* 操作區 */}
         <div className="flex flex-col items-center gap-8 py-4">
           <div className="text-center">
-            <p className="text-xs text-stone-500 mb-4">
+            <p className="text-xs text-[#6E6B66] mb-4">
               <T>是否加入脉轮检测，以辅助规划心灵滋养配方？</T>
             </p>
             <div className="flex gap-8 justify-center">
@@ -257,7 +257,7 @@ export default function ConsultationForm() {
                   value="yes"
                   checked={formData.chakra_detection === "yes"}
                   onChange={handleInputChange}
-                  className="mr-2 accent-[#2D4232]"
+                  className="mr-2 accent-[#4A5E4D]"
                 />{" "}
                 <T>愿意</T>
               </label>
@@ -268,7 +268,7 @@ export default function ConsultationForm() {
                   value="no"
                   checked={formData.chakra_detection === "no"}
                   onChange={handleInputChange}
-                  className="mr-2 accent-[#2D4232]"
+                  className="mr-2 accent-[#4A5E4D]"
                 />{" "}
                 <T>暂时不用</T>
               </label>
@@ -284,7 +284,7 @@ export default function ConsultationForm() {
           <button
             type="submit"
             disabled={status === "sending"}
-            className="w-full md:w-auto px-16 py-4 bg-[#2D4232] text-white rounded-full font-medium hover:bg-[#1e2e22] transition-all shadow-md text-sm tracking-widest uppercase disabled:opacity-50"
+            className="w-full md:w-auto px-16 py-4 bg-[#4A5E4D] text-white rounded-full font-medium hover:bg-[#1e2e22] transition-all shadow-md text-sm tracking-widest uppercase disabled:opacity-50"
           >
             <T>{status === "sending" ? "发送中..." : "发送咨询需求"}</T>
           </button>

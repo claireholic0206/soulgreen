@@ -33,11 +33,11 @@ export default function ProductDetailClient({ product }: { product: Product }) {
   const dosha = product.dosha_type;
 
   return (
-    <main className="min-h-screen bg-[#FDFBF7]">
+    <main className="min-h-screen bg-[#FAFAF8]">
       <div className="max-w-4xl mx-auto px-6 pt-6">
         <Link
           href="/products"
-          className="text-xs text-stone-400 hover:text-[#2D4232] transition-colors flex items-center gap-1"
+          className="text-xs text-[#A09890] hover:text-[#4A5E4D] transition-colors flex items-center gap-1"
         >
           ← <T>返回產品列表</T>
         </Link>
@@ -47,7 +47,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
           {/* 左：圖片 */}
           <div>
-            <div className="relative aspect-square bg-[#F5F2EB] rounded-2xl overflow-hidden">
+            <div className="relative aspect-square bg-[#F3F1ED] rounded-2xl overflow-hidden">
               {product.image_url ? (
                 <Image
                   src={product.image_url}
@@ -60,7 +60,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                   className="w-full h-full flex flex-col items-center justify-center gap-3"
                   style={{
                     background:
-                      dosha && DOSHA_BG[dosha] ? DOSHA_BG[dosha] : "#F5F2EB",
+                      dosha && DOSHA_BG[dosha] ? DOSHA_BG[dosha] : "#F3F1ED",
                   }}
                 >
                   <span className="text-5xl">🌿</span>
@@ -80,13 +80,13 @@ export default function ProductDetailClient({ product }: { product: Product }) {
           <div className="flex flex-col gap-5">
             <div className="flex items-center gap-2 flex-wrap">
               {product.categories && (
-                <span className="text-[10px] tracking-wider text-stone-400 uppercase">
+                <span className="text-[10px] tracking-wider text-[#A09890] uppercase">
                   <T>{product.categories.name_cn}</T>
                 </span>
               )}
               {dosha && DOSHA_LABEL[dosha] && (
                 <>
-                  <span className="text-stone-300 text-xs">·</span>
+                  <span className="text-[#D6D2C8] text-xs">·</span>
                   <span
                     className="text-[10px] px-2.5 py-0.5 rounded-full tracking-wider"
                     style={{
@@ -101,14 +101,14 @@ export default function ProductDetailClient({ product }: { product: Product }) {
             </div>
 
             <div>
-              <h1 className="font-serif text-3xl text-[#2D4232] leading-tight mb-1">
+              <h1 className="font-serif text-3xl text-[#4A5E4D] leading-tight mb-1">
                 <T>{product.name_cn ?? ""}</T>
               </h1>
               {product.name_en && (
-                <p className="text-sm text-stone-400">{product.name_en}</p>
+                <p className="text-sm text-[#A09890]">{product.name_en}</p>
               )}
               {isEssentialOil && product.latin_name && (
-                <p className="text-xs text-stone-400 italic mt-0.5">
+                <p className="text-xs text-[#A09890] italic mt-0.5">
                   {product.latin_name}
                 </p>
               )}
@@ -116,49 +116,49 @@ export default function ProductDetailClient({ product }: { product: Product }) {
 
             <div className="flex items-baseline gap-4">
               {product.price != null && (
-                <p className="text-2xl text-[#2D4232] font-medium">
+                <p className="text-2xl text-[#4A5E4D] font-medium">
                   ¥ {product.price.toLocaleString()}
                 </p>
               )}
               {product.volume && (
-                <p className="text-sm text-stone-400">{product.volume}</p>
+                <p className="text-sm text-[#A09890]">{product.volume}</p>
               )}
             </div>
 
             {product.description && (
-              <p className="text-sm text-stone-600 leading-relaxed">
+              <p className="text-sm text-[#6E6B66] leading-relaxed">
                 <T>{product.description}</T>
               </p>
             )}
 
             {isEssentialOil && (
-              <div className="bg-[#F5F2EB] rounded-xl p-4 space-y-2">
+              <div className="bg-[#F3F1ED] rounded-xl p-4 space-y-2">
                 {product.origin && (
                   <div className="flex gap-3 text-xs">
-                    <span className="text-stone-400 w-16 flex-shrink-0">
+                    <span className="text-[#A09890] w-16 flex-shrink-0">
                       <T>產地</T>
                     </span>
-                    <span className="text-[#2D4232]">
+                    <span className="text-[#4A5E4D]">
                       <T>{product.origin}</T>
                     </span>
                   </div>
                 )}
                 {product.method && (
                   <div className="flex gap-3 text-xs">
-                    <span className="text-stone-400 w-16 flex-shrink-0">
+                    <span className="text-[#A09890] w-16 flex-shrink-0">
                       <T>萃取方式</T>
                     </span>
-                    <span className="text-[#2D4232]">
+                    <span className="text-[#4A5E4D]">
                       <T>{product.method}</T>
                     </span>
                   </div>
                 )}
                 {product.is_organic !== null && (
                   <div className="flex gap-3 text-xs">
-                    <span className="text-stone-400 w-16 flex-shrink-0">
+                    <span className="text-[#A09890] w-16 flex-shrink-0">
                       <T>認證</T>
                     </span>
-                    <span className="text-[#2D4232]">
+                    <span className="text-[#4A5E4D]">
                       {product.is_organic ? <T>有機認證</T> : <T>天然農法</T>}
                     </span>
                   </div>
@@ -179,7 +179,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                   setAdded(true);
                   setTimeout(() => setAdded(false), 1500);
                 }}
-                className="w-full py-4 bg-[#2D4232] text-white text-xs tracking-[0.2em] uppercase rounded-md hover:bg-[#3D5A45] transition-all"
+                className="w-full py-4 bg-[#4A5E4D] text-white text-xs tracking-[0.2em] uppercase rounded-md hover:bg-[#2E2E2C] transition-all"
               >
                 <T>{added ? "已加入購物車 ✓" : "加入購物車"}</T>
               </button>
@@ -189,23 +189,23 @@ export default function ProductDetailClient({ product }: { product: Product }) {
 
         {/* 下方詳細資訊 */}
         {(product.ingredients || product.usage) && (
-          <div className="mt-12 border-t border-stone-200 pt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="mt-12 border-t border-[#E2DDD5] pt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
             {product.ingredients && (
               <div>
-                <h2 className="text-xs tracking-[0.2em] uppercase text-[#2D4232]/60 mb-4">
+                <h2 className="text-xs tracking-[0.2em] uppercase text-[#4A5E4D]/60 mb-4">
                   <T>成分</T>
                 </h2>
-                <p className="text-sm text-stone-600 leading-relaxed">
+                <p className="text-sm text-[#6E6B66] leading-relaxed">
                   <T>{product.ingredients}</T>
                 </p>
               </div>
             )}
             {product.usage && (
               <div>
-                <h2 className="text-xs tracking-[0.2em] uppercase text-[#2D4232]/60 mb-4">
+                <h2 className="text-xs tracking-[0.2em] uppercase text-[#4A5E4D]/60 mb-4">
                   <T>使用方式</T>
                 </h2>
-                <p className="text-sm text-stone-600 leading-relaxed">
+                <p className="text-sm text-[#6E6B66] leading-relaxed">
                   <T>{product.usage}</T>
                 </p>
               </div>
@@ -225,10 +225,10 @@ export default function ProductDetailClient({ product }: { product: Product }) {
             >
               <T>適合體質</T>
             </p>
-            <p className="font-serif text-lg text-[#2D4232] mb-2">
+            <p className="font-serif text-lg text-[#4A5E4D] mb-2">
               {DOSHA_LABEL[dosha]}
             </p>
-            <p className="text-xs text-stone-500 leading-relaxed">
+            <p className="text-xs text-[#6E6B66] leading-relaxed">
               <T>想了解自己的體質？</T>
             </p>
             <Link

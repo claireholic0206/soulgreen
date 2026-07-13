@@ -37,12 +37,12 @@ export default async function ProductDetailPage({
 
   if (!product) {
     return (
-      <main className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
+      <main className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-stone-400 mb-4">
+          <p className="text-[#A09890] mb-4">
             <T>找不到此產品</T>
           </p>
-          <Link href="/products" className="text-xs text-[#2D4232] underline">
+          <Link href="/products" className="text-xs text-[#4A5E4D] underline">
             <T>返回產品列表</T>
           </Link>
         </div>

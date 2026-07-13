@@ -144,18 +144,18 @@ export default function QuizPage() {
   // ── 介紹頁 ────────────────────────────────────────────────────
   if (stage === "intro") {
     return (
-      <main className="min-h-screen bg-[#FDFBF7] py-24 px-6 flex items-center justify-center">
+      <main className="min-h-screen bg-[#FAFAF8] py-24 px-6 flex items-center justify-center">
         <div className="max-w-md w-full text-center">
-          <p className="text-[10px] tracking-[0.35em] uppercase text-[#2D4232]/50 mb-5">
+          <p className="text-[10px] tracking-[0.35em] uppercase text-[#4A5E4D]/50 mb-5">
             <T>身心諮詢室 · Soulgreen Studio</T>
           </p>
-          <h1 className="text-4xl font-serif text-[#2D4232] mb-5 leading-tight">
+          <h1 className="text-4xl font-serif text-[#4A5E4D] mb-5 leading-tight">
             <em className="italic text-[#B8975A]">
               <T>探索</T>
             </em>{" "}
             <T>你的督夏能量</T>
           </h1>
-          <p className="text-stone-600 mb-8 leading-relaxed text-sm">
+          <p className="text-[#6E6B66] mb-8 leading-relaxed text-sm">
             <T>
               阿育吠陀認為，每個人皆由風（Vata）、火（Pitta）、土水（Kapha）三種生命能量組成。這份問卷結合瑞士芳療科學，幫助你深入了解當下的體質狀態與失衡傾向，找到最適合你的植萃配方。
             </T>
@@ -178,13 +178,13 @@ export default function QuizPage() {
             ))}
           </div>
 
-          <p className="text-xs text-stone-400 mb-8 bg-[#F5F2EB] rounded-lg px-5 py-3 border border-stone-200">
+          <p className="text-xs text-[#A09890] mb-8 bg-[#F3F1ED] rounded-lg px-5 py-3 border border-#E2DDD5">
             <T>約需 5–8 分鐘 · 共 23 題 · 結果含專屬配方推薦</T>
           </p>
 
           <button
             onClick={() => setStage("quiz")}
-            className="w-full py-4 bg-[#2D4232] text-white text-xs tracking-[0.25em] uppercase rounded-md hover:bg-[#3D5A45] transition-all"
+            className="w-full py-4 bg-[#4A5E4D] text-white text-xs tracking-[0.25em] uppercase rounded-md hover:bg-[#2E2E2C] transition-all"
           >
             <T>開始進行諮詢</T>
           </button>
@@ -214,20 +214,20 @@ export default function QuizPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FDFBF7]">
+    <main className="min-h-screen bg-[#FAFAF8]">
       {/* Section header */}
-      <div className="bg-[#F5F2EB] border-b border-stone-200 px-6 py-4">
-        <p className="text-[10px] tracking-[0.3em] uppercase text-[#2D4232]/50">
+      <div className="bg-[#F3F1ED] border-b border-#E2DDD5 px-6 py-4">
+        <p className="text-[10px] tracking-[0.3em] uppercase text-[#4A5E4D]/50">
           <T>{sectionMeta.tag}</T>
         </p>
-        <p className="font-serif text-lg text-[#2D4232] mt-0.5">
+        <p className="font-serif text-lg text-[#4A5E4D] mt-0.5">
           <T>{sectionMeta.title}</T>
         </p>
       </div>
 
       {/* Progress */}
       <div className="px-6 pt-5 pb-2 max-w-xl mx-auto">
-        <div className="flex justify-between text-[11px] text-stone-400 mb-2">
+        <div className="flex justify-between text-[11px] text-[#A09890] mb-2">
           <span>
             <T>問卷進度</T>
           </span>
@@ -235,9 +235,9 @@ export default function QuizPage() {
             {currentStep + 1} / {total}
           </span>
         </div>
-        <div className="w-full bg-stone-200 h-[2px] rounded-full overflow-hidden">
+        <div className="w-full bg-#E2DDD5 h-[2px] rounded-full overflow-hidden">
           <div
-            className="bg-[#2D4232] h-full transition-all duration-500"
+            className="bg-[#4A5E4D] h-full transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -245,14 +245,14 @@ export default function QuizPage() {
 
       {/* Question */}
       <div className="max-w-xl mx-auto px-6 py-6">
-        <p className="text-[10px] tracking-[0.2em] text-[#2D4232]/40 mb-3">
+        <p className="text-[10px] tracking-[0.2em] text-[#4A5E4D]/40 mb-3">
           {String(currentStep + 1).padStart(2, "0")}
         </p>
-        <h2 className="text-2xl font-serif text-[#2D4232] mb-3 leading-snug">
+        <h2 className="text-2xl font-serif text-[#4A5E4D] mb-3 leading-snug">
           <T>{currentQ.title}</T>
         </h2>
         {currentQ.note && (
-          <p className="text-xs text-stone-400 italic mb-5">
+          <p className="text-xs text-[#A09890] italic mb-5">
             <T>{currentQ.note}</T>
           </p>
         )}
@@ -273,8 +273,8 @@ export default function QuizPage() {
                 }
                 className={`w-full text-left px-5 py-4 border rounded-xl flex items-start gap-4 transition-all duration-200 active:scale-[0.99] ${
                   isSel
-                    ? "border-[#2D4232] bg-[#2D4232]/5"
-                    : "border-stone-200 bg-white hover:border-[#8A9A86]"
+                    ? "border-[#4A5E4D] bg-[#4A5E4D]/5"
+                    : "border-#E2DDD5 bg-white hover:border-[#7A8C7D]"
                 }`}
               >
                 {/* Dot */}
@@ -282,7 +282,7 @@ export default function QuizPage() {
                   className={`mt-0.5 flex-shrink-0 w-4 h-4 flex items-center justify-center border transition-all ${
                     currentQ.multi ? "rounded-sm" : "rounded-full"
                   } ${
-                    isSel ? "border-[#2D4232] bg-[#2D4232]" : "border-stone-300"
+                    isSel ? "border-[#4A5E4D] bg-[#4A5E4D]" : "border-stone-300"
                   }`}
                 >
                   {isSel && (
@@ -291,11 +291,11 @@ export default function QuizPage() {
                 </span>
 
                 <span>
-                  <span className="text-sm text-[#2D4232] leading-relaxed">
+                  <span className="text-sm text-[#4A5E4D] leading-relaxed">
                     <T>{opt.label}</T>
                   </span>
                   {opt.sub && (
-                    <span className="block text-xs text-stone-400 mt-0.5">
+                    <span className="block text-xs text-[#A09890] mt-0.5">
                       <T>{opt.sub}</T>
                     </span>
                   )}
@@ -307,10 +307,10 @@ export default function QuizPage() {
       </div>
 
       {/* Nav */}
-      <div className="sticky bottom-0 bg-[#FDFBF7] border-t border-stone-200 px-6 py-4 flex justify-between items-center max-w-xl mx-auto">
+      <div className="sticky bottom-0 bg-[#FAFAF8] border-t border-#E2DDD5 px-6 py-4 flex justify-between items-center max-w-xl mx-auto">
         <button
           onClick={handlePrev}
-          className={`text-xs border border-stone-200 text-stone-400 px-5 py-2.5 rounded-md hover:border-[#2D4232] hover:text-[#2D4232] transition-all ${
+          className={`text-xs border border-#E2DDD5 text-[#A09890] px-5 py-2.5 rounded-md hover:border-[#4A5E4D] hover:text-[#4A5E4D] transition-all ${
             currentStep === 0 ? "invisible" : ""
           }`}
         >
@@ -321,7 +321,7 @@ export default function QuizPage() {
           <button
             onClick={handleNext}
             disabled={!isAnswered}
-            className="text-xs bg-[#2D4232] text-white px-7 py-2.5 rounded-md tracking-widest uppercase disabled:opacity-30 hover:bg-[#3D5A45] transition-all"
+            className="text-xs bg-[#4A5E4D] text-white px-7 py-2.5 rounded-md tracking-widest uppercase disabled:opacity-30 hover:bg-[#2E2E2C] transition-all"
           >
             <T>{isLast ? "查看我的體質 →" : "繼續 →"}</T>
           </button>
@@ -361,7 +361,7 @@ function ResultPage({
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] pb-20">
+    <div className="min-h-screen bg-[#FAFAF8] pb-20">
       {/* Hero */}
       <div className="text-center px-6 pt-14 pb-8">
         <div
@@ -370,13 +370,13 @@ function ResultPage({
         >
           {primary}
         </div>
-        <p className="text-[10px] tracking-[0.35em] uppercase text-[#2D4232]/50 mb-3">
+        <p className="text-[10px] tracking-[0.35em] uppercase text-[#4A5E4D]/50 mb-3">
           <T>你的督夏體質</T>
         </p>
-        <h1 className="text-3xl font-serif text-[#2D4232] mb-2">
+        <h1 className="text-3xl font-serif text-[#4A5E4D] mb-2">
           <T>{pd.name}</T>
         </h1>
-        <p className="text-sm text-stone-400">
+        <p className="text-sm text-[#A09890]">
           <T>次體質：</T>
           <T>{sd.name}</T>
         </p>
@@ -386,10 +386,10 @@ function ResultPage({
       <div className="max-w-lg mx-auto px-6 mb-8">
         {(["V", "P", "K"] as DoshaKey[]).map((d) => (
           <div key={d} className="flex items-center gap-3 mb-3">
-            <span className="text-xs w-14 text-stone-400 tracking-wider">
+            <span className="text-xs w-14 text-[#A09890] tracking-wider">
               {d === "V" ? "Vata" : d === "P" ? "Pitta" : "Kapha"}
             </span>
-            <div className="flex-1 h-1.5 bg-stone-200 rounded-full overflow-hidden">
+            <div className="flex-1 h-1.5 bg-#E2DDD5 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{
@@ -398,7 +398,7 @@ function ResultPage({
                 }}
               />
             </div>
-            <span className="text-xs text-stone-400 w-9 text-right">
+            <span className="text-xs text-[#A09890] w-9 text-right">
               {doshaPercent[d]}%
             </span>
           </div>
@@ -407,18 +407,18 @@ function ResultPage({
 
       <div className="max-w-lg mx-auto px-6 space-y-4">
         {/* 體質解讀 */}
-        <div className="bg-[#F5F2EB] border border-stone-200 rounded-xl p-6">
-          <p className="text-[10px] tracking-[0.2em] uppercase text-[#2D4232]/50 mb-3">
+        <div className="bg-[#F3F1ED] border border-#E2DDD5 rounded-xl p-6">
+          <p className="text-[10px] tracking-[0.2em] uppercase text-[#4A5E4D]/50 mb-3">
             <T>體質解讀</T> · <T>{pd.name}</T>
           </p>
-          <p className="text-sm text-stone-600 leading-relaxed mb-4">
+          <p className="text-sm text-[#6E6B66] leading-relaxed mb-4">
             <T>{pd.essence}</T>
           </p>
-          <p className="text-sm text-stone-600 leading-relaxed mb-4">
+          <p className="text-sm text-[#6E6B66] leading-relaxed mb-4">
             <T>{pd.advice}</T>
           </p>
-          <div className="border-t border-stone-300 pt-4 text-xs text-[#2D4232]">
-            <span className="text-stone-400">
+          <div className="border-t border-stone-300 pt-4 text-xs text-[#4A5E4D]">
+            <span className="text-[#A09890]">
               <T>推薦精油：</T>
             </span>
             <span className="font-medium">
@@ -428,8 +428,8 @@ function ResultPage({
         </div>
 
         {/* 當下失衡信號 */}
-        <div className="bg-white border border-stone-200 rounded-xl p-6">
-          <p className="text-[10px] tracking-[0.2em] uppercase text-[#2D4232]/50 mb-3">
+        <div className="bg-white border border-#E2DDD5 rounded-xl p-6">
+          <p className="text-[10px] tracking-[0.2em] uppercase text-[#4A5E4D]/50 mb-3">
             <T>當下失衡信號</T> · <T>{id.name}</T>
           </p>
           <div className="flex flex-wrap gap-2">
@@ -450,10 +450,10 @@ function ResultPage({
 
         {/* 產品推薦 */}
         <div>
-          <h2 className="font-serif text-xl text-[#2D4232] mt-6 mb-1">
+          <h2 className="font-serif text-xl text-[#4A5E4D] mt-6 mb-1">
             <T>專屬芳療配方推薦</T>
           </h2>
-          <p className="text-xs text-stone-400 mb-4">
+          <p className="text-xs text-[#A09890] mb-4">
             <T>根據你的體質與當下狀態，以下配方最能支持你的身心平衡</T>
           </p>
           <div className="space-y-3">
@@ -461,21 +461,21 @@ function ResultPage({
               <a
                 key={p.name}
                 href="/products"
-                className="flex items-start gap-4 bg-white border border-stone-200 rounded-xl p-4 hover:border-[#8A9A86] transition-all group"
+                className="flex items-start gap-4 bg-white border border-#E2DDD5 rounded-xl p-4 hover:border-[#7A8C7D] transition-all group"
               >
                 <span className="text-2xl mt-0.5">{p.icon}</span>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-[#2D4232] mb-1 group-hover:text-[#3D5A45]">
+                  <p className="text-sm font-medium text-[#4A5E4D] mb-1 group-hover:text-[#2E2E2C]">
                     <T>{p.name}</T>
                   </p>
-                  <p className="text-xs text-stone-500 leading-relaxed mb-2">
+                  <p className="text-xs text-[#6E6B66] leading-relaxed mb-2">
                     <T>{p.desc}</T>
                   </p>
-                  <p className="text-[10px] tracking-wider text-[#8A9A86] uppercase">
+                  <p className="text-[10px] tracking-wider text-[#7A8C7D] uppercase">
                     <T>{p.tag}</T>
                   </p>
                 </div>
-                <span className="text-stone-300 group-hover:text-[#2D4232] transition-colors text-lg">
+                <span className="text-stone-300 group-hover:text-[#4A5E4D] transition-colors text-lg">
                   →
                 </span>
               </a>
@@ -484,24 +484,24 @@ function ResultPage({
         </div>
 
         {/* CTA 預約諮詢 */}
-        <div className="bg-[#2D4232] rounded-2xl p-8 text-center mt-6">
-          <h2 className="font-serif text-2xl text-[#FDFBF7] mb-3">
+        <div className="bg-[#4A5E4D] rounded-2xl p-8 text-center mt-6">
+          <h2 className="font-serif text-2xl text-[#FAFAF8] mb-3">
             <T>深度諮詢</T>
           </h2>
-          <p className="text-xs text-[#FDFBF7]/70 leading-relaxed mb-6">
+          <p className="text-xs text-[#FAFAF8]/70 leading-relaxed mb-6">
             <T>
               每一個體質都是獨一無二的組合。讓我們的認證芳療師為你設計完整的個人化療癒計劃，從精油選擇到日常調理，全方位守護你的身心。
             </T>
           </p>
           <a
             href="/services"
-            className="block w-full py-3.5 bg-[#FDFBF7] text-[#2D4232] text-xs tracking-[0.2em] uppercase rounded-md font-medium hover:opacity-90 transition-all mb-3"
+            className="block w-full py-3.5 bg-[#FAFAF8] text-[#4A5E4D] text-xs tracking-[0.2em] uppercase rounded-md font-medium hover:opacity-90 transition-all mb-3"
           >
             <T>預約一對一諮詢</T>
           </a>
           <a
             href="/products"
-            className="block w-full py-3.5 border border-[#FDFBF7]/30 text-[#FDFBF7] text-xs tracking-[0.2em] uppercase rounded-md hover:bg-[#FDFBF7]/10 transition-all"
+            className="block w-full py-3.5 border border-[#FAFAF8]/30 text-[#FAFAF8] text-xs tracking-[0.2em] uppercase rounded-md hover:bg-[#FAFAF8]/10 transition-all"
           >
             <T>瀏覽更多產品</T>
           </a>
@@ -511,7 +511,7 @@ function ResultPage({
         <div className="text-center pt-2 pb-4">
           <button
             onClick={onReset}
-            className="text-xs text-stone-400 underline hover:text-[#2D4232] transition-colors"
+            className="text-xs text-[#A09890] underline hover:text-[#4A5E4D] transition-colors"
           >
             <T>重新測驗</T>
           </button>
