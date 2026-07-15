@@ -1,6 +1,6 @@
 // src/data/quizData.ts
 export type DoshaKey = "V" | "P" | "K";
-export type OptionDosha = DoshaKey | "N"; // N = 跳过，不计分
+export type OptionDosha = DoshaKey | "N";
 
 export interface QuizOption {
   label: string;
@@ -10,7 +10,8 @@ export interface QuizOption {
 
 export interface Question {
   id: number;
-  section: 1 | 2 | 3 | 4;
+  section: 1 | 2;
+  type?: "single" | "multi" | "rank";
   multi?: boolean;
   title: string;
   note?: string;
@@ -18,269 +19,184 @@ export interface Question {
 }
 
 export const SECTION_META = {
-  1: { tag: "第一部分", title: "先天体质 · Prakriti" },
-  2: { tag: "第二部分", title: "当下状态 · Vikriti" },
-  3: { tag: "第三部分", title: "身体信号" },
-  4: { tag: "第四部分", title: "情绪与心理" },
+  1: { tag: "第一部分", title: "基礎體質 · Prakriti" },
+  2: { tag: "第二部分", title: "當下狀態 · Vikriti" },
 } as const;
 
 export const quizQuestions: Question[] = [
-  // ── SECTION 1：先天体质 Prakriti ──────────────────────────────────
+  // ── PART A：基礎體質 Prakriti（Q1-10）──────────────────────────────────
+
   {
     id: 1,
     section: 1,
-    title: "你的体型偏向？",
+    type: "rank",
+    title: "Q1：體型偏向",
     options: [
-      { dosha: "V", label: "偏瘦、难增重", sub: "骨架小、关节明显" },
-      { dosha: "P", label: "中等匀称", sub: "肌肉明显、身材比例好" },
-      { dosha: "K", label: "偏丰腴、易增重", sub: "体格厚实、难减重" },
+      { dosha: "V", label: "纖細、骨架明顯、不易增重" },
+      { dosha: "P", label: "中等體格、肌肉結實、體重適中" },
+      { dosha: "K", label: "骨架較大、身型豐潤、容易增重" },
     ],
   },
   {
     id: 2,
     section: 1,
-    title: "你的皮肤天生特质？",
+    type: "rank",
+    title: "Q2：皮膚特質",
     options: [
-      { dosha: "V", label: "偏干、易起皮", sub: "粗糙、冬天特别明显" },
-      { dosha: "P", label: "容易出油、发红", sub: "敏感、毛孔明显" },
-      { dosha: "K", label: "偏油但光滑", sub: "水润、不易干燥" },
+      { dosha: "V", label: "偏乾、容易粗糙、不易長痘" },
+      { dosha: "P", label: "溫暖、容易出油、易長痘或有雀斑" },
+      { dosha: "K", label: "光滑濕潤、毛孔細緻、較厚實" },
     ],
   },
   {
     id: 3,
     section: 1,
-    title: "你的头发质地？",
+    type: "rank",
+    title: "Q3：頭髮質地",
     options: [
-      { dosha: "V", label: "细软、卷曲易断", sub: "易打结、容易干燥" },
-      { dosha: "P", label: "中等、偏软", sub: "容易出油、早生白发" },
-      { dosha: "K", label: "粗硬丰厚", sub: "乌黑浓密、生长缓慢" },
+      { dosha: "V", label: "乾燥粗糙、偏少或偏細" },
+      { dosha: "P", label: "柔順有光澤、髮量適中、易白易禿" },
+      { dosha: "K", label: "厚實有光澤、髮量多、波浪或捲曲" },
     ],
   },
   {
     id: 4,
     section: 1,
-    title: "你的消化状况天生倾向？",
+    type: "rank",
+    title: "Q4：消化",
     options: [
-      { dosha: "V", label: "不规律、容易胀气", sub: "食欲忽大忽小" },
-      { dosha: "P", label: "旺盛、容易饥饿", sub: "不吃饭就烦躁" },
-      { dosha: "K", label: "稳定但消化慢", sub: "饱足感持久、不太饿" },
+      { dosha: "V", label: "容易脹氣、便秘、消化不規律" },
+      { dosha: "P", label: "消化能力強、易胃酸、有時腹瀉" },
+      { dosha: "K", label: "消化慢、飽足感持久、代謝較慢" },
     ],
   },
   {
     id: 5,
     section: 1,
-    title: "你的睡眠模式？",
+    type: "rank",
+    title: "Q5：思考方式",
     options: [
-      { dosha: "V", label: "浅眠、难入睡、多梦", sub: "睡眠需求少但常感疲惫" },
-      { dosha: "P", label: "入睡快、睡眠中等", sub: "有时会因思绪中断" },
-      { dosha: "K", label: "深沉、难叫醒", sub: "睡眠需求多、起床困难" },
+      { dosha: "V", label: "快速、靈活、易分散、難專注" },
+      { dosha: "P", label: "專注邏輯強、完美主義、堅持己見" },
+      { dosha: "K", label: "穩定、決策慢、記憶好、傾向依賴" },
     ],
   },
-
-  // ── SECTION 2：当下状态 Vikriti ──────────────────────────────────
   {
     id: 6,
-    section: 2,
-    title: "最近几周，你的能量状态？",
-    note: "这部分反映你当下的状态，可能与先天体质不同",
+    section: 1,
+    type: "rank",
+    title: "Q6：情緒特質",
     options: [
-      { dosha: "V", label: "散亂、不稳定", sub: "一阵兴奋一阵疲惫" },
-      { dosha: "P", label: "紧绷、过度燃烧", sub: "高效但容易上火" },
-      { dosha: "K", label: "沉重、停滞感", sub: "动力不足、赖床" },
+      { dosha: "V", label: "變化快、易焦慮或恐懼、難以穩定" },
+      { dosha: "P", label: "強烈直接、易被激怒、快速平復" },
+      { dosha: "K", label: "穩定平和、不易波動、很少極端情緒" },
     ],
   },
   {
     id: 7,
-    section: 2,
-    title: "近期皮肤出现什么状况？",
+    section: 1,
+    type: "rank",
+    title: "Q7：體溫調節",
     options: [
-      { dosha: "V", label: "干燥、脱皮、肤色暗沉" },
-      { dosha: "P", label: "发红、冒痘、油光明显" },
-      { dosha: "K", label: "浮肿、毛孔堵塞" },
+      { dosha: "V", label: "經常覺得冷、特別是手腳" },
+      { dosha: "P", label: "經常覺得熱、容易出汗或燥熱" },
+      { dosha: "K", label: "體溫適中、身體可能感覺沈重" },
     ],
   },
   {
     id: 8,
-    section: 2,
-    title: "近期消化状况？",
+    section: 1,
+    type: "rank",
+    title: "Q8：睡眠",
     options: [
-      { dosha: "V", label: "胀气、便秘、肠鸣" },
-      { dosha: "P", label: "胃酸过多、排便急促" },
-      { dosha: "K", label: "消化迟缓、恶心感" },
+      { dosha: "V", label: "淺眠、容易醒、失眠或多夢" },
+      { dosha: "P", label: "品質中等、規律、醒後迅速清醒" },
+      { dosha: "K", label: "深沈、需要長時間、起床困難" },
     ],
   },
   {
     id: 9,
-    section: 2,
-    title: "对气候的近期反应？",
+    section: 1,
+    type: "rank",
+    title: "Q9：溝通風格",
     options: [
-      { dosha: "V", label: "特别怕冷、怕风", sub: "末梢冰冷" },
-      { dosha: "P", label: "特别怕热", sub: "流汗多、容易燥热" },
-      { dosha: "K", label: "感觉沉重、不喜湿冷" },
+      { dosha: "V", label: "語速快、話多、容易跳題" },
+      { dosha: "P", label: "清晰直接、有條理、喜歡辯論" },
+      { dosha: "K", label: "語速緩慢、深思後開口、話不多" },
     ],
   },
   {
     id: 10,
-    section: 2,
-    multi: true,
-    title: "目前有哪些身体困扰？（可复选）",
+    section: 1,
+    type: "rank",
+    title: "Q10：面對變化",
     options: [
-      { dosha: "V", label: "关节疼痛或僵硬" },
-      { dosha: "P", label: "头痛或偏头痛" },
-      { dosha: "K", label: "水肿或体重增加" },
-      { dosha: "V", label: "失眠或睡眠障碍" },
-      { dosha: "P", label: "皮肤发炎、湿诊" },
-      { dosha: "K", label: "鼻塞或痰多" },
+      { dosha: "V", label: "喜歡變化、容易適應、容易不安" },
+      { dosha: "P", label: "想要主導、需要控制、因變化焦躁" },
+      { dosha: "K", label: "抗拒變化、喜歡穩定、需要時間調整" },
     ],
   },
 
-  // ── SECTION 3：身体信號 ───────────────────────────────────────────
+  // ── PART B：當下狀態 Vikriti（Q11-15）──────────────────────────────────
+
   {
     id: 11,
-    section: 3,
-    title: "你的口渴感与饮水习惯？",
+    section: 2,
+    type: "rank",
+    title: "Q11：消化與排便（當下）",
     options: [
-      { dosha: "V", label: "容易忘记喝水、口腔偏干", sub: "嘴唇容易干裂" },
-      { dosha: "P", label: "经常口渴、喜欢冷饮", sub: "流汗多、补水需求高" },
-      { dosha: "K", label: "很少感到口渴", sub: "即使不喝水也不太有感觉" },
+      { dosha: "V", label: "容易脹氣、便秘、消化不規律" },
+      { dosha: "P", label: "消化能力強、有胃酸、胃灼熱或腹瀉" },
+      { dosha: "K", label: "消化慢、飯後昏沉、體重增加" },
     ],
   },
   {
     id: 12,
-    section: 3,
-    title: "你对压力的身体反应？",
+    section: 2,
+    type: "rank",
+    title: "Q12：主要情緒（當下）",
     options: [
-      { dosha: "V", label: "手腳冰冷、心跳加速", sub: "呼吸急促、脖子紧張" },
-      { dosha: "P", label: "胃部灼热、容易上火", sub: "皮肤发红、額头出汗" },
-      { dosha: "K", label: "想睡觉、食欲增加", sub: "渴望甜食、感觉麻木" },
+      { dosha: "V", label: "焦慮、不安、恐懼、思緒混亂" },
+      { dosha: "P", label: "易怒、烦躁、批判、看什麼都不順眼" },
+      { dosha: "K", label: "倦怠、提不起勁、情緒低落" },
     ],
   },
   {
     id: 13,
-    section: 3,
-    title: "你排便的习惯？",
+    section: 2,
+    type: "rank",
+    title: "Q13：睡眠狀況（當下）",
     options: [
-      { dosha: "V", label: "不规律、偏干硬", sub: "常有便秘困扰" },
-      { dosha: "P", label: "偏松软、容易腹瀉", sub: "有时伴隨灼热感" },
-      { dosha: "K", label: "规律但偏黏稠", sub: "消化慢、量多" },
+      { dosha: "V", label: "睡眠不穩、容易夜醒、多夢、難入睡" },
+      { dosha: "P", label: "無法放鬆、淺眠易醒、凌晨驚醒" },
+      { dosha: "K", label: "睡眠過多卻疲倦、難起床、白天打瞌睡" },
     ],
   },
   {
     id: 14,
-    section: 3,
-    title: "你的月经周期特质（女性适用）",
-    note: "男性或不适用者請选「跳过此题」",
+    section: 2,
+    type: "rank",
+    title: "Q14：壓力反應（當下）",
     options: [
-      { dosha: "V", label: "不规律、量少、偏痛" },
-      { dosha: "P", label: "规律但量多、伴隨燥热情绪波动" },
-      { dosha: "K", label: "规律、水肿感明显" },
-      { dosha: "N", label: "跳过此题" },
+      { dosha: "V", label: "精力起伏、易疲倦、神經緊繃、焦慮" },
+      { dosha: "P", label: "無法休息、總是忙碌、過熱、急躁" },
+      { dosha: "K", label: "難以啟動、動力不足、沉重、遲鈍" },
     ],
   },
   {
     id: 15,
-    section: 3,
-    title: "运动后你的感受？",
+    section: 2,
+    type: "rank",
+    title: "Q15：能量與動力（當下）",
     options: [
-      { dosha: "V", label: "很快疲惫，需要长时间恢復" },
-      { dosha: "P", label: "充滿活力，但容易过热" },
-      { dosha: "K", label: "启动慢但耐力持久" },
-    ],
-  },
-  {
-    id: 16,
-    section: 3,
-    title: "你的說話方式？",
-    options: [
-      {
-        dosha: "V",
-        label: "語速快、話多、容易跳跃話题",
-        sub: "有时說到一半忘了重点",
-      },
-      { dosha: "P", label: "清晰直接、有條理", sub: "喜欢辩論、表达有力" },
-      {
-        dosha: "K",
-        label: "語速缓慢、深思后才开口",
-        sub: "聲音低沉稳定、話不多但有份量",
-      },
-    ],
-  },
-
-  // ── SECTION 4：情绪与心理 ────────────────────────────────────────
-  {
-    id: 17,
-    section: 4,
-    title: "你通常如何回应情绪压力？",
-    options: [
-      { dosha: "V", label: "焦虑、擔心、过度思考", sub: "容易感到迷失或恐懼" },
-      { dosha: "P", label: "愤怒、批判、急躁", sub: "强烈的挫折感" },
-      { dosha: "K", label: "退縮、逃避、难以放下", sub: "依附感强、情绪鬱積" },
-    ],
-  },
-  {
-    id: 18,
-    section: 4,
-    title: "你的思考与学习方式？",
-    options: [
-      { dosha: "V", label: "快速吸收、容易忘记", sub: "跳跃思考、创意丰富" },
-      { dosha: "P", label: "专注、逻辑、目标导向", sub: "完美主义、好辩" },
-      { dosha: "K", label: "慢熟但记忆长久", sub: "善于归纳、稳定思考" },
-    ],
-  },
-  {
-    id: 19,
-    section: 4,
-    title: "你如何表达自己的需求？",
-    options: [
-      { dosha: "V", label: "难以开口、容易自我怀疑" },
-      { dosha: "P", label: "直接、果断，有时过于强硬" },
-      { dosha: "K", label: "倾向忍耐，不想冲突" },
-    ],
-  },
-  {
-    id: 20,
-    section: 4,
-    title: "你对香气的天然偏好？",
-    options: [
-      { dosha: "V", label: "温暖辛香、大地感", sub: "姜、肉桂、广藿香" },
-      { dosha: "P", label: "清凉草本、花香", sub: "薄荷、熏衣草、玫瑰" },
-      { dosha: "K", label: "清新柑橘、轻盈木质", sub: "佛手柑、尤加利、杜松" },
-    ],
-  },
-  {
-    id: 21,
-    section: 4,
-    title: "当你需要放松时，你倾向？",
-    options: [
-      { dosha: "V", label: "独处、安静、避开刺激" },
-      { dosha: "P", label: "运动、冷静下来、解决问题" },
-      { dosha: "K", label: "社交、美食、舒适的环境" },
-    ],
-  },
-  {
-    id: 22,
-    section: 4,
-    title: "近三个月整体心理感受？",
-    options: [
-      { dosha: "V", label: "焦虑、不安、容易分心" },
-      { dosha: "P", label: "急躁、易怒、压力感重" },
-      { dosha: "K", label: "倦怠、提不起劲、情绪低落" },
-    ],
-  },
-  {
-    id: 23,
-    section: 4,
-    multi: true,
-    title: "你最希望芳疗帮助你改善哪方面？（可复选）",
-    options: [
-      { dosha: "V", label: "稳定神经、减少焦虑", sub: "提升安全感与定锚感" },
-      { dosha: "P", label: "降火消炎、情绪降温", sub: "释放愤怒、增加清晰度" },
-      { dosha: "K", label: "激活代谢、提振活力", sub: "释放停滞、重燃动力" },
+      { dosha: "V", label: "不穩定、一下活躍一下疲倦、難恢復" },
+      { dosha: "P", label: "精力充沛或容易燃燒過度、無法放鬆" },
+      { dosha: "K", label: "穩定持久、啟動困難、缺乏動力" },
     ],
   },
 ];
 
-// ── 体质說明 ──────────────────────────────────────────────────────
+// ── 體質說明 ──────────────────────────────────────────────────────
 export const DOSHA_DETAIL: Record<
   DoshaKey,
   {
@@ -294,110 +210,110 @@ export const DOSHA_DETAIL: Record<
   }
 > = {
   V: {
-    name: "Vata 风型",
+    name: "Vata 風型",
     series: "大地根植系列 · Grounding",
     essence:
-      "风与空的能量，代表著變动、轻盈与创造力。你的心靈像风一樣靈活，充滿靈感，但也容易分散与焦虑。",
+      "風與空的能量，代表著變動、輕盈與創造力。你的心靈像風一樣靈活，充滿靈感，但也容易分散與焦慮。",
     advice:
-      "回归大地，找回稳定感。透过温暖香气建立日常儀式，讓浮动的心靈落地，給神经系統真正的休息。",
-    oils: "广藿香 · 姜 · 甜橙 · 岩蘭草 · 乳香",
+      "回歸大地，找回穩定感。透過溫暖香氣建立日常儀式，讓浮動的心靈落地，給神經系統真正的休息。",
+    oils: "廣藿香 · 薑 · 甜橙 · 岩蘭草 · 乳香",
     imbalanceSigns: [
-      "焦虑失眠",
-      "皮肤干燥",
-      "胀气便秘",
+      "焦慮失眠",
+      "皮膚乾燥",
+      "脹氣便秘",
       "末梢冰冷",
-      "思绪散亂",
+      "思緒散亂",
     ],
     products: [
       {
         icon: "🌿",
         name: "扎根平衡按摩油",
-        desc: "以广藿香、姜、岩蘭草為核心，温暖定锚，稳定风型神经系統，缓解焦虑与末梢冰冷",
-        tag: "Grounding Body Oil · 舒缓焦虑 · 暖身",
+        desc: "以廣藿香、薑、岩蘭草為核心，溫暖定錨，穩定風型神經系統，緩解焦慮與末梢冰冷",
+        tag: "Grounding Body Oil · 舒緩焦慮 · 暖身",
       },
       {
         icon: "🫙",
-        name: "暖身滋養润肤膏",
-        desc: "乳木果与甜杏仁油深度滋润干燥肌肤，乳香与甜橙香气安撫紧绷的神经末梢",
-        tag: "Warming Body Butter · 保湿 · 定神",
+        name: "暖身滋養潤膚膏",
+        desc: "乳木果與甜杏仁油深度滋潤乾燥肌膚，乳香與甜橙香氣安撫緊繃的神經末梢",
+        tag: "Warming Body Butter · 保濕 · 定神",
       },
       {
         icon: "💨",
-        name: "安眠舒缓噴霧",
-        desc: "真正熏衣草、羅馬洋甘菊、佛手柑的黃金比例，睡前噴于枕头与頸部，引导深層放松",
-        tag: "Deep Sleep Mist · 助眠 · 放松",
+        name: "安眠舒緩噴霧",
+        desc: "真正薰衣草、羅馬洋甘菊、佛手柑的黃金比例，睡前噴於枕頭與頸部，引導深層放鬆",
+        tag: "Deep Sleep Mist · 助眠 · 放鬆",
       },
     ],
   },
   P: {
     name: "Pitta 火型",
-    series: "清凉舒压系列 · Soothing",
+    series: "清涼舒壓系列 · Soothing",
     essence:
-      "火的能量，代表著轉化、热情、智慧与精准執行力。你天生目标导向，但失衡时容易燃烧过度、急躁发炎。",
+      "火的能量，代表著轉化、熱情、智慧與精準執行力。你天生目標導向，但失衡時容易燃燒過度、急躁發炎。",
     advice:
-      "适度降温，給心靈留白。透过清凉香气撫平內在的火焰，在高效中保持滋養与平静。",
+      "適度降溫，給心靈留白。透過清涼香氣撫平內在的火焰，在高效中保持滋養與平靜。",
     oils: "薄荷 · 玫瑰 · 檀香 · 茉莉 · 德國洋甘菊",
     imbalanceSigns: [
-      "皮肤发炎",
-      "胃酸过多",
+      "皮膚發炎",
+      "胃酸過多",
       "急躁易怒",
-      "过热出汗",
-      "完美主义",
+      "過熱出汗",
+      "完美主義",
     ],
     products: [
       {
         icon: "🌊",
-        name: "降火复方按摩油",
-        desc: "薄荷、玫瑰、檀香精准冷卻过热体质，舒缓皮肤慢性发炎，安撫急躁情绪",
-        tag: "Cooling Body Oil · 降火 · 消炎",
+        name: "清涼舒緩精油",
+        desc: "薄荷與德國洋甘菊的組合，快速降溫，平撫火型的急躁感，帶來冷靜與清晰",
+        tag: "Cooling Essential Oil · 降火 · 清涼",
       },
       {
-        icon: "🌿",
-        name: "清凉头皮舒缓噴霧",
-        desc: "薄荷、茶樹、德國洋甘菊配方，直接噴于头皮，即时舒缓油膩、敏感与紧绷感",
-        tag: "Scalp Relief Mist · 头皮舒缓 · 清凉",
+        icon: "🌹",
+        name: "玫瑰舒心香膏",
+        desc: "玫瑰精油搭配檀香與茉莉，滋養敏感肌膚，撫平情緒，帶來柔和的寧靜",
+        tag: "Rose Heart Balm · 舒心 · 滋潤",
       },
       {
-        icon: "🛁",
-        name: "玫瑰清凉浴鹽",
-        desc: "玫瑰花瓣与瀉鹽的清凉配方，泡浴时释放積累的身体热气，平復过度激动的神经系統",
-        tag: "Rose Cooling Bath Salt · 降温 · 放松",
+        icon: "❄️",
+        name: "夜間冷靜噴霧",
+        desc: "洋甘菊與薄荷的降火組合，幫助火型在晚間放下控制，進入深度休息",
+        tag: "Cooling Night Mist · 放鬆 · 助眠",
       },
     ],
   },
   K: {
     name: "Kapha 土水型",
-    series: "煥活流动系列 · Energizing",
+    series: "喚醒活力系列 · Activating",
     essence:
-      "地与水的能量，代表著稳定、愛与深厚滋養。你是天生的支柱，但失衡时容易停滞、沉重与抑鬱。",
+      "土與水的能量，代表著穩定、包容與深厚的耐心。你值得信賴，但失衡時容易陷入停滯與遲鈍。",
     advice:
-      "喚醒感官，打破沈滞。透过温热提振的芳疗配方激活內在流动，重燃对生命的热情。",
-    oils: "迷迭香 · 姜 · 黑胡椒 · 尤加利 · 佛手柑",
+      "喚醒內在動力，重拾熱情。透過溫暖、辛香的香氣激活能量，打破慣性，重新啟動生活。",
+    oils: "薑 · 肉桂 · 黑胡椒 · 檸檬 · 尤加利",
     imbalanceSigns: [
-      "水肿停滞",
-      "代谢缓慢",
-      "情绪低落",
-      "鼻塞痰多",
-      "动力不足",
+      "身體沉重",
+      "消化遲緩",
+      "情緒低落",
+      "缺乏動力",
+      "水腫浮腫",
     ],
     products: [
       {
         icon: "🔥",
-        name: "排毒淋巴按摩油",
-        desc: "杜松漿果、絲柏、黑胡椒激活淋巴循环，消解停滞与水肿，喚醒沉重的土水体质",
-        tag: "Detox Lymph Oil · 淋巴排毒 · 消肿",
+        name: "啟動活力精油",
+        desc: "薑、肉桂、黑胡椒的辛香組合，快速溫暖，喚醒土水型的內在動力，打破停滯感",
+        tag: "Activating Essential Oil · 溫暖 · 提神",
       },
       {
-        icon: "🛁",
-        name: "煥活提振浴鹽",
-        desc: "迷迭香、姜、葡萄柚配方，泡浴时全面激活循环代谢，驅散身体的沉重与停滞感",
-        tag: "Energizing Bath Salt · 提振 · 代谢",
+        icon: "🍋",
+        name: "清新檸檬按摩油",
+        desc: "檸檬與尤加利的清新活力，促進循環，舒緩身體沉重感，帶來輕盈感受",
+        tag: "Energizing Body Oil · 提振 · 輕盈",
       },
       {
-        icon: "☀️",
-        name: "晨间活力噴霧",
-        desc: "佛手柑、姜黃、甜橙的陽光配方，早晨噴于胸口与手腕，点燃一天的动力与清醒",
-        tag: "Morning Boost Mist · 提振精神 · 晨间",
+        icon: "⚡",
+        name: "晨間喚醒噴霧",
+        desc: "黑胡椒與檸檬的刺激香氣，早晨一噴立即清醒，幫助土水型快速進入行動模式",
+        tag: "Morning Activation Mist · 提神 · 啟動",
       },
     ],
   },
