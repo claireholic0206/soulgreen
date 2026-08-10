@@ -1,19 +1,12 @@
-import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import { T } from "@/components/TextConverter";
+import { getAllProductIds, getProductById } from "@/lib/products-data";
 import ProductDetailClient from "./ProductDetailClient";
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  );
-}
 
 export async function generateStaticParams() {
   try {
-    const { data } = await getSupabase().from("products").select("id");
-    return (data ?? []).map((p) => ({ id: p.id }));
+    const ids = await getAllProductIds();
+    return ids.map((id) => ({ id }));
   } catch (error) {
     console.error('Failed to fetch products:', error);
     return [];
@@ -29,11 +22,7 @@ export default async function ProductDetailPage({
 
   // 静态匯出模式下，这个 fetch 只会在 next build 时執行一次，
   // 產生的是已经含資料的静态 HTML，瀏覽器不需要再打 API
-  const { data: product } = await getSupabase()
-    .from("products")
-    .select("*, categories(id, name_cn, name_en, slug)")
-    .eq("id", id)
-    .single();
+  const product = await getProductById(id);
 
   if (!product) {
     return (

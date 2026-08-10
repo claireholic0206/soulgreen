@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# original (uncropped) image backups — kept locally only
+public/*-original.*
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -174,7 +174,7 @@ function ProductCard({ product }: { product: Product }) {
           )}
           {product.price != null && (
             <p className="text-sm text-[#4A5E4D] font-medium">
-              ¥ {product.price.toLocaleString()}
+              NT$ {product.price.toLocaleString()}
             </p>
           )}
         </div>
