@@ -36,7 +36,7 @@ export default function CartPage() {
         (item) =>
           `・${item.name}${item.volume ? ` (${item.volume})` : ""} x ${item.quantity}` +
           (item.price != null
-            ? ` = ¥${(item.price * item.quantity).toLocaleString()}`
+            ? ` = NT$${(item.price * item.quantity).toLocaleString()}`
             : ""),
       )
       .join("\n");
@@ -149,7 +149,7 @@ export default function CartPage() {
                     )}
                     {item.price != null && (
                       <p className="text-xs text-[#4A5E4D] mt-0.5">
-                        ¥ {item.price.toLocaleString()}
+                        NT$ {item.price.toLocaleString()}
                       </p>
                     )}
                   </div>

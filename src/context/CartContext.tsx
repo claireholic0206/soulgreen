@@ -25,6 +25,8 @@ interface CartContextValue {
   clearCart: () => void;
   totalCount: number;
   totalPrice: number;
+  cartOpen: boolean;
+  setCartOpen: (open: boolean) => void;
 }
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -34,6 +36,7 @@ const STORAGE_KEY = "soulgreen-cart";
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
 
   // Load persisted cart on mount. Initial state must stay [] so the
   // client's first render matches the statically exported HTML.
@@ -97,6 +100,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         clearCart,
         totalCount,
         totalPrice,
+        cartOpen,
+        setCartOpen,
       }}
     >
       {children}
