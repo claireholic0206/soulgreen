@@ -51,6 +51,14 @@ body {
   color: var(--text);
 }
 
+/* 全站的連結/按鈕都搭配 :hover 變色效果，手機版 WebKit（iOS Safari）在這種情況下
+   常會把第一次點擊當成觸發 hover，要點第二次才真的送出 click，導致「按鈕要按兩次」。
+   加上 touch-action: manipulation 讓觸控裝置跳過這個 hover 判斷，第一下就直接觸發點擊。 */
+a,
+button {
+  touch-action: manipulation;
+}
+
 .font-serif {
   font-family: 'Noto Serif TC', serif;
 }
