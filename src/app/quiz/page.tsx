@@ -14,7 +14,7 @@ const DOSHA_INFO: Record<DoshaKey, { tint: string; glyph: string }> = {
 };
 
 export default function QuizPage() {
-  const [stage, setStage] = useState<"intro" | "quiz" | "result">("intro");
+  const [stage, setStage] = useState<"quiz" | "result">("quiz");
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<DoshaKey[]>([]);
   const [result, setResult] = useState<DoshaKey | null>(null);
@@ -49,121 +49,11 @@ export default function QuizPage() {
   };
 
   const handleReset = () => {
-    setStage("intro");
+    setStage("quiz");
     setCurrentStep(0);
     setAnswers([]);
     setResult(null);
   };
-
-  // ── Intro 頁 ────
-  if (stage === "intro") {
-    return (
-      <div style={{
-        fontFamily: "'Noto Sans TC', sans-serif",
-        background: "linear-gradient(180deg, #eee7d6 0%, #f7f3ea 100%)",
-        color: "#28331f",
-        lineHeight: 1.75,
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "40px 6vw"
-      }}>
-        <style>{`
-          .font-serif { font-family: 'Noto Serif TC', serif; }
-          .sg-pulse-ring { animation: sg-pulse-ring 2.4s infinite; }
-          @keyframes sg-pulse-ring {
-            0% { box-shadow: 0 0 0 0 rgba(184,115,79,.35); }
-            100% { box-shadow: 0 0 0 14px rgba(184,115,79,0); }
-          }
-        `}</style>
-
-        <div style={{
-          maxWidth: "760px",
-          margin: "0 auto"
-        }}>
-          <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <div style={{
-              fontSize: "13px",
-              letterSpacing: "4px",
-              color: "#b8734f",
-              marginBottom: "16px",
-              textTransform: "uppercase",
-              fontWeight: 600
-            }}>
-              Ayurveda Check-in
-            </div>
-            <h2 className="font-serif" style={{
-              fontSize: "clamp(28px, 3vw, 40px)",
-              fontWeight: 600,
-              margin: "0 0 18px"
-            }}>
-              此刻的你，是什麼狀態？
-            </h2>
-            <p style={{
-              color: "#5c6650",
-              maxWidth: "520px",
-              margin: "0 auto",
-              fontWeight: 300
-            }}>
-              這不是體質診斷，而是一份根據你「目前的身心感受」，為你推薦合適儀式與產品的小測驗。
-            </p>
-          </div>
-
-          <div style={{
-            background: "#fffdf8",
-            borderRadius: "28px",
-            padding: "52px 48px",
-            boxShadow: "0 16px 46px rgba(40,51,31,.05)",
-            minHeight: "380px",
-            textAlign: "center"
-          }}>
-            <div className="sg-pulse-ring" style={{
-              width: "88px",
-              height: "88px",
-              borderRadius: "50%",
-              background: "#eef1e6",
-              margin: "0 auto 28px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}>
-              <span className="font-serif" style={{
-                fontSize: "32px",
-                color: "#6b7a4f"
-              }}>
-                氣
-              </span>
-            </div>
-            <p style={{
-              fontSize: "16px",
-              color: "#4a5230",
-              margin: "0 0 34px",
-              fontWeight: 300
-            }}>
-              6 道選擇題，約 2 分鐘，找到最適合現在的你的產品組合。
-            </p>
-            <button
-              onClick={() => setStage("quiz")}
-              style={{
-                background: "#2f3b26",
-                color: "#fbf8f0",
-                border: "none",
-                padding: "16px 40px",
-                borderRadius: "100px",
-                fontSize: "15px",
-                letterSpacing: "1px",
-                cursor: "pointer",
-                fontFamily: "inherit"
-              }}
-            >
-              開始評估
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // ── 結果頁 ────
   if (stage === "result" && result) {

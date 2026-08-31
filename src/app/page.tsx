@@ -137,6 +137,11 @@ function HomePageContent() {
         a { color: #6b7a4f; text-decoration: none; }
         a:hover { color: #b8734f; }
 
+        /* 錨點跳轉時，扣掉 sticky nav 的高度，避免標題被擋住。
+           用 scroll-margin-top 而不是算死的像素位置，
+           不管上面產品數量多寡改變了頁面高度都還是會跳到正確位置 */
+        #story, #products, #assessment, #consult { scroll-margin-top: 96px; }
+
         .sg-hero { min-height: 92vh; }
         .sg-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 90px; align-items: center; position: relative; max-width: 1240px; margin: 0 auto; }
         .sg-story-img-wrap { width: 280px; height: 360px; }
@@ -296,7 +301,7 @@ function HomePageContent() {
             純粹植物萃取，結合阿育吠陀身心智慧，為你與家人打造溫柔而深刻的日常儀式。
           </p>
           <div className="sg-hero-actions">
-            <Link href="/quiz" style={{
+            <a href="#assessment" style={{
               background: "#b8734f",
               color: "#fbf8f0",
               padding: "15px 32px",
@@ -308,7 +313,7 @@ function HomePageContent() {
               display: "inline-block"
             }}>
               開始身心狀態評估
-            </Link>
+            </a>
             <a href="#products" style={{
               border: "1px solid rgba(251,248,240,.5)",
               color: "#fbf8f0",
