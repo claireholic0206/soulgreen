@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
 import { useCart } from "@/context/CartContext";
-import { toTwd } from "@/lib/currency";
 import type { Product } from "@/types/product";
 
 export default function ProductDetailClient({ product }: { product: Product }) {
@@ -29,7 +28,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
           .neq("id", product.id)
           .limit(4);
 
-        setRelatedProducts((data ?? []).map(toTwd));
+        setRelatedProducts(data ?? []);
       } catch (error) {
         console.error("Failed to fetch related products:", error);
       }
@@ -172,7 +171,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                 fontWeight: 500,
                 marginBottom: "30px"
               }}>
-                NT$ {product.price?.toLocaleString()}
+                ¥{product.price?.toLocaleString()}
               </div>
 
               {/* 主要成分框 */}
@@ -394,7 +393,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                           color: "#28331f",
                           fontWeight: 500
                         }}>
-                          NT$ {prod.price?.toLocaleString()}
+                          ¥{prod.price?.toLocaleString()}
                         </div>
                       </div>
                     </div>

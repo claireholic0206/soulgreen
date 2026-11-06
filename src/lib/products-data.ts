@@ -1,6 +1,5 @@
 import { unstable_cache } from "next/cache";
 import { createClient } from "@supabase/supabase-js";
-import { toTwd } from "./currency";
 import type { Product, Category } from "@/types/product";
 
 function getSupabase() {
@@ -22,7 +21,7 @@ export const getProductById = unstable_cache(
       .select("*, categories(id, name_cn, name_en, slug)")
       .eq("id", id)
       .single();
-    return data ? toTwd(data) : null;
+    return data ?? null;
   },
   ["product-by-id"],
   { revalidate: REVALIDATE_SECONDS },
@@ -48,7 +47,7 @@ export const getCategoriesAndSaleProducts = unstable_cache(
     ]);
     return {
       categories: categories ?? [],
-      products: (products ?? []).map(toTwd),
+      products: products ?? [],
     };
   },
   ["categories-and-sale-products"],

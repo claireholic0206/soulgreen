@@ -149,7 +149,7 @@ export default function CartDrawer() {
                       fontSize: "13px",
                       color: "#8a7a5c"
                     }}>
-                      {item.quantity} × {item.price ? `NT$ ${item.price.toLocaleString()}` : ""}
+                      {item.quantity} × {item.price ? `¥${item.price.toLocaleString()}` : ""}
                     </div>
                   </div>
 
@@ -187,7 +187,7 @@ export default function CartDrawer() {
                 color: "#28331f"
               }}>
                 <span>小計</span>
-                <span>NT$ {totalPrice.toLocaleString()}</span>
+                <span>¥{totalPrice.toLocaleString()}</span>
               </div>
               <Link
                 href="/#consult"

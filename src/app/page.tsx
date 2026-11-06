@@ -4,9 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import emailjs from "@emailjs/browser";
 import { useCart } from "@/context/CartContext";
-import { toTwd } from "@/lib/currency";
 import type { Product } from "@/types/product";
 
 const CATEGORY_IMAGE_BY_NAME: Record<string, string> = {
@@ -64,7 +62,7 @@ function HomePageContent() {
           .eq("Is_Sale", true)
           .limit(20);
 
-        setTeaserProducts((products ?? []).map(toTwd));
+        setTeaserProducts(products ?? []);
       } catch (err) {
         console.error("Failed to fetch products:", err);
       } finally {
@@ -605,7 +603,7 @@ function HomePageContent() {
                       margin: 0,
                       fontWeight: 500
                     }}>
-                      NT$ {p.price?.toLocaleString()}
+                      ¥{p.price?.toLocaleString()}
                     </p>
                   </Link>
                 ))
@@ -862,7 +860,7 @@ function HomePageContent() {
                           color: "#28331f"
                         }}>
                           <span>{item.name} × {item.quantity}</span>
-                          <span>{item.price ? `NT$ ${(item.price * item.quantity).toLocaleString()}` : ""}</span>
+                          <span>{item.price ? `¥${(item.price * item.quantity).toLocaleString()}` : ""}</span>
                         </div>
                       ))}
                     </div>
@@ -877,7 +875,7 @@ function HomePageContent() {
                       borderTop: "1px solid rgba(74,89,64,.15)"
                     }}>
                       <span>小計</span>
-                      <span>NT$ {cartTotalPrice.toLocaleString()}</span>
+                      <span>¥{cartTotalPrice.toLocaleString()}</span>
                     </div>
                   </div>
                 )}
@@ -976,13 +974,9 @@ function HomePageContent() {
 
                   setConsultSending(true);
                   try {
-                    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "";
-                    const templateId = "template_azxgpe8";
-                    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "";
-
                     const cartItemsText = cartItems.length > 0
                       ? cartItems
-                          .map((item) => `${item.name} x${item.quantity}${item.price ? `（NT$ ${(item.price * item.quantity).toLocaleString()}）` : ""}`)
+                          .map((item) => `${item.name} x${item.quantity}${item.price ? `（¥${(item.price * item.quantity).toLocaleString()}）` : ""}`)
                           .join("\n")
                       : "無";
 
@@ -991,27 +985,16 @@ function HomePageContent() {
                       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
                     );
 
-                    // 寄信跟存 Supabase 是互相獨立的操作，同時發送以縮短等待時間
-                    await Promise.all([
-                      emailjs.send(
-                        serviceId,
-                        templateId,
-                        {
-                          from_name: consultName,
-                          contact: consultContact,
-                          topic: consultTopic || "無",
-                          cart_items: cartItemsText,
-                        },
-                        publicKey
-                      ),
-                      supabase.from("consultations").insert({
-                        name: consultName,
-                        contact: consultContact,
-                        topic: consultTopic,
-                        cart_items: cartItemsText,
-                        created_at: new Date().toISOString(),
-                      }),
-                    ]);
+                    // supabase-js 失敗時是回傳 error 而不是丟例外，要自己檢查，
+                    // 否則存失敗了畫面還是會顯示「已收到」。
+                    const { error } = await supabase.from("consultations").insert({
+                      name: consultName,
+                      contact: consultContact,
+                      topic: consultTopic,
+                      cart_items: cartItemsText,
+                      created_at: new Date().toISOString(),
+                    });
+                    if (error) throw error;
 
                     setConsultSubmitted(true);
                   } catch (error) {
