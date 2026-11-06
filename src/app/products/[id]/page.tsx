@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { T } from "@/components/TextConverter";
 import { getAllProductIds, getProductById } from "@/lib/products-data";
 import ProductDetailClient from "./ProductDetailClient";
 
@@ -20,8 +19,8 @@ export default async function ProductDetailPage({
 }) {
   const { id } = await params;
 
-  // 静态匯出模式下，这个 fetch 只会在 next build 时執行一次，
-  // 產生的是已经含資料的静态 HTML，瀏覽器不需要再打 API
+  // 静态汇出模式下，这个 fetch 只会在 next build 时执行一次，
+  // 产生的是已经含资料的静态 HTML，浏览器不需要再打 API
   const product = await getProductById(id);
 
   if (!product) {
@@ -29,10 +28,10 @@ export default async function ProductDetailPage({
       <main className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
         <div className="text-center">
           <p className="text-[#A09890] mb-4">
-            <T>找不到此產品</T>
+            找不到此产品
           </p>
           <Link href="/products" className="text-xs text-[#4A5E4D] underline">
-            <T>返回產品列表</T>
+            返回产品列表
           </Link>
         </div>
       </main>

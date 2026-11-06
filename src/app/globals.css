@@ -44,23 +44,23 @@
 }
 
 body {
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: 'Noto Sans SC', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: var(--bg);
   color: var(--text);
 }
 
-/* 全站的連結/按鈕都搭配 :hover 變色效果，手機版 WebKit（iOS Safari）在這種情況下
-   常會把第一次點擊當成觸發 hover，要點第二次才真的送出 click，導致「按鈕要按兩次」。
-   加上 touch-action: manipulation 讓觸控裝置跳過這個 hover 判斷，第一下就直接觸發點擊。 */
+/* 全站的连结/按钮都搭配 :hover 变色效果，手机版 WebKit（iOS Safari）在这种情况下
+   常会把第一次点击当成触发 hover，要点第二次才真的送出 click，导致「按钮要按两次」。
+   加上 touch-action: manipulation 让触控装置跳过这个 hover 判断，第一下就直接触发点击。 */
 a,
 button {
   touch-action: manipulation;
 }
 
 .font-serif {
-  font-family: 'Noto Serif TC', serif;
+  font-family: 'Noto Serif SC', serif;
 }
 
 .animate-fade-up {

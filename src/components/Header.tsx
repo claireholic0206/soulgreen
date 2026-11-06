@@ -158,9 +158,9 @@ export default function Header() {
           Soulgreen
         </a>
         <div className="header-nav">
-          <a href="/">首頁</a>
-          <a href="/products">芳疗產品</a>
-          <a href="/quiz">能量檢測</a>
+          <a href="/">首页</a>
+          <a href="/products">芳疗产品</a>
+          <a href="/quiz">能量检测</a>
           <a href="/services" className="header-nav-mobile-hide">专属服务</a>
         </div>
 
@@ -187,9 +187,9 @@ export default function Header() {
         </div>
 
         <div className={`mobile-nav ${mobileMenuOpen ? "open" : ""}`}>
-          <a href="/" onClick={() => setMobileMenuOpen(false)}>首頁</a>
-          <a href="/products" onClick={() => setMobileMenuOpen(false)}>芳疗產品</a>
-          <a href="/quiz" onClick={() => setMobileMenuOpen(false)}>能量檢測</a>
+          <a href="/" onClick={() => setMobileMenuOpen(false)}>首页</a>
+          <a href="/products" onClick={() => setMobileMenuOpen(false)}>芳疗产品</a>
+          <a href="/quiz" onClick={() => setMobileMenuOpen(false)}>能量检测</a>
           <a href="/services" onClick={() => setMobileMenuOpen(false)}>专属服务</a>
         </div>
       </div>

@@ -8,7 +8,7 @@ import {
 } from "@/data/quizData";
 
 const DOSHA_INFO: Record<DoshaKey, { tint: string; glyph: string }> = {
-  V: { tint: "#8a9a7a", glyph: "風" },
+  V: { tint: "#8a9a7a", glyph: "风" },
   P: { tint: "#b8734f", glyph: "火" },
   K: { tint: "#4a5940", glyph: "土" },
 };
@@ -55,14 +55,14 @@ export default function QuizPage() {
     setResult(null);
   };
 
-  // ── 結果頁 ────
+  // ── 结果页 ────
   if (stage === "result" && result) {
     const resultDetail = DOSHA_DETAIL[result];
     const info = DOSHA_INFO[result];
 
     return (
       <div style={{
-        fontFamily: "'Noto Sans TC', sans-serif",
+        fontFamily: "'Noto Sans SC', sans-serif",
         background: "#f7f3ea",
         color: "#28331f",
         lineHeight: 1.75,
@@ -70,7 +70,7 @@ export default function QuizPage() {
         padding: "40px 6vw 120px"
       }}>
         <style>{`
-          .font-serif { font-family: 'Noto Serif TC', serif; }
+          .font-serif { font-family: 'Noto Serif SC', serif; }
           .sg-fade-up { animation: sg-fade-up 0.6s ease both; }
           @keyframes sg-fade-up {
             from { opacity: 0; transform: translateY(24px); }
@@ -82,7 +82,7 @@ export default function QuizPage() {
           maxWidth: "1000px",
           margin: "0 auto"
         }}>
-          {/* 標題區 */}
+          {/* 标题区 */}
           <div className="sg-fade-up" style={{
             display: "flex",
             alignItems: "center",
@@ -112,7 +112,7 @@ export default function QuizPage() {
                 letterSpacing: "2px",
                 color: "#a08a5c"
               }}>
-                你目前的能量傾向
+                你目前的能量倾向
               </div>
               <h3 className="font-serif" style={{
                 fontSize: "26px",
@@ -135,7 +135,7 @@ export default function QuizPage() {
             {resultDetail.summary}
           </p>
 
-          {/* 三個資訊框 */}
+          {/* 三个资讯框 */}
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
@@ -155,7 +155,7 @@ export default function QuizPage() {
                 marginBottom: "12px",
                 textTransform: "uppercase"
               }}>
-                能量傾向說明
+                能量倾向说明
               </div>
               <p style={{
                 fontSize: "14.5px",
@@ -181,7 +181,7 @@ export default function QuizPage() {
                 marginBottom: "12px",
                 textTransform: "uppercase"
               }}>
-                為你推薦
+                为你推荐
               </div>
               <p style={{
                 fontSize: "14.5px",
@@ -207,7 +207,7 @@ export default function QuizPage() {
                 marginBottom: "12px",
                 textTransform: "uppercase"
               }}>
-                建議的自我照顧儀式
+                建议的自我照顾仪式
               </div>
               <p style={{
                 fontSize: "14.5px",
@@ -221,7 +221,7 @@ export default function QuizPage() {
             </div>
           </div>
 
-          {/* 按鈕 */}
+          {/* 按钮 */}
           <div style={{
             display: "flex",
             gap: "16px",
@@ -244,7 +244,7 @@ export default function QuizPage() {
                 display: "inline-block"
               }}
             >
-              預約專屬諮詢
+              预约专属咨询
             </button>
             <button
               onClick={handleReset}
@@ -259,7 +259,7 @@ export default function QuizPage() {
                 fontFamily: "inherit"
               }}
             >
-              重新測驗
+              重新测验
             </button>
           </div>
         </div>
@@ -267,17 +267,17 @@ export default function QuizPage() {
     );
   }
 
-  // ── 測驗頁 ────
+  // ── 测验页 ────
   return (
     <div style={{
-      fontFamily: "'Noto Sans TC', sans-serif",
+      fontFamily: "'Noto Sans SC', sans-serif",
       background: "#f7f3ea",
       color: "#28331f",
       lineHeight: 1.75,
       minHeight: "100vh"
     }}>
       <style>{`
-        .font-serif { font-family: 'Noto Serif TC', serif; }
+        .font-serif { font-family: 'Noto Serif SC', serif; }
       `}</style>
 
       <div style={{
@@ -310,7 +310,7 @@ export default function QuizPage() {
           color: "#a08a5c",
           marginBottom: "12px"
         }}>
-          問題 {currentStep + 1} / {total}
+          问题 {currentStep + 1} / {total}
         </div>
 
         <h3 className="font-serif" style={{
@@ -372,7 +372,7 @@ export default function QuizPage() {
               padding: "0"
             }}
           >
-            ← 上一題
+            ← 上一题
           </button>
         )}
       </div>

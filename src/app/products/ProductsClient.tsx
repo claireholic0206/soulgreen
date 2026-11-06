@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { T } from "@/components/TextConverter";
 import type { Category, Product } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,17 +45,17 @@ export default function ProductsClient({
       {/* Hero */}
       <div className="bg-[#F3F1ED] border-b border-[#E2DDD5] px-6 py-14 text-center">
         <p className="text-[10px] tracking-[0.35em] uppercase text-[#4A5E4D]/50 mb-3">
-          <T>Soulgreen Studio</T>
+          Soulgreen Studio
         </p>
         <h1 className="font-serif text-3xl text-[#4A5E4D] mb-3 leading-tight">
-          <T>植萃芳疗產品</T>
+          植萃芳疗产品
         </h1>
         <p className="text-xs text-[#A09890] max-w-xs mx-auto leading-relaxed">
-          <T>结合阿育吠陀智慧与瑞士芳疗科学，為你的体质量身打造</T>
+          结合阿育吠陀智慧与瑞士芳疗科学，为你的体质量身打造
         </p>
       </div>
 
-      {/* 分類 Tab */}
+      {/* 分类 Tab */}
       <div className="sticky top-[57px] z-40 bg-[#FAFAF8] border-b border-[#E2DDD5]">
         <div className="max-w-5xl mx-auto px-4 py-3">
           <div className="flex flex-wrap gap-2">
@@ -68,7 +67,7 @@ export default function ProductsClient({
                   : "border-[#E2DDD5] text-[#A09890] hover:border-[#7A8C7D] hover:text-[#4A5E4D]"
               }`}
             >
-              <T>全部</T>
+              全部
             </button>
             {visibleCategories.map((cat) => (
               <button
@@ -80,18 +79,18 @@ export default function ProductsClient({
                     : "border-[#E2DDD5] text-[#A09890] hover:border-[#7A8C7D] hover:text-[#4A5E4D]"
                 }`}
               >
-                <T>{cat.name_cn}</T>
+                {cat.name_cn}
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      {/* 產品 Grid */}
+      {/* 产品 Grid */}
       <div className="max-w-5xl mx-auto px-4 py-8">
         {products.length === 0 ? (
           <div className="text-center py-20 text-stone-400 text-sm">
-            <T>此分類暫無產品</T>
+            此分类暂无产品
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
@@ -112,7 +111,7 @@ function ProductCard({ product }: { product: Product }) {
   return (
     <Link href={`/products/${product.id}`} className="group block">
       <div className="bg-white border border-[#E2DDD5] rounded-xl overflow-hidden hover:border-[#7A8C7D] hover:shadow-sm transition-all duration-300">
-        {/* 圖片區：固定正方形比例 */}
+        {/* 图片区：固定正方形比例 */}
         <div className="relative w-full aspect-square overflow-hidden">
           {hasImage ? (
             <Image
@@ -122,7 +121,7 @@ function ProductCard({ product }: { product: Product }) {
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
-            // 無圖：品牌色塊佔位
+            // 无图：品牌色块占位
             <div
               className="w-full h-full flex flex-col items-center justify-center gap-2"
               style={{
@@ -139,7 +138,7 @@ function ProductCard({ product }: { product: Product }) {
             </div>
           )}
 
-          {/* Badge 區 */}
+          {/* Badge 区 */}
           {dosha && DOSHA_LABEL[dosha] && hasImage && (
             <div className="absolute top-2 left-2">
               <span
@@ -152,19 +151,19 @@ function ProductCard({ product }: { product: Product }) {
           )}
         </div>
 
-        {/* 文字區 */}
+        {/* 文字区 */}
         <div className="p-3 md:p-4">
           {product.categories && (
             <p className="text-[9px] tracking-wider text-[#A09890] uppercase mb-1">
-              <T>{product.categories.name_cn}</T>
+              {product.categories.name_cn}
             </p>
           )}
           <p className="text-sm font-medium text-[#4A5E4D] leading-snug mb-1 group-hover:text-[#2E2E2C] transition-colors line-clamp-2">
-            <T>{product.name_cn ?? ""}</T>
+            {product.name_cn ?? ""}
           </p>
           {product.usage && (
             <p className="text-xs text-[#6E6B66] mb-1.5 leading-relaxed">
-              <T>{product.usage}</T>
+              {product.usage}
             </p>
           )}
           {product.volume && (

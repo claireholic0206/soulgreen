@@ -13,7 +13,7 @@ export default function CartDrawer() {
       position: "fixed",
       inset: 0,
       zIndex: 300,
-      fontFamily: "'Noto Sans TC', sans-serif"
+      fontFamily: "'Noto Sans SC', sans-serif"
     }}>
       <style>{`
         @media (max-width: 560px) {
@@ -22,7 +22,7 @@ export default function CartDrawer() {
           }
         }
       `}</style>
-      {/* 背景覆蓋 */}
+      {/* 背景覆盖 */}
       <div
         onClick={() => setCartOpen(false)}
         style={{
@@ -33,7 +33,7 @@ export default function CartDrawer() {
         }}
       />
 
-      {/* 抽屜 */}
+      {/* 抽屉 */}
       <div className="sg-cart-drawer" style={{
         position: "absolute",
         top: 0,
@@ -47,7 +47,7 @@ export default function CartDrawer() {
         display: "flex",
         flexDirection: "column"
       }}>
-        {/* 標題和關閉按鈕 */}
+        {/* 标题和关闭按钮 */}
         <div style={{
           display: "flex",
           justifyContent: "space-between",
@@ -55,13 +55,13 @@ export default function CartDrawer() {
           marginBottom: "32px"
         }}>
           <h3 style={{
-            fontFamily: "'Noto Serif TC', serif",
+            fontFamily: "'Noto Serif SC', serif",
             fontSize: "22px",
             fontWeight: 600,
             margin: 0,
             color: "#28331f"
           }}>
-            我的購物清單
+            我的购物清单
           </h3>
           <button
             onClick={() => setCartOpen(false)}
@@ -84,11 +84,11 @@ export default function CartDrawer() {
             fontWeight: 300,
             fontSize: "14.5px"
           }}>
-            清單目前是空的，去看看喜歡的產品吧。
+            清单目前是空的，去看看喜欢的产品吧。
           </p>
         ) : (
           <>
-            {/* 購物清單 */}
+            {/* 购物清单 */}
             <div style={{
               display: "flex",
               flexDirection: "column",
@@ -102,7 +102,7 @@ export default function CartDrawer() {
                   gap: "16px",
                   alignItems: "center"
                 }}>
-                  {/* 產品圖片 */}
+                  {/* 产品图片 */}
                   <div style={{
                     width: "76px",
                     height: "76px",
@@ -135,7 +135,7 @@ export default function CartDrawer() {
                     )}
                   </div>
 
-                  {/* 產品資訊 */}
+                  {/* 产品资讯 */}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{
                       fontSize: "15px",
@@ -153,7 +153,7 @@ export default function CartDrawer() {
                     </div>
                   </div>
 
-                  {/* 移除按鈕 */}
+                  {/* 移除按钮 */}
                   <button
                     onClick={() => removeItem(item.id)}
                     style={{
@@ -173,7 +173,7 @@ export default function CartDrawer() {
               ))}
             </div>
 
-            {/* 小計和操作按鈕 */}
+            {/* 小计和操作按钮 */}
             <div style={{
               borderTop: "1px solid rgba(74,89,64,.15)",
               paddingTop: "22px"
@@ -186,15 +186,15 @@ export default function CartDrawer() {
                 marginBottom: "20px",
                 color: "#28331f"
               }}>
-                <span>小計</span>
+                <span>小计</span>
                 <span>¥{totalPrice.toLocaleString()}</span>
               </div>
               <Link
                 href="/#consult"
                 onClick={(e) => {
                   setCartOpen(false);
-                  // 如果已經在首頁，換 hash 不會觸發 Next.js 的換頁捲動。
-                  // 改成手動觸發 hashchange，讓首頁自己既有的捲動邏輯接手處理。
+                  // 如果已经在首页，换 hash 不会触发 Next.js 的换页卷动。
+                  // 改成手动触发 hashchange，让首页自己既有的卷动逻辑接手处理。
                   if (window.location.pathname === "/") {
                     e.preventDefault();
                     if (window.location.hash === "#consult") {
@@ -217,7 +217,7 @@ export default function CartDrawer() {
                   fontFamily: "inherit"
                 }}
               >
-                前往預約諮詢，確認我的清單
+                前往预约咨询，确认我的清单
               </Link>
             </div>
           </>

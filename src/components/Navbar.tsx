@@ -1,7 +1,6 @@
-"use client"; // 務必保留，因為使用了 useState
+"use client"; // 务必保留，因为使用了 useState
 
 import { useState } from 'react';
-import { T } from '@/components/TextConverter';
 import { useCart } from '@/context/CartContext';
 
 export function Navbar() {
@@ -20,20 +19,20 @@ export function Navbar() {
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <span className="text-xl font-bold text-[#2D4232] tracking-wider font-serif">
-          <T>Soulgreen Aroma</T>
+          Soulgreen Aroma
         </span>
 
-        {/* 電腦版选單 */}
+        {/* 电脑版选单 */}
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-stone-600">
           {navLinks.map((link) => (
             <a key={link.name} href={link.href} className="hover:text-[#8A9A86] transition-colors">
-              <T>{link.name}</T>
+              {link.name}
             </a>
           ))}
           <CartIcon totalCount={totalCount} />
         </div>
 
-        {/* 手機版：購物車 + 漢堡按鈕 */}
+        {/* 手机版：购物车 + 汉堡按钮 */}
         <div className="flex md:hidden items-center gap-1">
           <CartIcon totalCount={totalCount} />
           <button
@@ -52,7 +51,7 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* 手機版下拉选單 */}
+      {/* 手机版下拉选单 */}
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-stone-100 px-6 py-4 flex flex-col space-y-4 animate-in slide-in-from-top-2">
           {navLinks.map((link) => (
@@ -60,9 +59,9 @@ export function Navbar() {
               key={link.name}
               href={link.href}
               className="text-sm font-medium text-stone-600 hover:text-[#8A9A86] transition-colors block py-2"
-              onClick={() => setIsMenuOpen(false)} // 点击后关閉选單
+              onClick={() => setIsMenuOpen(false)} // 点击后关闭选单
             >
-              <T>{link.name}</T>
+              {link.name}
             </a>
           ))}
         </div>
@@ -76,7 +75,7 @@ function CartIcon({ totalCount }: { totalCount: number }) {
     <a
       href="/cart"
       className="relative p-2 text-[#2D4232] hover:text-[#8A9A86] transition-colors"
-      aria-label="購物車"
+      aria-label="购物车"
     >
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path

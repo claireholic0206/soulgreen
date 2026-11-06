@@ -9,9 +9,9 @@ function getSupabase() {
   );
 }
 
-// 靜態匯出模式下這些只會在 next build 時跑一次；
-// revalidate 只在 next dev（或未來改用 ISR）時有意義，
-// 讓開發時重複瀏覽同一頁不用每次都重打 Supabase。
+// 静态汇出模式下这些只会在 next build 时跑一次；
+// revalidate 只在 next dev（或未来改用 ISR）时有意义，
+// 让开发时重复浏览同一页不用每次都重打 Supabase。
 const REVALIDATE_SECONDS = 60;
 
 export const getProductById = unstable_cache(

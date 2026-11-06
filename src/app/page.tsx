@@ -8,11 +8,11 @@ import { useCart } from "@/context/CartContext";
 import type { Product } from "@/types/product";
 
 const CATEGORY_IMAGE_BY_NAME: Record<string, string> = {
-  "功能複方": "/focus1.jpg",
-  "單方精油": "/focus2.jpg",
+  "功能复方": "/focus1.jpg",
+  "单方精油": "/focus2.jpg",
   "阿育吠陀": "/focus3.jpg",
   "植物基底油": "/focus4.jpg",
-  "季節限定": "/focus5.jpg",
+  "季节限定": "/focus5.jpg",
 };
 
 export default function HomePage() {
@@ -38,7 +38,7 @@ function HomePageContent() {
   useEffect(() => {
     const section = searchParams.get("section");
     if (section && !loading) {
-      // 產品載入完成後，給 DOM 一點時間渲染，再滾動
+      // 产品载入完成后，给 DOM 一点时间渲染，再滚动
       requestAnimationFrame(() => {
         const element = document.getElementById(section);
         if (element) {
@@ -82,7 +82,7 @@ function HomePageContent() {
   );
 
   useEffect(() => {
-    // 處理 hash 跳轉
+    // 处理 hash 跳转
     const handleHashChange = () => {
       const hash = window.location.hash.slice(1);
       if (hash) {
@@ -109,12 +109,12 @@ function HomePageContent() {
   const filteredProducts = teaserProducts.filter(p => p.categories?.id === selectedCategory);
 
   return (
-    <div style={{ fontFamily: "'Noto Sans TC', sans-serif", background: "#f7f3ea", color: "#28331f", lineHeight: 1.75, overflowX: "hidden" }}>
+    <div style={{ fontFamily: "'Noto Sans SC', sans-serif", background: "#f7f3ea", color: "#28331f", lineHeight: 1.75, overflowX: "hidden" }}>
       <style>{`
         * { box-sizing: border-box; }
         ::selection { background: #c9a961; color: #28331f; }
 
-        .font-serif { font-family: 'Noto Serif TC', serif; }
+        .font-serif { font-family: 'Noto Serif SC', serif; }
         .sg-fade-up { animation: sg-fade-up 0.9s ease both; }
         .sg-pulse-ring { animation: sg-pulse-ring 2.4s infinite; }
         .sg-drift { animation: sg-drift 14s ease-in-out infinite; }
@@ -135,9 +135,9 @@ function HomePageContent() {
         a { color: #6b7a4f; text-decoration: none; }
         a:hover { color: #b8734f; }
 
-        /* 錨點跳轉時，扣掉 sticky nav 的高度，避免標題被擋住。
+        /* 锚点跳转时，扣掉 sticky nav 的高度，避免标题被挡住。
            用 scroll-margin-top 而不是算死的像素位置，
-           不管上面產品數量多寡改變了頁面高度都還是會跳到正確位置 */
+           不管上面产品数量多寡改变了页面高度都还是会跳到正确位置 */
         #story, #products, #assessment, #consult { scroll-margin-top: 96px; }
 
         .sg-hero { min-height: 92vh; }
@@ -191,19 +191,19 @@ function HomePageContent() {
           color: "#4a5940"
         }}>
           Soulgreen <span style={{
-            fontFamily: "'Noto Serif TC', serif",
+            fontFamily: "'Noto Serif SC', serif",
             fontSize: "14px",
             fontWeight: 400,
             color: "#8a7a5c",
             letterSpacing: "1px",
             marginLeft: "6px"
-          }}>芳療</span>
+          }}>芳疗</span>
         </div>
         <div className="sg-nav-links">
           <a href="#story">品牌理念</a>
-          <a href="#products">產品</a>
-          <a href="#assessment">狀態評估</a>
-          <a href="#consult">預約諮詢</a>
+          <a href="#products">产品</a>
+          <a href="#assessment">状态评估</a>
+          <a href="#consult">预约咨询</a>
           <button onClick={() => setCartOpen(true)} style={{
             position: "relative",
             background: "none",
@@ -219,7 +219,7 @@ function HomePageContent() {
             gap: "8px",
             textDecoration: "none"
           }}>
-            購物清單
+            购物清单
             {totalCount > 0 && (
               <span style={{
                 background: "#b8734f",
@@ -277,7 +277,7 @@ function HomePageContent() {
             marginBottom: "18px",
             textTransform: "uppercase"
           }}>
-            Aromatherapy · Ayurveda · 天然身心療癒
+            Aromatherapy · Ayurveda · 天然身心疗愈
           </div>
           <h1 className="font-serif" style={{
             fontSize: "clamp(38px, 5.2vw, 68px)",
@@ -286,7 +286,7 @@ function HomePageContent() {
             margin: "0 0 22px",
             lineHeight: 1.35
           }}>
-            在香氣裡，<br/>找回與自然同步的自己
+            在香气里，<br/>找回与自然同步的自己
           </h1>
           <p style={{
             fontSize: "17px",
@@ -296,7 +296,7 @@ function HomePageContent() {
             fontWeight: 300,
             lineHeight: 1.7
           }}>
-            純粹植物萃取，結合阿育吠陀身心智慧，為你與家人打造溫柔而深刻的日常儀式。
+            纯粹植物萃取，结合阿育吠陀身心智慧，为你与家人打造温柔而深刻的日常仪式。
           </p>
           <div className="sg-hero-actions">
             <a href="#assessment" style={{
@@ -310,7 +310,7 @@ function HomePageContent() {
               boxShadow: "0 8px 24px rgba(184,115,79,0.35)",
               display: "inline-block"
             }}>
-              開始身心狀態評估
+              开始身心状态评估
             </a>
             <a href="#products" style={{
               border: "1px solid rgba(251,248,240,.5)",
@@ -322,7 +322,7 @@ function HomePageContent() {
               textDecoration: "none",
               display: "inline-block"
             }}>
-              探索產品
+              探索产品
             </a>
           </div>
         </div>
@@ -381,7 +381,7 @@ function HomePageContent() {
               margin: "0 0 28px",
               color: "#fbf8f0"
             }}>
-              相信身體本來，<br/>就懂得如何療癒自己
+              相信身体本来，<br/>就懂得如何疗愈自己
             </h2>
             <p style={{
               fontSize: "16px",
@@ -390,7 +390,7 @@ function HomePageContent() {
               margin: "0 0 20px",
               lineHeight: 1.8
             }}>
-              Soulgreen 源自於一個簡單的信念：當我們願意慢下來，貼近植物、貼近呼吸，身體與情緒都會找到屬於自己的節奏。
+              Soulgreen 源自于一个简单的信念：当我们愿意慢下来，贴近植物、贴近呼吸，身体与情绪都会找到属于自己的节奏。
             </p>
             <p style={{
               fontSize: "16px",
@@ -399,7 +399,7 @@ function HomePageContent() {
               margin: 0,
               lineHeight: 1.8
             }}>
-              我們以阿育吠陀的身心智慧為底蘊，結合純淨植物萃取，將每一瓶產品都設計成一段安定練習——給重視健康、渴望被自然溫柔擁抱的你與家人。
+              我们以阿育吠陀的身心智慧为底蕴，结合纯净植物萃取，将每一瓶产品都设计成一段安定练习——给重视健康、渴望被自然温柔拥抱的你与家人。
             </p>
           </div>
         </div>
@@ -427,7 +427,7 @@ function HomePageContent() {
             fontWeight: 600,
             margin: "0 0 18px"
           }}>
-            五大品項，各自延展出屬於你的香氣
+            五大品项，各自延展出属于你的香气
           </h2>
           <p style={{
             color: "#5c6650",
@@ -436,7 +436,7 @@ function HomePageContent() {
             fontWeight: 300,
             fontSize: "15px"
           }}>
-            每個品項底下都有十數款配方，依你的品類選擇，慢慢瀏覽、慢慢感受。
+            每个品项底下都有十数款配方，依你的品类选择，慢慢浏览、慢慢感受。
           </p>
         </div>
 
@@ -491,7 +491,7 @@ function HomePageContent() {
               }}>
                 <img
                   src={CATEGORY_IMAGE_BY_NAME[categories.find(c => c.id === selectedCategory)?.name_cn ?? ""] ?? "/focus1.jpg"}
-                  alt={categories.find(c => c.id === selectedCategory)?.name_cn ?? "分類精選"}
+                  alt={categories.find(c => c.id === selectedCategory)?.name_cn ?? "分类精选"}
                   loading="lazy"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
@@ -510,7 +510,7 @@ function HomePageContent() {
                 fontWeight: 600,
                 margin: "0 0 18px"
               }}>
-                {categories.find(c => c.id === selectedCategory)?.name_cn || "精選"}
+                {categories.find(c => c.id === selectedCategory)?.name_cn || "精选"}
               </h3>
               <p style={{
                 color: "#5c6650",
@@ -519,7 +519,7 @@ function HomePageContent() {
                 margin: "0 0 22px",
                 maxWidth: "400px"
               }}>
-                {categories.find(c => c.id === selectedCategory)?.slug || "精心挑選的優質品項"}
+                {categories.find(c => c.id === selectedCategory)?.slug || "精心挑选的优质品项"}
               </p>
               <div style={{
                 display: "inline-flex",
@@ -548,7 +548,7 @@ function HomePageContent() {
             }}>
               {filteredProducts.length === 0 ? (
                 <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px", color: "#8a7a5c" }}>
-                  暫無商品
+                  暂无商品
                 </div>
               ) : (
                 filteredProducts.map((p: Product) => (
@@ -578,11 +578,11 @@ function HomePageContent() {
                           style={{ width: "100%", height: "100%", objectFit: "cover" }}
                         />
                       ) : (
-                        <div style={{ color: "#8a7a5c", fontSize: "14px" }}>[產品圖片]</div>
+                        <div style={{ color: "#8a7a5c", fontSize: "14px" }}>[产品图片]</div>
                       )}
                     </div>
                     <h4 style={{
-                      fontFamily: "'Noto Serif TC', serif",
+                      fontFamily: "'Noto Serif SC', serif",
                       fontSize: "16.5px",
                       fontWeight: 600,
                       margin: "0 0 7px"
@@ -614,7 +614,7 @@ function HomePageContent() {
 
         {loading && (
           <div style={{ textAlign: "center", padding: "40px", color: "#8a7a5c" }}>
-            加載中...
+            加载中...
           </div>
         )}
       </section>
@@ -642,7 +642,7 @@ function HomePageContent() {
               fontWeight: 600,
               margin: "0 0 18px"
             }}>
-              此刻的你，是什麼狀態？
+              此刻的你，是什么状态？
             </h2>
             <p style={{
               color: "#5c6650",
@@ -651,7 +651,7 @@ function HomePageContent() {
               fontWeight: 300,
               fontSize: "15px"
             }}>
-              這不是體質診斷，而是一份根據你「目前的身心感受」，為你推薦合適儀式與產品的小測驗。
+              这不是体质诊断，而是一份根据你「目前的身心感受」，为你推荐合适仪式与产品的小测验。
             </p>
           </div>
 
@@ -677,7 +677,7 @@ function HomePageContent() {
                 fontSize: "32px",
                 color: "#6b7a4f"
               }}>
-                氣
+                气
               </span>
             </div>
             <p style={{
@@ -687,7 +687,7 @@ function HomePageContent() {
               fontWeight: 300,
               lineHeight: 1.7
             }}>
-              6 道選擇題，約 1 分鐘，找到最適合現在的你的產品組合。
+              6 道选择题，约 1 分钟，找到最适合现在的你的产品组合。
             </p>
             <Link href="/quiz" style={{
               display: "inline-block",
@@ -701,7 +701,7 @@ function HomePageContent() {
               cursor: "pointer",
               textDecoration: "none"
             }}>
-              開始評估
+              开始评估
             </Link>
           </div>
         </div>
@@ -745,7 +745,7 @@ function HomePageContent() {
               color: "#fbf8f0",
               margin: "0 0 24px"
             }}>
-              讓芳療顧問，<br/>為你量身規劃儀式
+              让芳疗顾问，<br/>为你量身规划仪式
             </h2>
             <p style={{
               color: "#d6cfba",
@@ -754,7 +754,7 @@ function HomePageContent() {
               margin: "0 0 32px",
               lineHeight: 1.8
             }}>
-              無論是初次接觸精油、想改善睡眠困擾，或想為家人挑選合適的照護方式，我們都樂意傾聽並提供建議。
+              无论是初次接触精油、想改善睡眠困扰，或想为家人挑选合适的照护方式，我们都乐意倾听并提供建议。
             </p>
             <div style={{
               width: "100%",
@@ -766,7 +766,7 @@ function HomePageContent() {
             }}>
               <img
                 src="/consultation.jpg"
-                alt="芳療顧問諮詢情境"
+                alt="芳疗顾问咨询情境"
                 loading="lazy"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
@@ -801,7 +801,7 @@ function HomePageContent() {
                   margin: "0 0 16px",
                   color: "#28331f"
                 }}>
-                  已收到你的訊息
+                  已收到你的讯息
                 </h3>
                 <p style={{
                   fontSize: "15px",
@@ -810,7 +810,7 @@ function HomePageContent() {
                   lineHeight: 1.6,
                   maxWidth: "400px"
                 }}>
-                  感謝 {consultName} 的信任，我們將盡快透過你留下的方式與你聯繫。
+                  感谢 {consultName} 的信任，我们将尽快透过你留下的方式与你联系。
                 </p>
                 <button
                   onClick={() => {
@@ -849,7 +849,7 @@ function HomePageContent() {
                       marginBottom: "10px",
                       fontWeight: 500
                     }}>
-                      已選商品清單
+                      已选商品清单
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                       {cartItems.map((item) => (
@@ -874,7 +874,7 @@ function HomePageContent() {
                       paddingTop: "10px",
                       borderTop: "1px solid rgba(74,89,64,.15)"
                     }}>
-                      <span>小計</span>
+                      <span>小计</span>
                       <span>¥{cartTotalPrice.toLocaleString()}</span>
                     </div>
                   </div>
@@ -891,7 +891,7 @@ function HomePageContent() {
                 </label>
               <input
                 type="text"
-                placeholder="請輸入你的姓名"
+                placeholder="请输入你的姓名"
                 value={consultName}
                 onChange={(e) => setConsultName(e.target.value)}
                 style={{
@@ -915,11 +915,11 @@ function HomePageContent() {
                 marginBottom: "8px",
                 fontWeight: 500
               }}>
-                聯絡方式（電話、Email或Wechat）
+                联络方式（电话、Email或Wechat）
               </label>
               <input
                 type="text"
-                placeholder="方便聯絡你的方式"
+                placeholder="方便联络你的方式"
                 value={consultContact}
                 onChange={(e) => setConsultContact(e.target.value)}
                 style={{
@@ -943,10 +943,10 @@ function HomePageContent() {
                 marginBottom: "8px",
                 fontWeight: 500
               }}>
-                想諮詢的主題（可選）
+                想咨询的主题（可选）
               </label>
               <textarea
-                placeholder="例如：睡眠不佳、想為長輩推薦產品等"
+                placeholder="例如：睡眠不佳、想为长辈推荐产品等"
                 rows={4}
                 value={consultTopic}
                 onChange={(e) => setConsultTopic(e.target.value)}
@@ -968,7 +968,7 @@ function HomePageContent() {
                 disabled={consultSending}
                 onClick={async () => {
                   if (!consultName.trim() || !consultContact.trim()) {
-                    alert("請填寫姓名和聯絡方式");
+                    alert("请填写姓名和联络方式");
                     return;
                   }
 
@@ -978,15 +978,15 @@ function HomePageContent() {
                       ? cartItems
                           .map((item) => `${item.name} x${item.quantity}${item.price ? `（¥${(item.price * item.quantity).toLocaleString()}）` : ""}`)
                           .join("\n")
-                      : "無";
+                      : "无";
 
                     const supabase = createClient(
                       process.env.NEXT_PUBLIC_SUPABASE_URL!,
                       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
                     );
 
-                    // supabase-js 失敗時是回傳 error 而不是丟例外，要自己檢查，
-                    // 否則存失敗了畫面還是會顯示「已收到」。
+                    // supabase-js 失败时是回传 error 而不是丢例外，要自己检查，
+                    // 否则存失败了画面还是会显示「已收到」。
                     const { error } = await supabase.from("consultations").insert({
                       name: consultName,
                       contact: consultContact,
@@ -998,8 +998,8 @@ function HomePageContent() {
 
                     setConsultSubmitted(true);
                   } catch (error) {
-                    console.error("提交失敗:", error);
-                    alert("提交失敗，請稍後重試");
+                    console.error("提交失败:", error);
+                    alert("提交失败，请稍后重试");
                   } finally {
                     setConsultSending(false);
                   }
@@ -1019,7 +1019,7 @@ function HomePageContent() {
                   transition: "background 0.3s",
                   opacity: consultSending ? 0.85 : 1
                 }}>
-                {consultSending ? "送出中…" : "送出諮詢預約"}
+                {consultSending ? "送出中…" : "送出咨询预约"}
               </button>
             </div>
             )}
@@ -1048,13 +1048,13 @@ function HomePageContent() {
           maxWidth: "460px",
           margin: "0 auto 28px"
         }}>
-          純粹植物萃取 · 阿育吠陀身心智慧 · 陪你與家人建立每日的療癒儀式
+          纯粹植物萃取 · 阿育吠陀身心智慧 · 陪你与家人建立每日的疗愈仪式
         </p>
         <div style={{
           fontSize: "12.5px",
           color: "#6f7a5c"
         }}>
-          © 2026 Soulgreen 芳療。以自然之名，溫柔以待。
+          © 2026 Soulgreen 芳疗。以自然之名，温柔以待。
         </div>
       </footer>
     </div>

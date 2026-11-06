@@ -38,9 +38,9 @@ export default function ProductDetailClient({ product }: { product: Product }) {
   }, [product.id, product.category_id]);
 
   return (
-    <div style={{ fontFamily: "'Noto Sans TC', sans-serif", background: "#f7f3ea", color: "#28331f", lineHeight: 1.75, overflowX: "hidden" }}>
+    <div style={{ fontFamily: "'Noto Sans SC', sans-serif", background: "#f7f3ea", color: "#28331f", lineHeight: 1.75, overflowX: "hidden" }}>
       <style>{`
-        .font-serif { font-family: 'Noto Serif TC', serif; }
+        .font-serif { font-family: 'Noto Serif SC', serif; }
         .sg-fade-up { animation: sg-fade-up 0.9s ease both; }
         @keyframes sg-fade-up {
           from { opacity: 0; transform: translateY(24px); }
@@ -87,7 +87,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
           margin: "0 auto",
           padding: "40px 6vw 120px"
         }}>
-          {/* 返回按鈕 */}
+          {/* 返回按钮 */}
           <Link href="/#products" style={{
             background: "none",
             border: "none",
@@ -102,12 +102,12 @@ export default function ProductDetailClient({ product }: { product: Product }) {
             gap: "6px",
             textDecoration: "none"
           }}>
-            ← 返回產品列表
+            ← 返回产品列表
           </Link>
 
-          {/* 主要內容網格 */}
+          {/* 主要内容网格 */}
           <div className="sg-product-grid">
-            {/* 左邊：產品圖片 */}
+            {/* 左边：产品图片 */}
             <div className="sg-product-image" style={{
               aspectRatio: "4/5",
               borderRadius: "28px",
@@ -128,13 +128,13 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
               ) : (
-                "[產品圖片]"
+                "[产品图片]"
               )}
             </div>
 
-            {/* 右邊：產品資訊 */}
+            {/* 右边：产品资讯 */}
             <div>
-              {/* 分類名稱 */}
+              {/* 分类名称 */}
               <div style={{
                 fontSize: "13px",
                 letterSpacing: "3px",
@@ -142,10 +142,10 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                 marginBottom: "14px",
                 textTransform: "uppercase"
               }}>
-                {product.categories?.name_cn || "產品"}
+                {product.categories?.name_cn || "产品"}
               </div>
 
-              {/* 產品標題 */}
+              {/* 产品标题 */}
               <h2 className="font-serif" style={{
                 fontSize: "clamp(28px, 3vw, 38px)",
                 fontWeight: 600,
@@ -154,7 +154,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                 {product.name_cn}
               </h2>
 
-              {/* 產品描述 */}
+              {/* 产品描述 */}
               <p style={{
                 color: "#5c6650",
                 fontWeight: 300,
@@ -164,7 +164,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                 {product.description}
               </p>
 
-              {/* 價格 */}
+              {/* 价格 */}
               <div style={{
                 fontSize: "22px",
                 color: "#28331f",
@@ -212,7 +212,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                 </div>
               )}
 
-              {/* 香氣與使用建議框 */}
+              {/* 香气与使用建议框 */}
               <div style={{
                 background: "#fffdf8",
                 borderRadius: "18px",
@@ -226,7 +226,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                   marginBottom: "10px",
                   textTransform: "uppercase"
                 }}>
-                  香氣與使用建議
+                  香气与使用建议
                 </div>
                 <p style={{
                   fontSize: "14.5px",
@@ -234,18 +234,18 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                   margin: "0",
                   fontWeight: 300
                 }}>
-                  {product.method || "請洽詢客服了解使用方式"}
+                  {product.method || "请洽询客服了解使用方式"}
                 </p>
               </div>
 
-              {/* 數量選擇和加入購物車 */}
+              {/* 数量选择和加入购物车 */}
               <div style={{
                 display: "flex",
                 alignItems: "center",
                 gap: "20px",
                 marginBottom: "24px"
               }}>
-                {/* 數量選擇器 */}
+                {/* 数量选择器 */}
                 <div style={{
                   display: "flex",
                   alignItems: "center",
@@ -290,12 +290,12 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                   </button>
                 </div>
 
-                {/* 加入購物清單按鈕 */}
+                {/* 加入购物清单按钮 */}
                 <button
                   onClick={() => {
                     addItem({
                       id: product.id,
-                      name: product.name_cn || product.name_en || "產品",
+                      name: product.name_cn || product.name_en || "产品",
                       price: product.price,
                       image: product.image_url,
                       volume: product.volume
@@ -316,13 +316,13 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                     transition: "background 0.3s ease"
                   }}
                 >
-                  加入購物清單
+                  加入购物清单
                 </button>
               </div>
             </div>
           </div>
 
-          {/* 同系列產品 */}
+          {/* 同系列产品 */}
           {relatedProducts.length > 0 && (
             <div>
               <h3 className="font-serif" style={{
@@ -330,7 +330,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                 fontWeight: 600,
                 margin: "0 0 32px"
               }}>
-                同系列還有
+                同系列还有
               </h3>
               <div style={{
                 display: "grid",
@@ -369,7 +369,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                             }}
                           />
                         ) : (
-                          <span style={{ color: "#8a7a5c" }}>[圖片]</span>
+                          <span style={{ color: "#8a7a5c" }}>[图片]</span>
                         )}
                       </div>
                       <div style={{ padding: "18px" }}>

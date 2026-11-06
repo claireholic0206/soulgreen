@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 
-// 舊的購物車結帳頁（以前靠寄 email 送出清單）。現在改成在首頁的預約諮詢表單確認清單，
-// 保留這個網址只是避免舊連結 404，直接導回首頁的諮詢區塊。
+// 旧的购物车结帐页（以前靠寄 email 送出清单）。现在改成在首页的预约咨询表单确认清单，
+// 保留这个网址只是避免旧连结 404，直接导回首页的咨询区块。
 export default function CartRedirect() {
   useEffect(() => {
     window.location.replace("/#consult");
