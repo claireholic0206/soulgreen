@@ -5,6 +5,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { posts, hasPosts, formatPostDate } from "@/lib/posts";
 import type { Product } from "@/types/product";
 
 const CATEGORY_IMAGE_BY_NAME: Record<string, string> = {
@@ -138,7 +139,7 @@ function HomePageContent() {
         /* 锚点跳转时，扣掉 sticky nav 的高度，避免标题被挡住。
            用 scroll-margin-top 而不是算死的像素位置，
            不管上面产品数量多寡改变了页面高度都还是会跳到正确位置 */
-        #story, #products, #assessment, #consult { scroll-margin-top: 96px; }
+        #story, #products, #news, #assessment, #consult { scroll-margin-top: 96px; }
 
         .sg-hero { min-height: 92vh; }
         .sg-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 90px; align-items: center; position: relative; max-width: 1240px; margin: 0 auto; }
@@ -202,6 +203,7 @@ function HomePageContent() {
         <div className="sg-nav-links">
           <a href="#story">品牌理念</a>
           <a href="#products">产品</a>
+          {hasPosts && <a href="#news">最新动态</a>}
           <a href="#assessment">状态评估</a>
           <a href="#consult">预约咨询</a>
           <button onClick={() => setCartOpen(true)} style={{
@@ -618,6 +620,42 @@ function HomePageContent() {
           </div>
         )}
       </section>
+
+      {/* ──── NEWS（还没有文章时整个区块不显示；内容放在 content/posts/） ──── */}
+      {hasPosts && (
+        <section id="news" style={{ background: "#f7f3ea", padding: "120px 6vw 40px" }}>
+          <div style={{ maxWidth: "1160px", margin: "0 auto" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "16px", marginBottom: "44px" }}>
+              <div>
+                <div style={{ fontSize: "13px", letterSpacing: "4px", color: "#b8734f", marginBottom: "16px", fontWeight: 600 }}>
+                  JOURNAL
+                </div>
+                <h2 className="font-serif" style={{ fontSize: "clamp(28px, 3vw, 40px)", fontWeight: 600, margin: 0 }}>
+                  最新动态
+                </h2>
+              </div>
+              <Link href="/news/" style={{ fontSize: "14.5px", color: "#4a5940" }}>查看全部 →</Link>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "28px" }}>
+              {posts.slice(0, 3).map((p) => (
+                <Link key={p.slug} href={`/news/${p.slug}/`} style={{ display: "block", background: "#fffdf8", borderRadius: "20px", overflow: "hidden", color: "inherit" }}>
+                  {p.cover && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={p.cover} alt="" loading="lazy" style={{ width: "100%", aspectRatio: "16/10", objectFit: "cover", display: "block" }} />
+                  )}
+                  <div style={{ padding: "22px 24px 26px" }}>
+                    <div style={{ fontSize: "12px", color: "#b8734f", letterSpacing: "1px", marginBottom: "8px" }}>
+                      {p.type} · {formatPostDate(p.date)}
+                    </div>
+                    <h3 className="font-serif" style={{ fontSize: "19px", fontWeight: 600, margin: "0 0 8px" }}>{p.title}</h3>
+                    {p.summary && <p style={{ fontSize: "14px", color: "#5c6650", fontWeight: 300, margin: 0 }}>{p.summary}</p>}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ──── ASSESSMENT SECTION ──── */}
       <section id="assessment" style={{

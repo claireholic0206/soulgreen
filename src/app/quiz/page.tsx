@@ -18,6 +18,7 @@ export default function QuizPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<DoshaKey[]>([]);
   const [result, setResult] = useState<DoshaKey | null>(null);
+  const [tied, setTied] = useState<DoshaKey[]>([]);
 
   const total = quizQuestions.length;
   const currentQ = quizQuestions[currentStep];
@@ -32,9 +33,11 @@ export default function QuizPage() {
       newAnswers.forEach((d) => {
         counts[d]++;
       });
-      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-      const dominant = (sorted[0][0] as DoshaKey) || "V";
-      setResult(dominant);
+      // 票数并列时不要默默偏向某一型：并列者都记下来，结果页会明确告知
+      const max = Math.max(...Object.values(counts));
+      const leaders = (["V", "P", "K"] as DoshaKey[]).filter((k) => counts[k] === max);
+      setResult(leaders[0]);
+      setTied(leaders.slice(1));
       setStage("result");
     } else {
       setCurrentStep((s) => s + 1);
@@ -53,6 +56,7 @@ export default function QuizPage() {
     setCurrentStep(0);
     setAnswers([]);
     setResult(null);
+    setTied([]);
   };
 
   // ── 结果页 ────
@@ -134,6 +138,21 @@ export default function QuizPage() {
           }}>
             {resultDetail.summary}
           </p>
+
+          {tied.length > 0 && (
+            <p style={{
+              fontSize: "14px",
+              color: "#8a7a5c",
+              background: "#fffdf8",
+              borderRadius: "14px",
+              padding: "14px 18px",
+              margin: "-24px 0 48px",
+              lineHeight: 1.7
+            }}>
+              你的结果在 {[result, ...tied].map((k) => DOSHA_DETAIL[k as DoshaKey].name).join("、")} 之间并列，
+              说明目前你同时带有多种倾向。以下先以 {resultDetail.name} 作为主要参考，更适合你的搭配可以在一对一咨询时再细聊。
+            </p>
+          )}
 
           {/* 三个资讯框 */}
           <div style={{
