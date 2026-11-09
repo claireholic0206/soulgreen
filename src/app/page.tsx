@@ -30,11 +30,32 @@ function HomePageContent() {
   const [teaserProducts, setTeaserProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [consultName, setConsultName] = useState("");
-  const [consultContact, setConsultContact] = useState("");
-  const [consultTopic, setConsultTopic] = useState("");
-  const [consultSubmitted, setConsultSubmitted] = useState(false);
-  const [consultSending, setConsultSending] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // 把购物清单整理成文字，方便贴到微信对话里
+  const handleCopyList = async () => {
+    const text =
+      "我想咨询的产品：\n" +
+      cartItems
+        .map((item) => `${item.name} x${item.quantity}${item.price ? `（¥${(item.price * item.quantity).toLocaleString()}）` : ""}`)
+        .join("\n") +
+      `\n小计 ¥${cartTotalPrice.toLocaleString()}`;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // 部分手机浏览器（含微信内置）没有剪贴板 API，改用旧方式
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
 
   useEffect(() => {
     const section = searchParams.get("section");
@@ -148,7 +169,7 @@ function HomePageContent() {
         .sg-nav-links { display: flex; align-items: center; gap: 36px; font-size: 15px; letter-spacing: .5px; }
         .sg-nav-links a:not(:last-child) { display: block; }
         .sg-assessment-card { padding: 52px 48px; }
-        .sg-consult-form { padding: 44px; }
+        .sg-consult-form { padding: 44px 40px; }
         .sg-hero-actions { display: flex; gap: 18px; flex-wrap: wrap; }
 
         @media (max-width: 860px) {
@@ -689,7 +710,7 @@ function HomePageContent() {
               fontWeight: 300,
               fontSize: "15px"
             }}>
-              这不是体质诊断，而是一份根据你「目前的身心感受」，为你推荐合适仪式与产品的小测验。
+              这不是医疗诊断，而是一份帮你看见身体里风、火、水土三种能量占比的小测验。
             </p>
           </div>
 
@@ -725,7 +746,7 @@ function HomePageContent() {
               fontWeight: 300,
               lineHeight: 1.7
             }}>
-              6 道选择题，约 1 分钟，找到最适合现在的你的产品组合。
+              12 道选择题，约 3 分钟，看见你的能量比例，并获得一份油浴配方参考。
             </p>
             <Link href="/quiz" style={{
               display: "inline-block",
@@ -815,251 +836,54 @@ function HomePageContent() {
             background: "#fbf8f0",
             borderRadius: "28px",
             position: "relative",
-            boxShadow: "0 20px 50px rgba(0,0,0,.12)"
+            boxShadow: "0 20px 50px rgba(0,0,0,.12)",
+            textAlign: "center"
           }}>
-            {consultSubmitted ? (
-              <div style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "400px",
-                textAlign: "center"
-              }}>
-                <div style={{
-                  fontSize: "48px",
-                  marginBottom: "24px",
-                  color: "#8a7a5c"
-                }}>
-                  ✓
+            <div style={{ fontSize: "13px", letterSpacing: "3px", color: "#b8734f", marginBottom: "10px", fontWeight: 600 }}>
+              ADD ON WECHAT
+            </div>
+            <h3 className="font-serif" style={{ fontSize: "22px", fontWeight: 600, margin: "0 0 14px", color: "#28331f" }}>
+              扫码添加微信，开始聊聊
+            </h3>
+            <p style={{ fontSize: "14.5px", color: "#5c6650", fontWeight: 300, lineHeight: 1.8, margin: "0 auto 24px", maxWidth: "340px" }}>
+              Hi，我是 Claire，瑞士 Usha Veda 自然疗法学院认证芳疗师。
+              欢迎扫码添加我的微信，告诉我你目前的状态与想改善的困扰，我们一对一聊聊。
+            </p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/wechat-qr.jpg"
+              alt="Claire 的微信二维码"
+              loading="lazy"
+              style={{ width: "100%", maxWidth: "250px", display: "block", margin: "0 auto 14px", borderRadius: "16px", border: "1px solid rgba(74,89,64,.12)" }}
+            />
+            <p style={{ fontSize: "12.5px", color: "#8a7a5c", fontWeight: 300, margin: 0 }}>
+              在手机上浏览？在微信内打开本页后，长按二维码即可添加。
+            </p>
+
+            {cartItems.length > 0 && (
+              <div style={{ background: "#f7f3ea", borderRadius: "14px", padding: "18px 20px", marginTop: "28px", textAlign: "left" }}>
+                <div style={{ fontSize: "13px", letterSpacing: "1px", color: "#6b7562", marginBottom: "10px", fontWeight: 500 }}>
+                  我想了解的产品
                 </div>
-                <h3 className="font-serif" style={{
-                  fontSize: "22px",
-                  fontWeight: 600,
-                  margin: "0 0 16px",
-                  color: "#28331f"
-                }}>
-                  已收到你的讯息
-                </h3>
-                <p style={{
-                  fontSize: "15px",
-                  color: "#4a5230",
-                  margin: "0 0 32px",
-                  lineHeight: 1.6,
-                  maxWidth: "400px"
-                }}>
-                  感谢 {consultName} 的信任，我们将尽快透过你留下的方式与你联系。
-                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  {cartItems.map((item) => (
+                    <div key={item.id} style={{ display: "flex", justifyContent: "space-between", fontSize: "14px", color: "#28331f" }}>
+                      <span>{item.name} × {item.quantity}</span>
+                      <span>{item.price ? `¥${(item.price * item.quantity).toLocaleString()}` : ""}</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", fontWeight: 600, color: "#28331f", marginTop: "10px", paddingTop: "10px", borderTop: "1px solid rgba(74,89,64,.15)" }}>
+                  <span>小计</span>
+                  <span>¥{cartTotalPrice.toLocaleString()}</span>
+                </div>
                 <button
-                  onClick={() => {
-                    setConsultSubmitted(false);
-                    setConsultName("");
-                    setConsultContact("");
-                    setConsultTopic("");
-                  }}
-                  style={{
-                    background: "none",
-                    border: "1px solid rgba(74,89,64,.3)",
-                    color: "#4a5940",
-                    padding: "12px 28px",
-                    borderRadius: "100px",
-                    fontSize: "14px",
-                    cursor: "pointer",
-                    fontFamily: "inherit"
-                  }}
+                  onClick={handleCopyList}
+                  style={{ width: "100%", marginTop: "14px", background: "#2f3b26", color: "#fbf8f0", border: "none", padding: "13px", borderRadius: "100px", fontSize: "14px", cursor: "pointer", fontFamily: "inherit" }}
                 >
-                  再填一份
+                  {copied ? "已复制，添加微信后直接发给我" : "复制清单，添加微信后发给我"}
                 </button>
               </div>
-            ) : (
-              <div>
-                {cartItems.length > 0 && (
-                  <div style={{
-                    background: "#f7f3ea",
-                    borderRadius: "14px",
-                    padding: "18px 20px",
-                    marginBottom: "24px"
-                  }}>
-                    <div style={{
-                      fontSize: "13px",
-                      letterSpacing: "1px",
-                      color: "#6b7562",
-                      marginBottom: "10px",
-                      fontWeight: 500
-                    }}>
-                      已选商品清单
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                      {cartItems.map((item) => (
-                        <div key={item.id} style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          fontSize: "14px",
-                          color: "#28331f"
-                        }}>
-                          <span>{item.name} × {item.quantity}</span>
-                          <span>{item.price ? `¥${(item.price * item.quantity).toLocaleString()}` : ""}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      fontSize: "13px",
-                      fontWeight: 600,
-                      color: "#28331f",
-                      marginTop: "10px",
-                      paddingTop: "10px",
-                      borderTop: "1px solid rgba(74,89,64,.15)"
-                    }}>
-                      <span>小计</span>
-                      <span>¥{cartTotalPrice.toLocaleString()}</span>
-                    </div>
-                  </div>
-                )}
-                <label style={{
-                  display: "block",
-                  fontSize: "13px",
-                  letterSpacing: "1px",
-                  color: "#6b7562",
-                  marginBottom: "8px",
-                  fontWeight: 500
-                }}>
-                  姓名
-                </label>
-              <input
-                type="text"
-                placeholder="请输入你的姓名"
-                value={consultName}
-                onChange={(e) => setConsultName(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "14px 16px",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(74,89,64,.18)",
-                  fontSize: "15px",
-                  marginBottom: "20px",
-                  background: "#f7f3ea",
-                  fontFamily: "inherit",
-                  boxSizing: "border-box"
-                }}
-              />
-
-              <label style={{
-                display: "block",
-                fontSize: "13px",
-                letterSpacing: "1px",
-                color: "#6b7562",
-                marginBottom: "8px",
-                fontWeight: 500
-              }}>
-                联络方式（电话、Email或Wechat）
-              </label>
-              <input
-                type="text"
-                placeholder="方便联络你的方式"
-                value={consultContact}
-                onChange={(e) => setConsultContact(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "14px 16px",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(74,89,64,.18)",
-                  fontSize: "15px",
-                  marginBottom: "20px",
-                  background: "#f7f3ea",
-                  fontFamily: "inherit",
-                  boxSizing: "border-box"
-                }}
-              />
-
-              <label style={{
-                display: "block",
-                fontSize: "13px",
-                letterSpacing: "1px",
-                color: "#6b7562",
-                marginBottom: "8px",
-                fontWeight: 500
-              }}>
-                想咨询的主题（可选）
-              </label>
-              <textarea
-                placeholder="例如：睡眠不佳、想为长辈推荐产品等"
-                rows={4}
-                value={consultTopic}
-                onChange={(e) => setConsultTopic(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "14px 16px",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(74,89,64,.18)",
-                  fontSize: "15px",
-                  marginBottom: "28px",
-                  background: "#f7f3ea",
-                  fontFamily: "inherit",
-                  resize: "vertical",
-                  boxSizing: "border-box"
-                }}
-              />
-
-              <button
-                disabled={consultSending}
-                onClick={async () => {
-                  if (!consultName.trim() || !consultContact.trim()) {
-                    alert("请填写姓名和联络方式");
-                    return;
-                  }
-
-                  setConsultSending(true);
-                  try {
-                    const cartItemsText = cartItems.length > 0
-                      ? cartItems
-                          .map((item) => `${item.name} x${item.quantity}${item.price ? `（¥${(item.price * item.quantity).toLocaleString()}）` : ""}`)
-                          .join("\n")
-                      : "无";
-
-                    const supabase = createClient(
-                      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-                      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                    );
-
-                    // supabase-js 失败时是回传 error 而不是丢例外，要自己检查，
-                    // 否则存失败了画面还是会显示「已收到」。
-                    const { error } = await supabase.from("consultations").insert({
-                      name: consultName,
-                      contact: consultContact,
-                      topic: consultTopic,
-                      cart_items: cartItemsText,
-                      created_at: new Date().toISOString(),
-                    });
-                    if (error) throw error;
-
-                    setConsultSubmitted(true);
-                  } catch (error) {
-                    console.error("提交失败:", error);
-                    alert("提交失败，请稍后重试");
-                  } finally {
-                    setConsultSending(false);
-                  }
-                }}
-                style={{
-                  width: "100%",
-                  background: consultSending ? "#5c6650" : "#2f3b26",
-                  color: "#fbf8f0",
-                  border: "none",
-                  padding: "17px",
-                  borderRadius: "100px",
-                  fontSize: "15.5px",
-                  letterSpacing: "1px",
-                  cursor: consultSending ? "default" : "pointer",
-                  fontFamily: "inherit",
-                  fontWeight: 500,
-                  transition: "background 0.3s",
-                  opacity: consultSending ? 0.85 : 1
-                }}>
-                {consultSending ? "送出中…" : "送出咨询预约"}
-              </button>
-            </div>
             )}
           </div>
         </div>

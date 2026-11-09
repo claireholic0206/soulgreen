@@ -4,21 +4,211 @@ import { useState } from "react";
 import {
   quizQuestions,
   DOSHA_DETAIL,
+  DOSHA_KEYS,
+  FORMULAS,
+  FORMULA_ESSENTIAL_OIL_NOTE,
+  computeResult,
   type DoshaKey,
+  type DualKey,
+  type QuizResult,
 } from "@/data/quizData";
 
-const DOSHA_INFO: Record<DoshaKey, { tint: string; glyph: string }> = {
-  V: { tint: "#8a9a7a", glyph: "风" },
-  P: { tint: "#b8734f", glyph: "火" },
-  K: { tint: "#4a5940", glyph: "土" },
+const DOSHA_INFO: Record<DoshaKey, { tint: string; glyph: string; label: string }> = {
+  V: { tint: "#8a9a7a", glyph: "风", label: "风能 Vata" },
+  P: { tint: "#b8734f", glyph: "火", label: "火能 Pitta" },
+  K: { tint: "#4a5940", glyph: "土", label: "水土能 Kapha" },
 };
 
+const pageStyle: React.CSSProperties = {
+  fontFamily: "'Noto Sans SC', sans-serif",
+  background: "#f7f3ea",
+  color: "#28331f",
+  lineHeight: 1.75,
+  minHeight: "100vh",
+};
+
+const cardStyle: React.CSSProperties = {
+  background: "#fffdf8",
+  borderRadius: "22px",
+  padding: "28px 30px",
+};
+
+const cardTitle: React.CSSProperties = {
+  fontSize: "13px",
+  letterSpacing: "2px",
+  color: "#a08a5c",
+  marginBottom: "12px",
+  fontWeight: 600,
+};
+
+// 三轴雷达图：风在上、火在右下、水土在左下
+function EnergyRadar({ percents }: { percents: Record<DoshaKey, number> }) {
+  const cx = 150;
+  const cy = 150;
+  const R = 90;
+  const scaleMax = Math.max(60, ...DOSHA_KEYS.map((k) => percents[k]));
+  const angle: Record<DoshaKey, number> = { V: -90, P: 30, K: 150 };
+  const pt = (k: DoshaKey, ratio: number) => {
+    const a = (angle[k] * Math.PI) / 180;
+    return [cx + R * ratio * Math.cos(a), cy + R * ratio * Math.sin(a)] as const;
+  };
+  const ring = (ratio: number) =>
+    DOSHA_KEYS.map((k) => pt(k, ratio).join(",")).join(" ");
+  const shape = DOSHA_KEYS.map((k) => pt(k, percents[k] / scaleMax).join(",")).join(" ");
+
+  return (
+    <svg viewBox="25 25 250 200" role="img" aria-label="三种能量占比雷达图" style={{ width: "100%", maxWidth: "380px", display: "block", margin: "0 auto" }}>
+      {[1 / 3, 2 / 3, 1].map((r) => (
+        <polygon key={r} points={ring(r)} fill="none" stroke="rgba(74,89,64,.18)" strokeWidth="1" />
+      ))}
+      {DOSHA_KEYS.map((k) => {
+        const [x, y] = pt(k, 1);
+        return <line key={k} x1={cx} y1={cy} x2={x} y2={y} stroke="rgba(74,89,64,.18)" strokeWidth="1" />;
+      })}
+      <polygon points={shape} fill="rgba(184,115,79,.22)" stroke="#b8734f" strokeWidth="2" strokeLinejoin="round" />
+      {DOSHA_KEYS.map((k) => {
+        const [x, y] = pt(k, percents[k] / scaleMax);
+        return <circle key={k} cx={x} cy={y} r="4.5" fill={DOSHA_INFO[k].tint} />;
+      })}
+      {DOSHA_KEYS.map((k) => {
+        const [x, y] = pt(k, 1.22);
+        return (
+          <text key={k} x={x} y={y} textAnchor="middle" dominantBaseline="middle" fontSize="13" fill="#4a5230">
+            {DOSHA_DETAIL[k].short} {percents[k]}%
+          </text>
+        );
+      })}
+    </svg>
+  );
+}
+
+function ResultView({ result, onReset }: { result: QuizResult; onReset: () => void }) {
+  const primary = result.order[0];
+  const secondary = result.order[1];
+  const detail = DOSHA_DETAIL[primary];
+
+  const formula =
+    result.kind === "single"
+      ? FORMULAS.single[primary]
+      : result.kind === "dual" && result.formulaKey
+        ? FORMULAS.dual[result.formulaKey as DualKey]
+        : null;
+
+  const heading =
+    result.kind === "tri" ? "三种能量较为均衡" : formula?.name ?? detail.name;
+
+  return (
+    <div style={{ ...pageStyle, padding: "40px 6vw 120px" }}>
+      <style>{`
+        .font-serif { font-family: 'Noto Serif SC', serif; }
+        .sg-fade-up { animation: sg-fade-up 0.6s ease both; }
+        @keyframes sg-fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+      `}</style>
+
+      <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+        <div className="sg-fade-up" style={{ marginBottom: "36px" }}>
+          <div style={{ fontSize: "13px", letterSpacing: "2px", color: "#a08a5c" }}>你的能量比例</div>
+          <h2 className="font-serif" style={{ fontSize: "clamp(26px, 4vw, 34px)", fontWeight: 600, margin: "6px 0 0" }}>
+            {heading}
+          </h2>
+        </div>
+
+        <div className="sg-fade-up" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px", alignItems: "center", marginBottom: "28px" }}>
+          <div style={{ ...cardStyle }}>
+            <EnergyRadar percents={result.percents} />
+          </div>
+          <div style={{ ...cardStyle }}>
+            <div style={cardTitle}>占比</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+              {result.order.map((k) => (
+                <div key={k}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "15px", marginBottom: "6px" }}>
+                    <span>{DOSHA_INFO[k].label}</span>
+                    <span style={{ fontWeight: 600 }}>{result.percents[k]}%</span>
+                  </div>
+                  <div style={{ height: "10px", borderRadius: "5px", background: "rgba(74,89,64,.1)" }}>
+                    <div style={{ width: `${result.percents[k]}%`, height: "100%", borderRadius: "5px", background: DOSHA_INFO[k].tint, transition: "width .6s ease" }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p style={{ fontSize: "13px", color: "#8a7a5c", margin: "20px 0 0", fontWeight: 300 }}>
+              多数人都是两种甚至三种能量的混合，占比越高，代表这股能量在你身上越明显。
+            </p>
+          </div>
+        </div>
+
+        <div className="sg-fade-up" style={{ ...cardStyle, marginBottom: "24px" }}>
+          <div style={cardTitle}>能量解读</div>
+          {result.kind === "single" && (
+            <>
+              <p style={{ margin: "0 0 12px", fontWeight: 300 }}>{detail.summary}</p>
+              <p style={{ margin: 0, fontWeight: 300, color: "#5c6650" }}>{detail.energyText}</p>
+            </>
+          )}
+          {result.kind === "dual" && (
+            <>
+              {formula?.traits && <p style={{ margin: "0 0 12px", fontWeight: 300 }}>特征：{formula.traits}</p>}
+              <p style={{ margin: "0 0 10px", fontWeight: 300, color: "#5c6650" }}>{DOSHA_DETAIL[primary].energyText}</p>
+              <p style={{ margin: 0, fontWeight: 300, color: "#5c6650" }}>{DOSHA_DETAIL[secondary].energyText}</p>
+            </>
+          )}
+          {result.kind === "tri" && (
+            <p style={{ margin: 0, fontWeight: 300 }}>
+              你的风、火、水土三种能量比例比较接近，说明目前身心状态相对均衡，也可能同时带有多种倾向。
+              这类体质的搭配比较个别化，建议在一对一咨询时，依你当下的状态再为你细细调配。
+            </p>
+          )}
+        </div>
+
+        <div className="sg-fade-up" style={{ ...cardStyle, marginBottom: "24px" }}>
+          <div style={cardTitle}>油浴量身配方（参考）</div>
+          {formula ? (
+            <>
+              <div style={{ fontSize: "14px", color: "#8a7a5c", marginBottom: "6px" }}>基底油</div>
+              <ul style={{ margin: "0 0 18px", paddingLeft: "1.2em", listStyle: "disc", fontWeight: 300 }}>
+                {formula.baseOils.map((o) => (
+                  <li key={o}>{o}</li>
+                ))}
+              </ul>
+              <div style={{ fontSize: "14px", color: "#8a7a5c", marginBottom: "6px" }}>精油（{FORMULA_ESSENTIAL_OIL_NOTE}）</div>
+              <p style={{ margin: 0, fontWeight: 300 }}>
+                {formula.essentialOils ?? "精油搭配会在一对一咨询时，依你的状态与香气偏好为你调配。"}
+              </p>
+            </>
+          ) : (
+            <p style={{ margin: 0, fontWeight: 300 }}>专属配方将在一对一咨询时，依你的状态与香气偏好为你调配。</p>
+          )}
+          <p style={{ fontSize: "13px", color: "#8a7a5c", margin: "20px 0 0", fontWeight: 300 }}>
+            以上为参考方向，不作为医疗建议；实际比例与精油会依你的状况在一对一咨询时调整。
+          </p>
+        </div>
+
+        <div className="sg-fade-up" style={{ ...cardStyle, marginBottom: "36px" }}>
+          <div style={cardTitle}>日常小仪式</div>
+          <p style={{ margin: 0, fontWeight: 300 }}>{detail.ritual}</p>
+        </div>
+
+        <div style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
+          <a href="/#consult" style={{ background: "#b8734f", color: "#fff", padding: "14px 34px", borderRadius: "100px", fontSize: "14.5px", letterSpacing: ".5px" }}>
+            预约专属咨询
+          </a>
+          <button
+            onClick={onReset}
+            style={{ background: "none", border: "1px solid rgba(74,89,64,.25)", color: "#4a5940", padding: "14px 30px", borderRadius: "100px", fontSize: "14.5px", cursor: "pointer", fontFamily: "inherit" }}
+          >
+            重新测验
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function QuizPage() {
-  const [stage, setStage] = useState<"quiz" | "result">("quiz");
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<DoshaKey[]>([]);
-  const [result, setResult] = useState<DoshaKey | null>(null);
-  const [tied, setTied] = useState<DoshaKey[]>([]);
+  const [result, setResult] = useState<QuizResult | null>(null);
 
   const total = quizQuestions.length;
   const currentQ = quizQuestions[currentStep];
@@ -27,18 +217,8 @@ export default function QuizPage() {
   const handleSelectOption = (dosha: DoshaKey) => {
     const newAnswers = [...answers, dosha];
     setAnswers(newAnswers);
-
     if (isLast) {
-      const counts: Record<DoshaKey, number> = { V: 0, P: 0, K: 0 };
-      newAnswers.forEach((d) => {
-        counts[d]++;
-      });
-      // 票数并列时不要默默偏向某一型：并列者都记下来，结果页会明确告知
-      const max = Math.max(...Object.values(counts));
-      const leaders = (["V", "P", "K"] as DoshaKey[]).filter((k) => counts[k] === max);
-      setResult(leaders[0]);
-      setTied(leaders.slice(1));
-      setStage("result");
+      setResult(computeResult(newAnswers));
     } else {
       setCurrentStep((s) => s + 1);
     }
@@ -52,263 +232,19 @@ export default function QuizPage() {
   };
 
   const handleReset = () => {
-    setStage("quiz");
     setCurrentStep(0);
     setAnswers([]);
     setResult(null);
-    setTied([]);
   };
 
-  // ── 结果页 ────
-  if (stage === "result" && result) {
-    const resultDetail = DOSHA_DETAIL[result];
-    const info = DOSHA_INFO[result];
+  if (result) return <ResultView result={result} onReset={handleReset} />;
 
-    return (
-      <div style={{
-        fontFamily: "'Noto Sans SC', sans-serif",
-        background: "#f7f3ea",
-        color: "#28331f",
-        lineHeight: 1.75,
-        minHeight: "100vh",
-        padding: "40px 6vw 120px"
-      }}>
-        <style>{`
-          .font-serif { font-family: 'Noto Serif SC', serif; }
-          .sg-fade-up { animation: sg-fade-up 0.6s ease both; }
-          @keyframes sg-fade-up {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-        `}</style>
-
-        <div style={{
-          maxWidth: "1000px",
-          margin: "0 auto"
-        }}>
-          {/* 标题区 */}
-          <div className="sg-fade-up" style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "16px",
-            marginBottom: "28px"
-          }}>
-            <div style={{
-              width: "64px",
-              height: "64px",
-              borderRadius: "50%",
-              background: info.tint,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0
-            }}>
-              <span className="font-serif" style={{
-                fontSize: "26px",
-                color: "#fff"
-              }}>
-                {info.glyph}
-              </span>
-            </div>
-            <div>
-              <div style={{
-                fontSize: "13px",
-                letterSpacing: "2px",
-                color: "#a08a5c"
-              }}>
-                你目前的能量倾向
-              </div>
-              <h3 className="font-serif" style={{
-                fontSize: "26px",
-                fontWeight: 600,
-                margin: "4px 0 0"
-              }}>
-                {resultDetail.title}
-              </h3>
-            </div>
-          </div>
-
-          {/* 描述文本 */}
-          <p style={{
-            fontSize: "15px",
-            color: "#4a5230",
-            margin: "0 0 48px",
-            fontWeight: 300,
-            lineHeight: 1.7
-          }}>
-            {resultDetail.summary}
-          </p>
-
-          {tied.length > 0 && (
-            <p style={{
-              fontSize: "14px",
-              color: "#8a7a5c",
-              background: "#fffdf8",
-              borderRadius: "14px",
-              padding: "14px 18px",
-              margin: "-24px 0 48px",
-              lineHeight: 1.7
-            }}>
-              你的结果在 {[result, ...tied].map((k) => DOSHA_DETAIL[k as DoshaKey].name).join("、")} 之间并列，
-              说明目前你同时带有多种倾向。以下先以 {resultDetail.name} 作为主要参考，更适合你的搭配可以在一对一咨询时再细聊。
-            </p>
-          )}
-
-          {/* 三个资讯框 */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "24px",
-            marginBottom: "48px"
-          }}>
-            <div style={{
-              background: "#fffdf8",
-              borderRadius: "18px",
-              padding: "28px",
-              boxShadow: "0 2px 8px rgba(40,51,31,.04)"
-            }}>
-              <div style={{
-                fontSize: "13px",
-                letterSpacing: "1.5px",
-                color: "#8a7a5c",
-                marginBottom: "12px",
-                textTransform: "uppercase"
-              }}>
-                能量倾向说明
-              </div>
-              <p style={{
-                fontSize: "14.5px",
-                color: "#4a5230",
-                margin: "0",
-                fontWeight: 300,
-                lineHeight: 1.6
-              }}>
-                {resultDetail.energyText}
-              </p>
-            </div>
-
-            <div style={{
-              background: "#fffdf8",
-              borderRadius: "18px",
-              padding: "28px",
-              boxShadow: "0 2px 8px rgba(40,51,31,.04)"
-            }}>
-              <div style={{
-                fontSize: "13px",
-                letterSpacing: "1.5px",
-                color: "#8a7a5c",
-                marginBottom: "12px",
-                textTransform: "uppercase"
-              }}>
-                为你推荐
-              </div>
-              <p style={{
-                fontSize: "14.5px",
-                color: "#4a5230",
-                margin: "0",
-                fontWeight: 400,
-                lineHeight: 1.6
-              }}>
-                {resultDetail.productsText}
-              </p>
-            </div>
-
-            <div style={{
-              background: "#fffdf8",
-              borderRadius: "18px",
-              padding: "28px",
-              boxShadow: "0 2px 8px rgba(40,51,31,.04)"
-            }}>
-              <div style={{
-                fontSize: "13px",
-                letterSpacing: "1.5px",
-                color: "#8a7a5c",
-                marginBottom: "12px",
-                textTransform: "uppercase"
-              }}>
-                建议的自我照顾仪式
-              </div>
-              <p style={{
-                fontSize: "14.5px",
-                color: "#4a5230",
-                margin: "0",
-                fontWeight: 300,
-                lineHeight: 1.6
-              }}>
-                {resultDetail.ritual}
-              </p>
-            </div>
-          </div>
-
-          {/* 按钮 */}
-          <div style={{
-            display: "flex",
-            gap: "16px",
-            flexWrap: "wrap"
-          }}>
-            <button
-              onClick={() => {
-                window.location.href = "/?section=consult#consult";
-              }}
-              style={{
-                background: "#b8734f",
-                color: "#fff",
-                padding: "14px 30px",
-                borderRadius: "100px",
-                fontSize: "14.5px",
-                letterSpacing: ".5px",
-                border: "none",
-                cursor: "pointer",
-                fontFamily: "inherit",
-                display: "inline-block"
-              }}
-            >
-              预约专属咨询
-            </button>
-            <button
-              onClick={handleReset}
-              style={{
-                background: "none",
-                border: "1px solid rgba(74,89,64,.25)",
-                color: "#4a5940",
-                padding: "14px 30px",
-                borderRadius: "100px",
-                fontSize: "14.5px",
-                cursor: "pointer",
-                fontFamily: "inherit"
-              }}
-            >
-              重新测验
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── 测验页 ────
   return (
-    <div style={{
-      fontFamily: "'Noto Sans SC', sans-serif",
-      background: "#f7f3ea",
-      color: "#28331f",
-      lineHeight: 1.75,
-      minHeight: "100vh"
-    }}>
-      <style>{`
-        .font-serif { font-family: 'Noto Serif SC', serif; }
-      `}</style>
+    <div style={pageStyle}>
+      <style>{`.font-serif { font-family: 'Noto Serif SC', serif; }`}</style>
 
-      <div style={{
-        maxWidth: "760px",
-        margin: "0 auto",
-        padding: "40px 6vw"
-      }}>
-        <div style={{
-          display: "flex",
-          gap: "8px",
-          marginBottom: "36px"
-        }}>
+      <div style={{ maxWidth: "760px", margin: "0 auto", padding: "40px 6vw" }}>
+        <div style={{ display: "flex", gap: "6px", marginBottom: "36px" }}>
           {Array.from({ length: total }).map((_, i) => (
             <div
               key={i}
@@ -317,36 +253,22 @@ export default function QuizPage() {
                 flex: 1,
                 borderRadius: "2px",
                 background: i < currentStep ? "#b8734f" : "rgba(74,89,64,.15)",
-                transition: "background 0.3s ease"
+                transition: "background 0.3s ease",
               }}
             />
           ))}
         </div>
 
-        <div style={{
-          fontSize: "13px",
-          letterSpacing: "2px",
-          color: "#a08a5c",
-          marginBottom: "12px"
-        }}>
+        <div style={{ fontSize: "13px", letterSpacing: "2px", color: "#a08a5c", marginBottom: "6px" }}>
           问题 {currentStep + 1} / {total}
         </div>
+        <div style={{ fontSize: "13px", color: "#b8734f", marginBottom: "14px" }}>{currentQ.section}</div>
 
-        <h3 className="font-serif" style={{
-          fontSize: "24px",
-          fontWeight: 600,
-          margin: "0 0 32px",
-          lineHeight: 1.5
-        }}>
+        <h3 className="font-serif" style={{ fontSize: "24px", fontWeight: 600, margin: "0 0 32px", lineHeight: 1.5 }}>
           {currentQ.title}
         </h3>
 
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "14px",
-          marginBottom: "40px"
-        }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "40px" }}>
           {currentQ.options.map((opt, i) => (
             <button
               key={i}
@@ -361,7 +283,7 @@ export default function QuizPage() {
                 fontFamily: "inherit",
                 color: "#28331f",
                 cursor: "pointer",
-                transition: "all 0.2s ease"
+                transition: "all 0.2s ease",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = "#eef1e6";
@@ -380,16 +302,7 @@ export default function QuizPage() {
         {currentStep > 0 && (
           <button
             onClick={handlePrev}
-            style={{
-              marginBottom: "28px",
-              background: "none",
-              border: "none",
-              color: "#8a7a5c",
-              fontSize: "14px",
-              cursor: "pointer",
-              fontFamily: "inherit",
-              padding: "0"
-            }}
+            style={{ marginBottom: "28px", background: "none", border: "none", color: "#8a7a5c", fontSize: "14px", cursor: "pointer", fontFamily: "inherit", padding: 0 }}
           >
             ← 上一题
           </button>
