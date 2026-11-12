@@ -55,10 +55,10 @@ export const quizQuestions: Question[] = [
 ];
 
 // ── 分类规则（可调整）──
-// 某一能量占比 ≥ 此值 → 「单一能量显着型」
+// 某一能量占比 ≥ 此值 → 「单一能量显著型」
 export const SINGLE_DOMINANT_MIN_PERCENT = 60;
-// 占比最低的那一项答题数 ≤ 此值 → 「双体质」；否则视为「三体质（较均衡）」
-export const DUAL_MAX_THIRD_COUNT = 2;
+// 占比最低的那一项 ≤ 此百分比 → 「双体质」；否则视为「三体质（较均衡）」
+export const DUAL_MAX_THIRD_PERCENT = 17;
 
 export type DualKey = "VP" | "VK" | "PK";
 
@@ -70,7 +70,7 @@ export interface OilBathFormula {
 }
 
 // 油浴参考配方（配方内容之后会再调整，只要改这里）。
-// 单一显着型目前只有基底油，精油搭配留给一对一咨询。
+// 单一显著型目前只有基底油，精油搭配留给一对一咨询。
 export const FORMULAS: {
   single: Record<DoshaKey, OilBathFormula>;
   dual: Record<DualKey, OilBathFormula>;
@@ -161,8 +161,17 @@ export const DOSHA_DETAIL: Record<
 };
 
 // ── 计算 ──
+// 每题可选一个「最像我」（主选，2 分）和一个「也有点像」（次选，1 分，可略过）。
+export const PRIMARY_POINTS = 2;
+export const SECONDARY_POINTS = 1;
+
+export interface QuizAnswer {
+  primary: DoshaKey;
+  secondary?: DoshaKey;
+}
+
 export interface QuizResult {
-  counts: Record<DoshaKey, number>;
+  points: Record<DoshaKey, number>;
   percents: Record<DoshaKey, number>;
   kind: "single" | "dual" | "tri";
   // 依占比由高到低排序（并列时维持 V、P、K 的顺序）
@@ -170,27 +179,28 @@ export interface QuizResult {
   formulaKey: DoshaKey | DualKey | null;
 }
 
-export function computeResult(answers: DoshaKey[]): QuizResult {
-  const counts: Record<DoshaKey, number> = { V: 0, P: 0, K: 0 };
-  answers.forEach((d) => {
-    counts[d]++;
+export function computeResult(answers: QuizAnswer[]): QuizResult {
+  const points: Record<DoshaKey, number> = { V: 0, P: 0, K: 0 };
+  answers.forEach((a) => {
+    points[a.primary] += PRIMARY_POINTS;
+    if (a.secondary) points[a.secondary] += SECONDARY_POINTS;
   });
-  const total = answers.length || 1;
+  const total = points.V + points.P + points.K || 1;
   const percents = {
-    V: Math.round((counts.V / total) * 100),
-    P: Math.round((counts.P / total) * 100),
-    K: Math.round((counts.K / total) * 100),
+    V: Math.round((points.V / total) * 100),
+    P: Math.round((points.P / total) * 100),
+    K: Math.round((points.K / total) * 100),
   } as Record<DoshaKey, number>;
 
-  const order = [...DOSHA_KEYS].sort((a, b) => counts[b] - counts[a]);
+  const order = [...DOSHA_KEYS].sort((a, b) => points[b] - points[a]);
   const [first, second, third] = order;
 
   if (percents[first] >= SINGLE_DOMINANT_MIN_PERCENT) {
-    return { counts, percents, kind: "single", order, formulaKey: first };
+    return { points, percents, kind: "single", order, formulaKey: first };
   }
-  if (counts[third] <= DUAL_MAX_THIRD_COUNT) {
+  if (percents[third] <= DUAL_MAX_THIRD_PERCENT) {
     const pair = DOSHA_KEYS.filter((k) => k === first || k === second).join("") as DualKey;
-    return { counts, percents, kind: "dual", order, formulaKey: pair };
+    return { points, percents, kind: "dual", order, formulaKey: pair };
   }
-  return { counts, percents, kind: "tri", order, formulaKey: null };
+  return { points, percents, kind: "tri", order, formulaKey: null };
 }

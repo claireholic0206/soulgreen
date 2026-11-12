@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   quizQuestions,
   DOSHA_DETAIL,
@@ -10,6 +11,7 @@ import {
   computeResult,
   type DoshaKey,
   type DualKey,
+  type QuizAnswer,
   type QuizResult,
 } from "@/data/quizData";
 
@@ -57,7 +59,7 @@ function EnergyRadar({ percents }: { percents: Record<DoshaKey, number> }) {
   const shape = DOSHA_KEYS.map((k) => pt(k, percents[k] / scaleMax).join(",")).join(" ");
 
   return (
-    <svg viewBox="25 25 250 200" role="img" aria-label="三种能量占比雷达图" style={{ width: "100%", maxWidth: "380px", display: "block", margin: "0 auto" }}>
+    <svg viewBox="5 25 290 200" role="img" aria-label="三种能量占比雷达图" style={{ width: "100%", maxWidth: "380px", display: "block", margin: "0 auto" }}>
       {[1 / 3, 2 / 3, 1].map((r) => (
         <polygon key={r} points={ring(r)} fill="none" stroke="rgba(74,89,64,.18)" strokeWidth="1" />
       ))}
@@ -190,9 +192,9 @@ function ResultView({ result, onReset }: { result: QuizResult; onReset: () => vo
         </div>
 
         <div style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
-          <a href="/#consult" style={{ background: "#b8734f", color: "#fff", padding: "14px 34px", borderRadius: "100px", fontSize: "14.5px", letterSpacing: ".5px" }}>
+          <Link href="/#consult" style={{ background: "#b8734f", color: "#fff", padding: "14px 34px", borderRadius: "100px", fontSize: "14.5px", letterSpacing: ".5px" }}>
             预约专属咨询
-          </a>
+          </Link>
           <button
             onClick={onReset}
             style={{ background: "none", border: "1px solid rgba(74,89,64,.25)", color: "#4a5940", padding: "14px 30px", borderRadius: "100px", fontSize: "14.5px", cursor: "pointer", fontFamily: "inherit" }}
@@ -207,41 +209,63 @@ function ResultView({ result, onReset }: { result: QuizResult; onReset: () => vo
 
 export default function QuizPage() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState<DoshaKey[]>([]);
+  // 每题的选择：primary（最像我）/ secondary（也有点像），存的是选项的顺位
+  const [picks, setPicks] = useState<{ primary: number | null; secondary: number | null }[]>(
+    () => quizQuestions.map(() => ({ primary: null, secondary: null })),
+  );
   const [result, setResult] = useState<QuizResult | null>(null);
 
   const total = quizQuestions.length;
   const currentQ = quizQuestions[currentStep];
+  const pick = picks[currentStep];
   const isLast = currentStep === total - 1;
 
-  const handleSelectOption = (dosha: DoshaKey) => {
-    const newAnswers = [...answers, dosha];
-    setAnswers(newAnswers);
-    if (isLast) {
-      setResult(computeResult(newAnswers));
-    } else {
+  const handleTap = (i: number) => {
+    setPicks((prev) =>
+      prev.map((p, idx) => {
+        if (idx !== currentStep) return p;
+        if (p.primary === null) return { primary: i, secondary: null };
+        if (i === p.primary) return { primary: p.secondary, secondary: null };
+        if (i === p.secondary) return { ...p, secondary: null };
+        return { ...p, secondary: i };
+      }),
+    );
+  };
+
+  const handleNext = () => {
+    if (pick.primary === null) return;
+    if (!isLast) {
       setCurrentStep((s) => s + 1);
+      return;
     }
+    const answers: QuizAnswer[] = picks.map((p, idx) => ({
+      primary: quizQuestions[idx].options[p.primary as number].dosha,
+      secondary: p.secondary !== null ? quizQuestions[idx].options[p.secondary].dosha : undefined,
+    }));
+    setResult(computeResult(answers));
   };
 
   const handlePrev = () => {
-    if (currentStep > 0) {
-      setCurrentStep((s) => s - 1);
-      setAnswers((a) => a.slice(0, -1));
-    }
+    if (currentStep > 0) setCurrentStep((s) => s - 1);
   };
 
   const handleReset = () => {
     setCurrentStep(0);
-    setAnswers([]);
+    setPicks(quizQuestions.map(() => ({ primary: null, secondary: null })));
     setResult(null);
   };
 
   if (result) return <ResultView result={result} onReset={handleReset} />;
 
+  const canNext = pick.primary !== null;
+
   return (
     <div style={pageStyle}>
-      <style>{`.font-serif { font-family: 'Noto Serif SC', serif; }`}</style>
+      <style>{`
+        .font-serif { font-family: 'Noto Serif SC', serif; }
+        .sg-opt { transition: all .2s ease; }
+        .sg-opt:hover { border-color: #6b7a4f !important; }
+      `}</style>
 
       <div style={{ maxWidth: "760px", margin: "0 auto", padding: "40px 6vw" }}>
         <div style={{ display: "flex", gap: "6px", marginBottom: "36px" }}>
@@ -264,48 +288,98 @@ export default function QuizPage() {
         </div>
         <div style={{ fontSize: "13px", color: "#b8734f", marginBottom: "14px" }}>{currentQ.section}</div>
 
-        <h3 className="font-serif" style={{ fontSize: "24px", fontWeight: 600, margin: "0 0 32px", lineHeight: 1.5 }}>
+        <h3 className="font-serif" style={{ fontSize: "24px", fontWeight: 600, margin: "0 0 14px", lineHeight: 1.5 }}>
           {currentQ.title}
         </h3>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "40px" }}>
-          {currentQ.options.map((opt, i) => (
-            <button
-              key={i}
-              onClick={() => handleSelectOption(opt.dosha)}
-              style={{
-                textAlign: "left",
-                background: "#f7f3ea",
-                border: "1px solid rgba(74,89,64,.12)",
-                padding: "18px 24px",
-                borderRadius: "16px",
-                fontSize: "15px",
-                fontFamily: "inherit",
-                color: "#28331f",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#eef1e6";
-                e.currentTarget.style.borderColor = "#6b7a4f";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#f7f3ea";
-                e.currentTarget.style.borderColor = "rgba(74,89,64,.12)";
-              }}
-            >
-              {opt.label}
-            </button>
-          ))}
+        {currentStep === 0 ? (
+          <p style={{ fontSize: "14px", color: "#5c6650", background: "#fffdf8", borderRadius: "14px", padding: "14px 18px", margin: "0 0 24px", lineHeight: 1.8, fontWeight: 300 }}>
+            不需要很精准——凭第一直觉，选「大部分时候最像你」的一项就好，有七八成像就可以选。
+            如果还有另一项也有点像，可以再点选一项，当作「也有点像」。
+          </p>
+        ) : (
+          <p style={{ fontSize: "13.5px", color: "#8a7a5c", margin: "0 0 24px", fontWeight: 300 }}>
+            先选最像你的一项；另一项也有点像的话，可再选一项。
+          </p>
+        )}
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "32px" }}>
+          {currentQ.options.map((opt, i) => {
+            const isPrimary = pick.primary === i;
+            const isSecondary = pick.secondary === i;
+            return (
+              <button
+                key={i}
+                className="sg-opt"
+                onClick={() => handleTap(i)}
+                style={{
+                  textAlign: "left",
+                  background: isPrimary ? "#eef1e6" : isSecondary ? "#fbf3ea" : "#f7f3ea",
+                  border: isPrimary
+                    ? "1.5px solid #6b7a4f"
+                    : isSecondary
+                      ? "1.5px dashed #b8734f"
+                      : "1px solid rgba(74,89,64,.12)",
+                  padding: "18px 24px",
+                  borderRadius: "16px",
+                  fontSize: "15px",
+                  fontFamily: "inherit",
+                  color: "#28331f",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: "14px",
+                }}
+              >
+                <span>{opt.label}</span>
+                {(isPrimary || isSecondary) && (
+                  <span
+                    style={{
+                      flexShrink: 0,
+                      fontSize: "12px",
+                      padding: "3px 12px",
+                      borderRadius: "100px",
+                      background: isPrimary ? "#6b7a4f" : "#b8734f",
+                      color: "#fff",
+                    }}
+                  >
+                    {isPrimary ? "最像我" : "也有点像"}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
+        <button
+          onClick={handleNext}
+          disabled={!canNext}
+          style={{
+            background: canNext ? "#2f3b26" : "#a8a48c",
+            color: "#fbf8f0",
+            border: "none",
+            padding: "15px 40px",
+            borderRadius: "100px",
+            fontSize: "15px",
+            letterSpacing: "1px",
+            cursor: canNext ? "pointer" : "default",
+            fontFamily: "inherit",
+            marginBottom: "28px",
+          }}
+        >
+          {isLast ? "查看结果" : "下一题 →"}
+        </button>
+
         {currentStep > 0 && (
-          <button
-            onClick={handlePrev}
-            style={{ marginBottom: "28px", background: "none", border: "none", color: "#8a7a5c", fontSize: "14px", cursor: "pointer", fontFamily: "inherit", padding: 0 }}
-          >
-            ← 上一题
-          </button>
+          <div>
+            <button
+              onClick={handlePrev}
+              style={{ background: "none", border: "none", color: "#8a7a5c", fontSize: "14px", cursor: "pointer", fontFamily: "inherit", padding: 0 }}
+            >
+              ← 上一题
+            </button>
+          </div>
         )}
       </div>
     </div>
