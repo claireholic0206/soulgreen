@@ -60,7 +60,8 @@ export const SINGLE_DOMINANT_MIN_PERCENT = 60;
 // 占比最低的那一项 ≤ 此百分比 → 「双体质」；否则视为「三体质（较均衡）」
 export const DUAL_MAX_THIRD_PERCENT = 17;
 
-export type DualKey = "VP" | "VK" | "PK";
+// 双体质依主次分开：第一个字母是占比较高的能量（主），第二个是占比较低的（次）
+export type DualKey = "VP" | "PV" | "VK" | "KV" | "PK" | "KP";
 
 export interface OilBathFormula {
   name: string;
@@ -74,54 +75,70 @@ export interface OilBathFormula {
 export const FORMULAS: {
   single: Record<DoshaKey, OilBathFormula>;
   dual: Record<DualKey, OilBathFormula>;
+  tri: OilBathFormula;
 } = {
   single: {
     V: {
       name: "风能显著型",
-      baseOils: ["100% 冷压芝麻油（温热安神）"],
+      baseOils: ["芝麻油 80ml", "杏桃仁油 20ml"],
     },
     P: {
       name: "火能显著型",
-      baseOils: ["100% 冷压椰子油（清凉降火）"],
+      baseOils: ["椰子油 80ml", "芝麻油 20ml"],
     },
     K: {
       name: "水土能显著型",
-      baseOils: ["80% 轻质芝麻油／杏桃仁油", "20% 蓖麻油（活化推动）"],
+      baseOils: ["葵花籽油 50ml", "芝麻油 30ml", "圣约翰草浸泡油 20ml"],
     },
   },
+  // 双体质配方：主 60% ＋ 次 40%，由两款单一配方（各以 100ml 计）按比例混合
   dual: {
     VP: {
       name: "风火型 Vata-Pitta",
       traits: "既容易干燥焦虑，皮肤又容易敏弱发炎。",
-      baseOils: [
-        "60% 冷压芝麻油（补水抗干、安抚风能）",
-        "40% 冷压椰子油或甜杏仁油（镇静退火、舒缓敏弱）",
-      ],
+      baseOils: ["芝麻油 56ml", "椰子油 32ml", "杏桃仁油 12ml"],
+      essentialOils: "真实薰衣草 8 滴（风火双修）＋ 罗马洋甘菊 4 滴（降火）＋ 乳香 4 滴（沉降风能）",
+    },
+    PV: {
+      name: "火风型 Pitta-Vata",
+      traits: "既容易干燥焦虑，皮肤又容易敏弱发炎。",
+      baseOils: ["椰子油 48ml", "芝麻油 44ml", "杏桃仁油 8ml"],
       essentialOils: "真实薰衣草 8 滴（风火双修）＋ 罗马洋甘菊 4 滴（降火）＋ 乳香 4 滴（沉降风能）",
     },
     VK: {
       name: "风水型 Vata-Kapha",
       traits: "皮肤干燥怕冷，但同时容易水肿、晨起体重沉重。",
-      baseOils: [
-        "50% 冷压芝麻油（祛寒滋养）",
-        "35% 杏桃仁油（质地较轻盈）",
-        "15% 蓖麻油（强效推动水肿与毒素）",
-      ],
+      baseOils: ["芝麻油 60ml", "葵花籽油 20ml", "杏桃仁油 12ml", "圣约翰草浸泡油 8ml"],
+      essentialOils: "甜橙 6 滴 ＋ 迷迭香 5 滴 ＋ 丝柏 5 滴（促进淋巴循环与温热）",
+    },
+    KV: {
+      name: "水风型 Kapha-Vata",
+      traits: "皮肤干燥怕冷，但同时容易水肿、晨起体重沉重。",
+      baseOils: ["芝麻油 50ml", "葵花籽油 30ml", "圣约翰草浸泡油 12ml", "杏桃仁油 8ml"],
       essentialOils: "甜橙 6 滴 ＋ 迷迭香 5 滴 ＋ 丝柏 5 滴（促进淋巴循环与温热）",
     },
     PK: {
       name: "火水型 Pitta-Kapha",
       traits: "体质偏热易发炎，但代谢慢、容易出油与体液滞留。",
-      baseOils: [
-        "60% 葵花籽油或荷荷芭油（清爽不油腻、清热）",
-        "40% 冷压椰子油（带走体内湿热）",
-      ],
+      baseOils: ["椰子油 48ml", "芝麻油 24ml", "葵花籽油 20ml", "圣约翰草浸泡油 8ml"],
+      essentialOils: "葡萄柚 8 滴 ＋ 苦橙叶 4 滴 ＋ 大西洋雪松 4 滴（清热排水）",
+    },
+    KP: {
+      name: "水火型 Kapha-Pitta",
+      traits: "体质偏热易发炎，但代谢慢、容易出油与体液滞留。",
+      baseOils: ["椰子油 32ml", "葵花籽油 30ml", "芝麻油 26ml", "圣约翰草浸泡油 12ml"],
       essentialOils: "葡萄柚 8 滴 ＋ 苦橙叶 4 滴 ＋ 大西洋雪松 4 滴（清热排水）",
     },
   },
+  // 三体质（三种能量接近）：三款能量各取一点的通用配方
+  tri: {
+    name: "三种能量均衡型",
+    baseOils: ["芝麻油 50ml", "椰子油 30ml", "橄榄油 20ml"],
+    essentialOils: "真实薰衣草 6 滴（安抚平衡）＋ 天竺葵 5 滴（调和油脂、平衡情绪）＋ 甜橙 5 滴（温暖提振）",
+  },
 };
 
-export const FORMULA_ESSENTIAL_OIL_NOTE = "以 50ml 基底油计算";
+export const FORMULA_ESSENTIAL_OIL_NOTE = "以 100ml 基底油计算";
 
 export const DOSHA_DETAIL: Record<
   DoshaKey,
@@ -199,7 +216,7 @@ export function computeResult(answers: QuizAnswer[]): QuizResult {
     return { points, percents, kind: "single", order, formulaKey: first };
   }
   if (percents[third] <= DUAL_MAX_THIRD_PERCENT) {
-    const pair = DOSHA_KEYS.filter((k) => k === first || k === second).join("") as DualKey;
+    const pair = `${first}${second}` as DualKey; // 主＋次，例如占比较高的是火、其次是风 → "PV"
     return { points, percents, kind: "dual", order, formulaKey: pair };
   }
   return { points, percents, kind: "tri", order, formulaKey: null };

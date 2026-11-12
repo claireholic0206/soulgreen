@@ -94,7 +94,7 @@ function ResultView({ result, onReset }: { result: QuizResult; onReset: () => vo
       ? FORMULAS.single[primary]
       : result.kind === "dual" && result.formulaKey
         ? FORMULAS.dual[result.formulaKey as DualKey]
-        : null;
+        : FORMULAS.tri;
 
   const heading =
     result.kind === "tri" ? "三种能量较为均衡" : formula?.name ?? detail.name;
@@ -163,7 +163,7 @@ function ResultView({ result, onReset }: { result: QuizResult; onReset: () => vo
           )}
         </div>
 
-        <div className="sg-fade-up" style={{ ...cardStyle, marginBottom: "24px" }}>
+        <div className="sg-fade-up" style={{ ...cardStyle, marginBottom: "36px" }}>
           <div style={cardTitle}>油浴量身配方（参考）</div>
           {formula ? (
             <>
@@ -184,11 +184,6 @@ function ResultView({ result, onReset }: { result: QuizResult; onReset: () => vo
           <p style={{ fontSize: "13px", color: "#8a7a5c", margin: "20px 0 0", fontWeight: 300 }}>
             以上为参考方向，不作为医疗建议；实际比例与精油会依你的状况在一对一咨询时调整。
           </p>
-        </div>
-
-        <div className="sg-fade-up" style={{ ...cardStyle, marginBottom: "36px" }}>
-          <div style={cardTitle}>日常小仪式</div>
-          <p style={{ margin: 0, fontWeight: 300 }}>{detail.ritual}</p>
         </div>
 
         <div style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
